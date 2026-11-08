@@ -1,54 +1,57 @@
 import { useState } from 'react'
 import { Link } from 'react-router'
 import Icon from '../components/icon/Icon.jsx'
+import { randomCharacter } from '../data/characters.js'
+
+const prompts = [
+  'Tu personaje recibe una carta escrita con su propia letra, fechada cien años en el futuro. ¿Qué advertencia contiene?',
+  'Una ciudad olvida el nombre de uno de sus habitantes cada amanecer. Hoy ha desaparecido el tuyo. ¿Quién te recuerda?',
+  'La espada que heredaste se niega a herir a tu enemigo. ¿Qué secreto comparten?',
+  'Un dragón te ofrece su último deseo a cambio de un recuerdo. ¿Qué estás dispuesto a perder?',
+  'Todas las estatuas del reino han empezado a llorar. Una de ellas tiene tu rostro. ¿Qué anuncia?',
+  'Tu sombra abandona tus pasos para proteger a alguien que nunca has visto. ¿La sigues?',
+]
 
 export function Inspiration() {
+  const [prompt, setPrompt] = useState(0)
+  const [character, setCharacter] = useState(randomCharacter)
+  function generate() {
+    setPrompt(index => (index + 1 + Math.floor(Math.random() * (prompts.length - 1))) % prompts.length)
+    setCharacter(randomCharacter())
+  }
   return <section className="inspiration-panel">
     <Icon name="sparkle" size={30} />
     <h2>El comienzo de una leyenda</h2>
-    <p>Tu personaje recibe una carta escrita con su propia letra, fechada cien años en el futuro. ¿Qué advertencia contiene?</p>
-    <Link className="primary-button" to="/crear-personaje">Imaginar un personaje</Link>
-  </section>
-}
-
-export function Profile() {
-  return <section className="profile-panel">
-    <Icon name="user" size={36} />
-    <h2>Estás explorando como invitado</h2>
-    <p>No has iniciado sesión. Puedes explorar los personajes de ejemplo y probar la navegación.</p>
-    <Link className="primary-button" to="/login">Ir a Iniciar sesión</Link>
-    <Link className="secondary-button" to="/registro">Ir a Registro</Link>
-    <Link className="inline-link" to="/accesibilidad">Preferencias de accesibilidad</Link>
-  </section>
-}
-
-export function Accessibility({ preferences, onChange, error }) {
-  const [message, setMessage] = useState('')
-  function update(key, checked) {
-    onChange({ [key]: checked })
-    setMessage('Preferencias de accesibilidad aplicadas.')
-  }
-  return <section className="information-page">
-    <p>Puedes adaptar la lectura. Los cambios se aplican en todas las pantallas.</p>
-    <label className="preference-option"><input type="checkbox" checked={preferences.highContrast} onChange={event => update('highContrast', event.target.checked)} />Aumentar el contraste</label>
-    <label className="preference-option"><input type="checkbox" checked={preferences.largeText} onChange={event => update('largeText', event.target.checked)} />Aumentar el tamaño del texto</label>
-    <p className="feedback" role="status">{error || message || 'Las preferencias se guardan en este navegador cuando el almacenamiento está disponible.'}</p>
-    <h2>Navegación con teclado</h2>
-    <p>Usa Tab y Mayús + Tab para recorrer los controles, Enter para activar enlaces y Escape para cerrar menús y diálogos. En la barra inferior también puedes usar las flechas, Inicio y Fin.</p>
-    <Link className="secondary-button" to="/inicio">Volver a Inicio</Link>
+    <p role="status">{prompts[prompt]}</p>
+    <div className="inspiration-seed"><h2>{character.name}</h2><p>{character.race} · {character.type} · Nivel {character.level}</p><p>{character.traits.join(' · ')}</p></div>
+    <button className="secondary-button" onClick={generate}>Otra inspiración</button>
+    <Link className="primary-button" to="/crear-personaje" state={{ draft: { ...character, story: prompts[prompt] } }}>Crear a partir de esta idea</Link>
   </section>
 }
 
 export function Help() {
   return <section className="information-page">
-    <p>Umbra es un espacio para imaginar personajes y sus historias. Esta entrega permite recorrer las interfaces y comprobar sus mensajes.</p>
+    <p>Umbra es un espacio para imaginar personajes, guardar sus fichas y dar vida a sus historias.</p>
     <details><summary>¿Cómo navego por Umbra?</summary><p>Usa el menú superior para acceder a todas las secciones y la barra inferior para Inicio, Biblioteca, Inspiración y Perfil.</p></details>
-    <details><summary>¿Necesito iniciar sesión?</summary><p>Puedes explorar como invitado. Los formularios de acceso y registro validan datos de prueba; todavía no crean cuentas ni inician sesiones.</p></details>
-    <details><summary>¿Dónde se guardan mis personajes?</summary><p>En esta entrega se muestran personajes de ejemplo. El formulario de personaje no guarda datos. El CRUD y la conexión con servicios pertenecen a la siguiente fase.</p></details>
-    <details><summary>¿Qué ocurre si pierdo la conexión?</summary><p>Se muestra un aviso. Las interfaces ya cargadas pueden seguir funcionando mientras la página permanezca abierta; todavía no hay un modo sin conexión para recargar la aplicación.</p></details>
+    <details><summary>¿Necesito iniciar sesión?</summary><p>Puedes crear y guardar personajes como invitado. Si creas una cuenta local, tendrás una biblioteca independiente en este navegador. Guarda el código de recuperación que aparece al registrarte.</p></details>
+    <details><summary>¿Dónde se guardan mis personajes?</summary><p>En el almacenamiento de este navegador. No se sincronizan entre dispositivos. Desde Perfil puedes exportar una copia JSON y restaurarla en otro navegador o cuenta. Borrar los datos del sitio elimina las cuentas y las bibliotecas locales.</p></details>
+    <details><summary>¿Cómo edito o elimino una ficha?</summary><p>Abre un personaje desde Inicio o Biblioteca. En su ficha puedes marcarlo como favorito, editarlo, duplicarlo o eliminarlo. Se pide confirmación antes de eliminar.</p></details>
+    <details><summary>¿Qué ocurre si pierdo la conexión?</summary><p>Se muestra un aviso y puedes seguir trabajando mientras la app esté abierta. Para volver a cargarla necesitas conexión al sitio o tener el servidor local en marcha.</p></details>
+    <details><summary>¿Cómo recupero mi contraseña?</summary><p>Abre «¿Olvidaste tu contraseña?» e introduce tu correo y el código que guardaste al crear la cuenta. La recuperación es local y no envía correos. Si borraste los datos del navegador, necesitarás crear otra cuenta e importar tu copia de personajes.</p></details>
     <details><summary>¿Cómo mejoro la legibilidad?</summary><p>En Accesibilidad puedes aumentar el contraste y el tamaño del texto. La interfaz también respeta la preferencia del sistema de reducir el movimiento.</p></details>
     <Link className="secondary-button" to="/accesibilidad">Abrir Accesibilidad</Link>
     <Link className="inline-link" to="/inicio">Volver a Inicio</Link>
+  </section>
+}
+
+export function Privacy() {
+  return <section className="information-page">
+    <h2>Datos en tu navegador</h2>
+    <p>UMBRA guarda personajes, retratos, favoritos, preferencias y cuentas en el almacenamiento local del navegador. No envía estos datos a un servidor ni los sincroniza entre dispositivos.</p>
+    <p>Las cuentas locales permiten organizar bibliotecas independientes en este navegador. El código que recibes al registrarte sirve para recuperar el acceso si olvidas tu contraseña. No se envían correos y las copias de seguridad no incluyen las credenciales.</p>
+    <h2>Conservar tus historias</h2>
+    <p>Exporta una copia desde Perfil antes de borrar los datos del sitio o cambiar de navegador. La copia incluye las fichas y sus retratos, sin cuentas ni contraseñas. Usa solo imágenes que tengas permiso para utilizar.</p>
+    <Link className="secondary-button" to="/perfil">Ir a Perfil</Link>
   </section>
 }
 

@@ -16,7 +16,6 @@ export default function BottomNavigation() {
   return (
     <nav className="bottom-navigation" aria-label="Navegación principal" onKeyDown={handleKeys}>
       {mainTabs.map(tab => <NavLink key={tab.path} to={tab.path}
-        onClick={tab.pending ? event => event.preventDefault() : undefined}
         className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
         <Icon name={tab.icon} /><span className="nav-label">{tab.label}</span>
       </NavLink>)}

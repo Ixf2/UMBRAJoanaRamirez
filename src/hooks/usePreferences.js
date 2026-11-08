@@ -1,29 +1,22 @@
 import { useState } from 'react'
+import { defaultPreferences, normalizePreferences, readPreferences, writePreferences } from '../utils/preferenceStore.js'
 
-const key = 'umbra.accessibility.v1'
-const defaults = { highContrast: false, largeText: false }
-
-function readPreferences() {
-  try {
-    const saved = JSON.parse(localStorage.getItem(key))
-    return { highContrast: saved?.highContrast === true, largeText: saved?.largeText === true }
-  } catch {
-    return defaults
-  }
-}
-
-export function usePreferences() {
-  const [preferences, setPreferences] = useState(readPreferences)
-  const [preferenceError, setPreferenceError] = useState('')
+export function usePreferences(owner) {
+  const [loaded] = useState(() => {
+    try { return { preferences: readPreferences(owner), error: '' } }
+    catch { return { preferences: { ...defaultPreferences }, error: 'No se pudieron recuperar los ajustes de este perfil. Puedes volver a elegirlos.' } }
+  })
+  const [preferences, setPreferences] = useState(loaded.preferences)
+  const [preferenceError, setPreferenceError] = useState(loaded.error)
 
   function updatePreferences(changes) {
-    const updated = { ...preferences, ...changes }
+    const updated = normalizePreferences({ ...preferences, ...changes })
     setPreferences(updated)
     try {
-      localStorage.setItem(key, JSON.stringify(updated))
+      writePreferences(owner, updated)
       setPreferenceError('')
     } catch {
-      setPreferenceError('El navegador no permite guardar tus preferencias. Se aplicarán durante esta demo.')
+      setPreferenceError('El navegador no permite guardar tus preferencias. Se aplicarán mientras la app esté abierta.')
     }
   }
 

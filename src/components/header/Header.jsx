@@ -3,7 +3,7 @@ import { Link, NavLink } from 'react-router'
 import Icon from '../icon/Icon.jsx'
 import { menuItems } from '../../data/navigation.js'
 
-export default function Header({ onNotify, login = false }) {
+export default function Header({ onNotify, login = false, user }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const header = useRef(null)
   const menuButton = useRef(null)
@@ -33,11 +33,11 @@ export default function Header({ onNotify, login = false }) {
       <Link className="brand" to="/inicio" aria-label="Umbra, inicio" onClick={() => setMenuOpen(false)}>
         <Icon name="crest" size={27} /><span>UMBRA</span>
       </Link>
-      {login ? <button className="icon-button" type="button" disabled aria-label="Ayuda y soporte, próximamente" title="Próximamente"><Icon name="help" /></button> : <button className="icon-button notification-trigger" aria-label="Notificaciones: sin avisos nuevos" onClick={onNotify}>
+      {login ? <Link className="icon-button" to="/ayuda" aria-label="Ayuda y soporte"><Icon name="help" /></Link> : <button className="icon-button notification-trigger" aria-label="Notificaciones" onClick={onNotify}>
         <Icon name="bell" />
       </button>}
       {!login && menuOpen && <nav id="header-menu" className="header-popover" aria-label="Menú de secciones">
-        {menuItems.map(item => <NavLink key={item.path} to={item.path} onClick={() => setMenuOpen(false)}>{item.label}</NavLink>)}
+        {menuItems.filter(item => !user || item.path !== '/login').map(item => <NavLink key={item.path} to={item.path} onClick={() => setMenuOpen(false)}>{item.label}</NavLink>)}
         <button onClick={closeMenu}>Cerrar menú</button>
       </nav>}
     </header>

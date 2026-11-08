@@ -1,20 +1,24 @@
 import { useState } from 'react'
+import { Link, useNavigate } from 'react-router'
 import Icon from '../components/icon/Icon.jsx'
 import { validateForm } from '../utils/validateForm.js'
 import './Login.css'
 
 const fields = [
   { name: 'email', label: 'Correo electrónico', type: 'email', required: true },
-  { name: 'password', label: 'Contraseña', type: 'password', required: true, minLength: 8, requireSpecial: true },
+  { name: 'password', label: 'Contraseña', type: 'password', required: true },
 ]
 
-export default function Login() {
+export default function Login({ onLogin }) {
+  const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState(false)
   const [errors, setErrors] = useState({})
   const [message, setMessage] = useState('')
+  const [pending, setPending] = useState(false)
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault()
+    if (pending) return
     const form = event.currentTarget
     const nextErrors = validateForm(fields, new FormData(form))
     setErrors(nextErrors)
@@ -24,7 +28,14 @@ export default function Login() {
       form.elements.namedItem(firstError).focus()
       return
     }
-    setMessage('El formulario es válido.')
+    setPending(true)
+    try {
+      const values = new FormData(form)
+      await onLogin({ email: values.get('email'), password: values.get('password'), remember: values.has('remember') })
+      navigate('/perfil', { replace: true })
+    } catch (error) {
+      setMessage(error.message || 'No se pudo acceder. Comprueba el almacenamiento del navegador.')
+    } finally { setPending(false) }
   }
 
   return <section className="login-page" aria-labelledby="login-title">
@@ -36,8 +47,8 @@ export default function Login() {
 
     <div className="login-divider" aria-hidden="true"><span>❖</span></div>
 
-    <p className="form-hint" id="login-demo-notice">Demostración: los campos con * son obligatorios. Usa datos de prueba; se guarda en el storage.</p>
-    <form className="login-form" noValidate aria-describedby="login-demo-notice" onSubmit={handleSubmit}>
+    <p className="form-hint" id="login-notice">Accede a tu cuenta local de este navegador. Los campos con * son obligatorios.</p>
+    <form className="login-form" noValidate aria-describedby="login-notice" onSubmit={handleSubmit}>
       <div className="login-field">
         <label htmlFor="login-email">Correo electrónico *</label>
         <div className="login-input">
@@ -52,29 +63,28 @@ export default function Login() {
         <label htmlFor="login-password">Contraseña *</label>
         <div className="login-input">
           <Icon name="lock" size={18} />
-          <input id="login-password" name="password" type={showPassword ? 'text' : 'password'} autoComplete="current-password" required minLength={8}
-            placeholder="Introduce tu contraseña" aria-invalid={Boolean(errors.password)} aria-describedby={['login-password-hint', errors.password && 'login-password-error'].filter(Boolean).join(' ')} />
+          <input id="login-password" name="password" type={showPassword ? 'text' : 'password'} autoComplete="current-password" required
+            placeholder="Introduce tu contraseña" aria-invalid={Boolean(errors.password)} aria-describedby={errors.password ? 'login-password-error' : undefined} />
           <button type="button" className="login-password-toggle" aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
             aria-pressed={showPassword} onClick={() => setShowPassword(!showPassword)}>
             <Icon name={showPassword ? 'eye' : 'eye-off'} size={18} />
           </button>
         </div>
-        <p className="form-hint" id="login-password-hint">Al menos 8 caracteres y un carácter especial, como !, @, # o $.</p>
         {errors.password && <p className="field-error" id="login-password-error" role="alert">{errors.password}</p>}
       </div>
 
       <div className="login-options">
         <label className="login-remember"><input name="remember" type="checkbox" /> <span>Recordarme</span></label>
-        <button className="login-recovery" type="button" disabled title="Próximamente">¿Olvidaste tu contraseña?</button>
+        <Link className="login-recovery" to="/recuperar">¿Olvidaste tu contraseña?</Link>
       </div>
 
-      <button className="primary-button login-submit" type="submit"><Icon name="login" size={18} />Iniciar sesión</button>
-      {message && <p className="feedback" role="status">{message}</p>}
+      <button className="primary-button login-submit" type="submit" disabled={pending}><Icon name="login" size={18} />{pending ? 'Entrando…' : 'Iniciar sesión'}</button>
+      {message && <p className="feedback error" role="alert">{message}</p>}
     </form>
 
     <div className="login-divider login-account-divider"><span>¿Aún no tienes una cuenta?</span></div>
-    <button className="login-create-account" type="button" disabled title="Próximamente"><Icon name="user-plus" size={18} />Crear cuenta</button>
-    <p className="login-terms">Al entrar, aceptas los Términos de uso<br />y la Política de privacidad de Umbra.</p>
+    <Link className="login-create-account" to="/registro"><Icon name="user-plus" size={18} />Crear cuenta</Link>
+    <p className="login-terms"><Link to="/privacidad">Privacidad y condiciones de uso</Link></p>
     <p className="login-motto">Cada alma tiene una historia.</p>
   </section>
 }

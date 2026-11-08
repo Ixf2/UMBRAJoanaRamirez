@@ -1,23 +1,39 @@
+import { useState } from 'react'
 import { Link } from 'react-router'
-import PrototypeForm from '../components/forms/PrototypeForm.jsx'
+import AppForm from '../components/forms/AppForm.jsx'
+import { recoverAccount, registerAccount } from '../utils/localAccounts.js'
 
-const email = { name: 'email', label: 'Correo electrónico', type: 'email', required: true, autoComplete: 'email', hint: 'Usa el formato nombre@dominio.es.', maxLength: 254 }
+const email = { name: 'email', label: 'Correo electrónico', type: 'email', required: true, autoComplete: 'email', maxLength: 254 }
+const password = { name: 'password', label: 'Contraseña', type: 'password', required: true, minLength: 8, maxLength: 256, requireSpecial: true, autoComplete: 'new-password', hint: 'Al menos 8 caracteres y un carácter especial, como !, @, # o $.' }
+const confirmation = { name: 'confirmPassword', label: 'Repetir contraseña', type: 'password', required: true, matches: 'password', autoComplete: 'new-password' }
 
-export default function Auth({ register = false }) {
-  const fields = [
-    ...(register ? [{ name: 'name', label: 'Nombre', required: true, minLength: 2, maxLength: 60, autoComplete: 'name' }] : []),
-    email,
-    { name: 'password', label: 'Contraseña', type: 'password', required: true, minLength: register ? 8 : undefined, requireSpecial: register, autoComplete: register ? 'new-password' : 'current-password', hint: register ? 'Al menos 8 caracteres y un carácter especial, como !, @, # o $. Usa una contraseña de prueba.' : 'Usa credenciales de prueba en esta demostración.' },
-    ...(register ? [
-      { name: 'confirmPassword', label: 'Repetir contraseña', type: 'password', required: true, matches: 'password', autoComplete: 'new-password' },
-      { name: 'demoAcknowledged', label: 'Entiendo que este registro es una demostración y no se guarda información personal.', type: 'checkbox', required: true },
-    ] : []),
+export default function Auth({ recovery = false }) {
+  const [recoveryCode, setRecoveryCode] = useState('')
+  const [recovered, setRecovered] = useState(false)
+  const fields = recovery ? [email, { name: 'recoveryCode', label: 'Código de recuperación', required: true, maxLength: 32, hint: 'El código que guardaste al crear tu cuenta local.' }, password, confirmation] : [
+    { name: 'name', label: 'Nombre', required: true, minLength: 2, maxLength: 60, autoComplete: 'name' },
+    email, password, confirmation,
+    { name: 'localAcknowledged', label: 'Entiendo que la cuenta y mis personajes se guardan solo en este navegador.', type: 'checkbox', required: true },
   ]
 
-  return <section className="auth-page" aria-label={register ? 'Formulario de registro' : 'Formulario de acceso'}>
-    <PrototypeForm fields={fields} submitLabel={register ? 'Validar registro de prueba' : 'Validar acceso de prueba'}
-      successMessage={register ? 'Formulario de registro validado. No se ha creado una cuenta; el registro real se conectará en la próxima fase.' : 'Formulario de acceso validado. Sigues como invitado; la autenticación se conectará en la próxima fase.'} />
-    <p className="account-link">{register ? '¿Ya tienes cuenta?' : '¿Primera vez en Umbra?'} <Link to={register ? '/login' : '/registro'}>{register ? 'Iniciar sesión' : 'Ir a Registro'}</Link></p>
-    <Link className="inline-link" to="/ayuda">Necesito ayuda</Link>
+  async function submit(values) {
+    const data = Object.fromEntries(values)
+    if (recovery) {
+      await recoverAccount(data)
+      setRecovered(true)
+    } else {
+      setRecoveryCode(await registerAccount(data))
+    }
+  }
+
+  return <section className="auth-page">
+    {recoveryCode ? <div className="action-stack">
+      <p className="feedback success" role="status">Tu cuenta local está creada. Guarda este código antes de continuar: lo necesitarás si olvidas la contraseña.</p>
+      <label className="form-field">Código de recuperación<input aria-label="Código de recuperación" readOnly value={recoveryCode} onFocus={event => event.target.select()} /></label>
+      <p className="form-hint">Guárdalo en un lugar seguro. No podemos recuperarlo ni enviarlo por correo.</p>
+      <Link className="primary-button" to="/login">Ya he guardado el código. Iniciar sesión</Link>
+    </div> : recovered ? <div className="action-stack"><p className="feedback success" role="status">Contraseña actualizada. Ya puedes entrar con la nueva contraseña.</p><Link className="primary-button" to="/login">Iniciar sesión</Link></div> : <AppForm fields={fields} onSubmit={submit} submitLabel={recovery ? 'Cambiar contraseña' : 'Crear cuenta local'} notice="La cuenta funciona en este navegador. No se envían correos ni se sincronizan datos entre dispositivos." />}
+    {!recoveryCode && !recovered && <p className="account-link">¿Ya tienes cuenta? <Link to="/login">Iniciar sesión</Link></p>}
+    <Link className="inline-link" to="/privacidad">Privacidad y uso</Link>
   </section>
 }

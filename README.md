@@ -1,8 +1,6 @@
-﻿# UMBRA
+# UMBRA
 
-Proyecto interdisciplinario con React, Vite y React Router. Preparación de la entrega de Inicio y navegación: portada en modo oscuro, interfaces, formularios de prueba, accesibilidad y mensajes al usuario.
-
-**Estado actual:** las últimas ediciones de `App.jsx` y del mapa de navegación dejan activas únicamente Inicio y Login. Las demás interfaces permanecen preparadas en sus archivos, pendientes de reconectar si forman parte del alcance de esta entrega.
+Aplicación de personajes de fantasía con React, Vite y React Router. Interfaz oscura, navegación con teclado y almacenamiento local en el navegador.
 
 ## Ejecutar
 
@@ -11,39 +9,52 @@ npm install
 npm run dev
 ```
 
-Abrir la dirección que indique Vite. Para verificar:
+En PowerShell con scripts deshabilitados, usa `npm.cmd` en lugar de `npm`.
 
 ```bash
 npm test
+npm run lint
 npm run build
+npm run preview
 ```
 
-## Cómo se conecta
+La comprobación de recorridos en navegador está en `npm run test:browser`. Requiere la app local activa y Chrome o Edge iniciado con depuración remota en el puerto 9222; utiliza un contexto temporal aislado y lo elimina al terminar. `UMBRA_URL` permite elegir otra dirección local y `UMBRA_SCREENSHOT` guarda una captura opcional. Comprueba altas, edición, borrado, favoritos, búsqueda, retratos, cuentas, recuperación, copias JSON, teclado, almacenamiento bloqueado y pantallas de 320/390 px.
 
-`index.html` proporciona `#root`. `src/main.jsx` carga los estilos globales y monta `App` dentro de `BrowserRouter`. `src/App.jsx` compone la cabecera y la navegación, configura las rutas y abre las fichas en un diálogo.
+## Funciones
 
-- `src/pages/`: interfaces de cada ruta.
-- `src/components/`: componentes reutilizables, formularios, feedback y diálogos.
-- `src/data/`: personajes de ejemplo y mapa de navegación.
-- `src/hooks/`: preferencias de accesibilidad.
-- `src/utils/`: validación de formularios.
-- `src/index.css`: tipografías y estilos globales.
-- `src/App.css`: composición, modo oscuro y estilos de interfaz.
-- `public/`: imágenes, fuentes locales y licencias.
+- Inicio con personajes recientes y acceso a la creación de fichas.
+- Biblioteca con búsqueda por nombre, clase, raza u origen, filtro de clase y favoritos, y orden por fecha, nombre o nivel.
+- Crear, consultar, editar, duplicar y eliminar personajes. Las fichas incluyen historia, nivel, reino, rasgos, cuatro atributos y retrato propio PNG/JPG/WebP de hasta 750 KB.
+- Inspiración con ideas narrativas y personajes aleatorios que se pueden llevar al editor.
+- Registro de cuentas locales, inicio y cierre de sesión, opción Recordarme y recuperación mediante el código entregado al registrarse.
+- Perfil con recuentos y exportación/importación de bibliotecas JSON. La importación valida el contenido y pide confirmación antes de sustituir datos.
+- Accesibilidad por perfil mediante cinco menús: texto (cuatro tamaños y deslizador), contraste (normal, alto e invertido), lectores de pantalla (anuncios y lectura voluntaria en voz alta), teclado (foco reforzado y guía de atajos) y apariencia (oscuro, claro, sepia; tamaño de controles; seis acentos; movimiento reducido).
+- Ayuda, información de privacidad, estado de conexión y página 404.
 
-## Alcance de esta entrega
+## Almacenamiento
 
-Sin endpoints, autenticación real ni CRUD. Los formularios validan campos de prueba y explican el resultado; no envían ni guardan credenciales, cuentas o personajes. Solo las preferencias de accesibilidad se guardan en el navegador. La biblioteca usa los datos de ejemplo de `characters.js`.
+La app funciona sin servidor de datos. Cada cuenta local y el invitado tienen una biblioteca independiente, inicialmente con seis personajes. Los cambios persisten en `localStorage`; una biblioteca vacía permanece vacía. Los datos del invitado se conservan al cambiar de cuenta. Usa exportar/importar para trasladar personajes entre bibliotecas.
 
-Las rutas activas son Inicio y Login. Se han preparado además Biblioteca, Inspiración, Perfil, Crear personaje, Registro, Ayuda, Accesibilidad y una página 404. Actualmente no están conectadas al enrutador y los botones de Crear personaje y Ver todos están desactivados.
+Los ajustes de accesibilidad se guardan por identificador de perfil en `umbra.accessibility.v2.<id>`; Invitado tiene su propia configuración. Al cambiar de cuenta se cargan sus ajustes. Las antiguas preferencias globales se recuperan únicamente para Invitado. Restablecer afecta solo al perfil activo. Si el guardado está bloqueado, los ajustes se aplican durante la sesión y se muestra un aviso. El contraste tiene prioridad sobre los colores del tema, conservando la selección de tema y acento. La lectura en voz alta usa Web Speech cuando está disponible y se detiene al cerrar la ficha o salir de su pantalla; no sustituye al lector de pantalla del dispositivo.
 
-## Rúbrica y seguimiento
+Las cuentas solo existen en el navegador donde se crean. Las contraseñas se guardan como verificadores PBKDF2-SHA-256 con sal aleatoria por cuenta y 100 000 iteraciones; el código de recuperación se verifica mediante SHA-256. No se guardan contraseñas ni códigos de recuperación en texto plano. Es una organización local de bibliotecas, sin autenticación de servidor ni protección frente a personas con acceso al navegador. Web Crypto necesita un contexto seguro: localhost o HTTPS.
 
-- [Repositorio](https://github.com/Ixf2/UMBRAJoanaRamirez)
-- Tablero de GitHub Projects.
+Recordarme conserva la sesión en `localStorage`; sin marcarlo se utiliza `sessionStorage`. El cierre de sesión elimina ambas referencias. No hay envío de correos ni sincronización entre dispositivos. Borrar los datos del sitio elimina las cuentas y las bibliotecas. Exporta copias periódicas desde Perfil; estas incluyen personajes y retratos, sin cuentas ni credenciales.
 
-Las imágenes son recursos generados para el proyecto; los prompts están en [public/images/ASSETS.md](public/images/ASSETS.md). Las licencias de las fuentes están en `public/fonts/`.
+Los fallos de almacenamiento se muestran al usuario y las operaciones que no se pueden guardar no se presentan como completadas. Sin conexión puedes continuar con la app abierta; recargarla requiere acceso al sitio o al servidor local. No incluye un service worker.
 
-## Publicación futura
+## Estructura
 
-Esta tarea prepara el proyecto local. Al publicar con `BrowserRouter`, configurar el alojamiento para que las rutas de la aplicación devuelvan `index.html`. La aplicación mostrará su interfaz 404 cuando la ruta no exista. Vite ya permite comprobar estas rutas durante el desarrollo.
+- `src/pages/`: pantallas y formularios de cada ruta.
+- `src/components/`: navegación, fichas, formularios, avisos y diálogos.
+- `src/data/`: personajes iniciales, opciones y navegación.
+- `src/hooks/`: bibliotecas locales y preferencias de accesibilidad.
+- `src/utils/`: validación, cuentas locales y copias de seguridad.
+- `tests/`: pruebas de validación, persistencia y cuentas.
+- `public/`: imágenes y fuentes locales con sus licencias.
+
+Las imágenes se documentan en [public/images/ASSETS.md](public/images/ASSETS.md). Las licencias de las fuentes están en `public/fonts/`.
+
+## Publicación
+
+`npm run build` genera `dist/`. El alojamiento debe servir `index.html` para las rutas de la aplicación, ya que se utiliza `BrowserRouter`. No incluyas las bibliotecas ni las cuentas locales en el despliegue; son datos propios de cada navegador.
