@@ -1,0 +1,308 @@
+{
+  "date": "08/11/2026",
+  "source_files": 50,
+  "source_lines": 2892,
+  "unit_tests": 13,
+  "files": [
+    {
+      "path": "index.html",
+      "bytes": 531,
+      "lines": 15,
+      "sha256": "a4b5b04a163ff023f3c8102426002f20b1b158dc381205f4221eb128a55c1dac"
+    },
+    {
+      "path": "src/main.jsx",
+      "bytes": 330,
+      "lines": 13,
+      "sha256": "a0c30b0734ced3997d30279cc261a3ab1c2dc13a7a16f736b62a6d8e132b012d"
+    },
+    {
+      "path": "src/App.jsx",
+      "bytes": 8733,
+      "lines": 114,
+      "sha256": "6d07d99caa4e8e73f692ef39422f56836d7e14909aec8f62c07cf6b95a6d7f0d"
+    },
+    {
+      "path": "src/pages/Home.jsx",
+      "bytes": 1283,
+      "lines": 21,
+      "sha256": "035f7ac6a58d3da2d7ef29f9f44eccc24f3b657da27da6622153ee4a702501f3"
+    },
+    {
+      "path": "src/pages/Library.jsx",
+      "bytes": 3138,
+      "lines": 34,
+      "sha256": "936556e606f01ff84c8273acc319594f9b70d9321d590c3b6a9d8da92436cec3"
+    },
+    {
+      "path": "src/pages/CreateCharacter.jsx",
+      "bytes": 5977,
+      "lines": 92,
+      "sha256": "2e37c5f882c86bf1c5fb2133faa692ef872a89558ce7f28bfcadddac1f647a14"
+    },
+    {
+      "path": "src/pages/Login.jsx",
+      "bytes": 4447,
+      "lines": 90,
+      "sha256": "cf0768a1da6013d2d61e81398a606491589ef07d03658fef6b4e72b62dd55d7d"
+    },
+    {
+      "path": "src/pages/Auth.jsx",
+      "bytes": 3013,
+      "lines": 39,
+      "sha256": "f9a2022caaa080adac64a076ebe3dd187b626744e6b0631539777c41177ca152"
+    },
+    {
+      "path": "src/pages/Profile.jsx",
+      "bytes": 3395,
+      "lines": 50,
+      "sha256": "7f687b3c23093c5669458a57c18a8a9e94d5954c9c68a1d60e05c81402a7e7f5"
+    },
+    {
+      "path": "src/pages/Accessibility.jsx",
+      "bytes": 9514,
+      "lines": 114,
+      "sha256": "4e170d4f623bc21880cc444e25c33fc1863a323af2163d87fb929dba4836a285"
+    },
+    {
+      "path": "src/pages/Information.jsx",
+      "bytes": 5408,
+      "lines": 66,
+      "sha256": "acce321b2bc66ac25b5807fc9fda5e5c4f9a8f5b53d44cbc890cf559e482b09e"
+    },
+    {
+      "path": "src/components/header/Header.jsx",
+      "bytes": 2145,
+      "lines": 45,
+      "sha256": "bc63b3517248772123ab66ef9a73d28aa449b2c50fadd77cbf49182acf312fec"
+    },
+    {
+      "path": "src/components/bottomnavigation/BottomNavigation.jsx",
+      "bytes": 1027,
+      "lines": 24,
+      "sha256": "2e6b222d69ace0e5eab439918671e1652cea516540324a4d8087656a898fc8ae"
+    },
+    {
+      "path": "src/components/hero/Hero.jsx",
+      "bytes": 616,
+      "lines": 13,
+      "sha256": "122bddc95a161c7f53e81d9faac748ef8533d6e2a76129a0705eb8c661a610c1"
+    },
+    {
+      "path": "src/components/charactercard/CharacterCard.jsx",
+      "bytes": 531,
+      "lines": 8,
+      "sha256": "1a4d5ca86bed78f929eb7e2c5813904ec0a21f6217cc00e9d31817eaceb4da98"
+    },
+    {
+      "path": "src/components/charactercard/Portrait.jsx",
+      "bytes": 939,
+      "lines": 26,
+      "sha256": "fb13bc4be4580e567430468de02d95b4aa232ed266d8850e6268ac8e976f0668"
+    },
+    {
+      "path": "src/components/modal/Modal.jsx",
+      "bytes": 1032,
+      "lines": 29,
+      "sha256": "16f7bc8b7d3092477abecf3e47eb5926dec44bd540964f20ec9aea17eac39d94"
+    },
+    {
+      "path": "src/components/forms/AppForm.jsx",
+      "bytes": 4576,
+      "lines": 81,
+      "sha256": "4a8ae6f5bc75be07c4937e00dc05883937ce1be83b04afbe677e730131fef18e"
+    },
+    {
+      "path": "src/components/feedback/ConnectionStatus.jsx",
+      "bytes": 836,
+      "lines": 18,
+      "sha256": "661240da7ee93895c744b93593d0078c7983655d346fa477b5c26a7da245c1bf"
+    },
+    {
+      "path": "src/components/feedback/ReadAloud.jsx",
+      "bytes": 1853,
+      "lines": 48,
+      "sha256": "6b8db696e2080055c48acb39dbaf6904f444089ce5c135a8a09fb4c9c3414069"
+    },
+    {
+      "path": "src/components/icon/Icon.jsx",
+      "bytes": 2717,
+      "lines": 35,
+      "sha256": "5de85065d74d5b71fce2b4886147b91b6860d5666e8c4cbf7f682cc48e63de1e"
+    },
+    {
+      "path": "src/hooks/useCharacters.js",
+      "bytes": 1725,
+      "lines": 38,
+      "sha256": "a885b8a5c772dc0c583fbb3ceaf109b45df7b3b28ec9c0074243925f6b04aa14"
+    },
+    {
+      "path": "src/hooks/usePreferences.js",
+      "bytes": 1056,
+      "lines": 24,
+      "sha256": "473006af0a4bb3363458de9ab2d2b34b1a6357d3fcf7c297af1ddc6caa3a5208"
+    },
+    {
+      "path": "src/utils/characterStore.js",
+      "bytes": 3894,
+      "lines": 68,
+      "sha256": "ccf59fe9fab148b04558021ebbf4e148e02f272ec2b83bdaa779840457b1b510"
+    },
+    {
+      "path": "src/utils/localAccounts.js",
+      "bytes": 3654,
+      "lines": 63,
+      "sha256": "097f5b62a324833b5fa35bd1da92483cda3b00eb7fff68c072c2cce9ea0533cd"
+    },
+    {
+      "path": "src/utils/preferenceStore.js",
+      "bytes": 1938,
+      "lines": 36,
+      "sha256": "b8f0d16a392951b7a68d78af14e91fdd1f28ca3d40889207ca74ebcb701c70e9"
+    },
+    {
+      "path": "src/utils/validateForm.js",
+      "bytes": 1616,
+      "lines": 25,
+      "sha256": "97ab9fdf59e9edaeff458ef55a36ad19a9328d9cd8a61051f1cc0bcc9740a4c4"
+    },
+    {
+      "path": "src/data/characters.js",
+      "bytes": 2826,
+      "lines": 49,
+      "sha256": "555900b706070b7ea3c05c190dcfdde891c2297e3771940afc53b6e18531188a"
+    },
+    {
+      "path": "src/data/characterOptions.js",
+      "bytes": 845,
+      "lines": 19,
+      "sha256": "638e78935a9815f6be3f8f4f941d8f40c874ae40fff4fdecef8bdc0d1516c7e3"
+    },
+    {
+      "path": "src/data/navigation.js",
+      "bytes": 1217,
+      "lines": 24,
+      "sha256": "1c2230c0b5cc331334eb1857b21ac7fcebaf74f9ee217d5c879250faa6668386"
+    },
+    {
+      "path": "src/data/accessibility.js",
+      "bytes": 1865,
+      "lines": 36,
+      "sha256": "80a1383f7d244410cc28615ffe6b6f2a566c191656b219ed07995f320a452818"
+    },
+    {
+      "path": "src/index.css",
+      "bytes": 2249,
+      "lines": 77,
+      "sha256": "c978c61f6a0b248b94abc4091f7f8418e86dceb6738676638b7eb73e1e113af0"
+    },
+    {
+      "path": "src/App.css",
+      "bytes": 19205,
+      "lines": 255,
+      "sha256": "c31d037040bb76b8ec62d5837bec2c06213bc01fd399c35c84b561e884231a70"
+    },
+    {
+      "path": "src/pages/Login.css",
+      "bytes": 4341,
+      "lines": 238,
+      "sha256": "9171b7bceded35939c7f54794fde857b8e4a5636fff99f6c79b6ff68fd34d886"
+    },
+    {
+      "path": "src/pages/Accessibility.css",
+      "bytes": 4857,
+      "lines": 44,
+      "sha256": "b0f317a6716b445e7c105892c481a0541c33db47c70fd5f05d5537523f27822f"
+    },
+    {
+      "path": "package.json",
+      "bytes": 774,
+      "lines": 30,
+      "sha256": "9bd88f61dd2f00d8cd60f4a9885a90e18f8772c2aa0751bca8a863a7d448f81b"
+    },
+    {
+      "path": "vite.config.js",
+      "bytes": 324,
+      "lines": 13,
+      "sha256": "7ea68df159e6dcf1a4da387c5eb828a35f402484ba3189819a79c6a5e52ad3bd"
+    },
+    {
+      "path": "eslint.config.js",
+      "bytes": 589,
+      "lines": 21,
+      "sha256": "9f9b44b8e55768eaf86e417b96919510b12055d87806e0e2f0703c5a0eb64817"
+    },
+    {
+      "path": "tests/characterStore.test.js",
+      "bytes": 2353,
+      "lines": 43,
+      "sha256": "66e4796c990f66f5da9eeda449a4a953c822d30de4ffee8d866dc8e2d95f12cd"
+    },
+    {
+      "path": "tests/localAccounts.test.js",
+      "bytes": 2563,
+      "lines": 46,
+      "sha256": "f9c74b3be3d6b928482ef505aff66a27eebf49e46cd6689ac47108c804688b8c"
+    },
+    {
+      "path": "tests/preferenceStore.test.js",
+      "bytes": 2657,
+      "lines": 42,
+      "sha256": "44f18b3026203a6c61dcb97cf28c841a10937f78486391c25a6e6e77810d4a53"
+    },
+    {
+      "path": "tests/validateForm.test.js",
+      "bytes": 2482,
+      "lines": 50,
+      "sha256": "f86dec842e30062c94bbfc7924821830f5054fcd34d816c21bdc79b58d2a24ee"
+    },
+    {
+      "path": "scripts/browser-smoke.mjs",
+      "bytes": 23634,
+      "lines": 366,
+      "sha256": "4e7869f75f0b3711184905afbd5d874ae70508b887415e3ccdc786aa6a716305"
+    },
+    {
+      "path": "public/favicon.svg",
+      "bytes": 253,
+      "lines": 4,
+      "sha256": "9f9b30bbf7aa3dca61c8b928754abfa4ad370249b9b4d857bdcf1a28825ec5dc"
+    },
+    {
+      "path": "public/images/ASSETS.md",
+      "bytes": 2036,
+      "lines": 15,
+      "sha256": "b47a7657182ce862ccd9e88a9b70ae4ae33ea49660a9d52875a18fdea6997172"
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 277,
+      "lines": 24,
+      "sha256": "d50ab07e11fa4bf3b1c7c3312e1d7baeab56cca756832ccf40476823ad2a38b7"
+    },
+    {
+      "path": "README.md",
+      "bytes": 5076,
+      "lines": 60,
+      "sha256": "7dda1427ac6139c9dc25225faff513b1b45813da65f1635402895bf1098ed103"
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 1081,
+      "lines": 21,
+      "sha256": "58e32531aacd2fa91b72e5c1cb037fe7b520989bc7ffdc66c40aa6537b184202"
+    },
+    {
+      "path": "public/fonts/Inter-OFL.txt",
+      "bytes": 4470,
+      "lines": 93,
+      "sha256": "f14f2b95a38f4f20cad4d27f7710593f37534c046641be0348da7c28365f4e39"
+    },
+    {
+      "path": "public/fonts/Cormorant-Garamond-OFL.txt",
+      "bytes": 4480,
+      "lines": 93,
+      "sha256": "b2306305139223cbc000c2b9feffaa741687056066c227ba34de31c98eda0814"
+    }
+  ]
+}
