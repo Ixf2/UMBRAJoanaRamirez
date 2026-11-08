@@ -1,0 +1,77 @@
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/cormorant-garamond-regular.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/cormorant-garamond-medium.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/cormorant-garamond-italic.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/inter-regular.ttf') format('truetype');
+}
+
+:root {
+  font-family: 'Inter', sans-serif;
+  color: #ded9c7;
+  background: #202020;
+  color-scheme: dark;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --background: #090f0f;
+  --gold: #a99770;
+  --muted: #9b9d91;
+  --border: #303833;
+  --accent: #9e3537;
+  --foreground: #ded9c7;
+  --surface: #111a18;
+  --surface-raised: #25352c;
+  --input-background: #0b1210;
+  --feedback-background: #1b221d;
+  --error: #ffbba5;
+  --error-background: #302020;
+  --success: #7d9c70;
+  --accent-hover: #b44244;
+  --accent-ink: #e09b82;
+  --button-text: #fff8ef;
+  --text-scale: 1;
+  --control-height: 44px;
+  --control-padding: 10px;
+  --icon-size: 22px;
+}
+
+* { box-sizing: border-box; }
+body { min-width: 280px; min-height: 100vh; margin: 0; }
+button, input, select, textarea { font: inherit; }
+button, a { -webkit-tap-highlight-color: transparent; }
+button { color: inherit; cursor: pointer; border: 0; }
+a { color: inherit; text-decoration: none; }
+h1, h2, h3, p { margin: 0; }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 4px;
+}
+img { max-width: 100%; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+}

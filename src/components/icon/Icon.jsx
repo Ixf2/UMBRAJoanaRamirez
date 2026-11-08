@@ -1,0 +1,38 @@
+const paths = {
+  dice: <><rect x="3" y="3" width="18" height="18" rx="4" /><circle cx="8" cy="8" r="1" fill="currentColor" /><circle cx="16" cy="8" r="1" fill="currentColor" /><circle cx="12" cy="12" r="1" fill="currentColor" /><circle cx="8" cy="16" r="1" fill="currentColor" /><circle cx="16" cy="16" r="1" fill="currentColor" /></>,
+  unlock: <><rect x="5" y="10" width="14" height="11" rx="2" /><path d="M8 10V7a4 4 0 0 1 7.5-2M12 14v3" /></>,
+  undo: <><path d="M3 10h11a7 7 0 0 1 0 14M3 10l5-5M3 10l5 5" transform="translate(0 -2)" /></>,
+  mail: <><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 6 9 7 9-7" /></>,
+  lock: <><rect x="5" y="10" width="14" height="11" rx="2" /><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3" /></>,
+  'eye-off': <><path d="m3 3 18 18M10.5 5.1 12 5c6 0 10 7 10 7a20 20 0 0 1-3 3.5M6 6.5A22 22 0 0 0 2 12s4 7 10 7a11 11 0 0 0 5-1.2M10 10a3 3 0 0 0 4 4" /></>,
+  login: <><path d="M14 3h6v18h-6M3 12h13m-5-5 5 5-5 5" /></>,
+  'user-plus': <><circle cx="9" cy="7" r="4" /><path d="M2 22v-3a7 7 0 0 1 14 0v3M19 8v8M15 12h8" /></>,
+  sigil: <><path d="m12 2 10 5-2.5 11-7.5 4-7.5-4L2 7ZM5 7l7 12 7-12M12 2v10M8 11h8M9.5 15h5" /></>,
+  close: <path d="m6 6 12 12M6 18 18 6" />,
+  back: <path d="m14 5-7 7 7 7" />,
+  chevron: <path d="m9 5 7 7-7 7" />,
+  search: <><circle cx="10" cy="10" r="6" /><path d="m15 15 6 6" /></>,
+  edit: <><path d="m15 4 5 5M4 20l5-1L21 7l-5-5L4 14Z" /></>,
+  trash: <><path d="M3 6h18M9 6V3h6v3M6 6l1 15h10l1-15M10 10v7M14 10v7" /></>,
+  bookmark: <path d="M6 3h12v19l-6-4-6 4Z" />,
+  help: <><circle cx="12" cy="12" r="9" /><path d="M9 9a3 3 0 1 1 4 3c-1 0-1 1-1 2M12 17h.01" /></>,
+  logout: <><path d="M9 3H4v18h5M10 12h12m-5-5 5 5-5 5" /></>,
+  palette: <><path d="M12 3a9 9 0 1 0 0 18h1a2 2 0 0 0 0-4h-1a2 2 0 0 1 0-4h4a5 5 0 0 0 5-5c0-3-5-5-9-5Z" /><path d="M7 9h.01M11 6h.01M6 14h.01M16 7h.01" /></>,
+  contrast: <><circle cx="12" cy="12" r="9" /><path d="M12 3v18" /><path d="M12 3a9 9 0 0 1 0 18Z" fill="currentColor" /></>,
+  type: <path d="m3 20 7-16 7 16M6 14h8M17 12h6M20 12v8" />,
+  speaker: <><path d="m11 4-6 5H2v6h3l6 5ZM15 8a6 6 0 0 1 0 8M18 5a10 10 0 0 1 0 14" /></>,
+  keyboard: <><rect x="2" y="5" width="20" height="14" rx="2" /><path d="M6 9h1m3 0h1m3 0h1m3 0h1M6 12h1m3 0h1m3 0h1m3 0h1M7 16h10" /></>,
+  check: <path d="m4 12 5 5L20 6" />,
+  eye: <><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z" /><circle cx="12" cy="12" r="3" /></>,
+  menu: <><path d="M5 6h14M5 12h14M5 18h14" /></>,
+  bell: <><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4" /></>,
+  home: <><path d="m3 10 9-7 9 7v11h-6v-7H9v7H3Z" /></>,
+  book: <><path d="M12 5v16M3 3l9 2 9-2v16l-9 2-9-2Z" /></>,
+  sparkle: <><path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5ZM20 2v4M18 4h4" /></>,
+  user: <><circle cx="12" cy="7" r="4" /><path d="M4 22v-3a8 8 0 0 1 16 0v3" /></>,
+  crest: <><path d="m12 2 8 5-2 10-6 5-6-5L4 7ZM12 2v20M8 6l1 8 3 3 3-3 1-8" /></>,
+}
+
+export default function Icon({ name, size = 22 }) {
+  return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{paths[name]}</svg>
+}

@@ -1,0 +1,446 @@
+.inspiration-page {
+  display: grid;
+  gap: 16px;
+  padding-bottom: 30px;
+  min-width: 0;
+}
+
+.inspiration-intro {
+  position: relative;
+  display: grid;
+  gap: 12px;
+  padding: 24px 20px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: radial-gradient(ellipse at top right, var(--surface-raised), transparent 75%), var(--surface);
+}
+
+.inspiration-emblem {
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  color: var(--gold);
+  opacity: .65;
+}
+
+.inspiration-intro .eyebrow {
+  padding-right: 35px;
+  font-size: calc(9px * var(--text-scale));
+  line-height: 1.7;
+}
+
+.inspiration-intro h2 {
+  font-size: calc(29px * var(--text-scale));
+}
+
+.inspiration-intro > p:last-child,
+.inspiration-guidance p,
+.inspiration-create p {
+  color: var(--muted);
+  font-size: calc(12px * var(--text-scale));
+  line-height: 1.8;
+}
+
+.inspiration-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: stretch;
+  gap: 8px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  background: var(--background);
+}
+
+.inspiration-toolbar .primary-button {
+  min-width: 0;
+  font-size: calc(18px * var(--text-scale));
+  line-height: 1.4;
+}
+
+.inspiration-toolbar svg,
+.inspiration-create svg {
+  flex-shrink: 0;
+}
+
+.inspiration-undo {
+  width: var(--control-height);
+  min-width: 44px;
+  padding: 0;
+}
+
+.inspiration-page button:disabled {
+  cursor: default;
+}
+
+.inspiration-guidance {
+  display: grid;
+  gap: 3px;
+}
+
+.inspiration-guidance .text-button {
+  justify-self: start;
+}
+
+.inspiration-draft {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+}
+
+.inspiration-draft-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 6px 0;
+}
+
+.inspiration-draft-heading .eyebrow {
+  font-size: calc(9px * var(--text-scale));
+  line-height: 1.8;
+}
+
+.inspiration-draft-badge {
+  padding: 4px 9px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  color: var(--muted);
+  font-size: calc(10px * var(--text-scale));
+  line-height: 1.5;
+}
+
+.inspiration-field {
+  min-width: 0;
+  padding: 10px 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: var(--surface);
+  scroll-margin-top: 95px;
+}
+
+.inspiration-field[data-locked="true"] {
+  border-color: var(--accent-ink);
+}
+
+.inspiration-field-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+.inspiration-field-heading h3 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  font-size: calc(10px * var(--text-scale));
+  line-height: 1.6;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: .7px;
+  overflow-wrap: anywhere;
+}
+
+.inspiration-fixed {
+  color: var(--accent-ink);
+  font-size: calc(9px * var(--text-scale));
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.inspiration-field-actions {
+  display: flex;
+  flex-shrink: 0;
+}
+
+.inspiration-field-actions .icon-button[aria-pressed="true"] {
+  color: var(--accent-ink);
+  background: var(--surface-raised);
+  border-radius: 3px;
+}
+
+.inspiration-portrait-card {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.inspiration-portrait-card .inspiration-field {
+  border-radius: 0;
+  border: 0;
+}
+
+.inspiration-portrait-card .inspiration-field[data-locked="true"] {
+  box-shadow: inset 3px 0 var(--accent-ink);
+}
+
+.inspiration-portrait-card .character-portrait {
+  width: 100%;
+  aspect-ratio: 1.3;
+  border-radius: 3px;
+  object-position: center 30%;
+}
+
+.inspiration-portrait-card .portrait-placeholder {
+  font-size: calc(64px * var(--text-scale));
+}
+
+.inspiration-portrait-caption {
+  padding-top: 8px;
+  color: var(--muted);
+  font-size: calc(10px * var(--text-scale));
+  line-height: 1.6;
+}
+
+.inspiration-name {
+  color: var(--foreground);
+  font-family: var(--font-display);
+  font-size: calc(29px * var(--text-scale));
+  line-height: 1.2;
+}
+
+.inspiration-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.inspiration-fields .inspiration-field {
+  padding: 8px 10px 16px;
+}
+
+.inspiration-value {
+  color: var(--foreground);
+  font-family: var(--font-display);
+  font-size: calc(23px * var(--text-scale));
+  line-height: 1.3;
+}
+
+.inspiration-level {
+  color: var(--muted);
+  font-size: calc(12px * var(--text-scale));
+}
+
+.inspiration-level strong {
+  color: var(--gold);
+  font-family: var(--font-display);
+  font-size: calc(34px * var(--text-scale));
+  font-weight: 400;
+}
+
+.inspiration-traits {
+  margin: 0;
+}
+
+.inspiration-input-label {
+  display: block;
+  margin: 14px 0 7px;
+  color: var(--muted);
+  font-size: calc(12px * var(--text-scale));
+  line-height: 1.7;
+}
+
+.inspiration-page input,
+.inspiration-page select,
+.inspiration-page textarea {
+  display: block;
+  width: 100%;
+  min-width: 0;
+}
+
+.inspiration-page input.inspiration-name {
+  font-family: var(--font-display);
+  font-size: calc(26px * var(--text-scale));
+}
+
+.inspiration-page .inspiration-fields .inspiration-value {
+  font-size: calc(18px * var(--text-scale));
+}
+
+.inspiration-page textarea.inspiration-story {
+  font-size: calc(16px * var(--text-scale));
+  line-height: 1.8;
+  min-height: 210px;
+}
+
+.inspiration-number {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.inspiration-number input[type="number"] {
+  flex: 1;
+  width: 0;
+  min-width: 0;
+  color: var(--gold);
+  font-family: var(--font-display);
+  font-size: calc(26px * var(--text-scale));
+  line-height: 1.2;
+  appearance: textfield;
+}
+
+.inspiration-number input::-webkit-inner-spin-button,
+.inspiration-number input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.inspiration-number > span {
+  flex-shrink: 0;
+  color: var(--muted);
+  font-family: 'Inter', sans-serif;
+  font-size: calc(11px * var(--text-scale));
+}
+
+.inspiration-traits li {
+  padding: 0;
+}
+
+.inspiration-traits button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: var(--control-height);
+  padding: 6px 10px;
+  background: transparent;
+  color: var(--foreground);
+  font-size: calc(12px * var(--text-scale));
+}
+
+.inspiration-traits button svg {
+  flex-shrink: 0;
+}
+
+.inspiration-trait-picker {
+  margin-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+.inspiration-trait-picker summary {
+  min-height: var(--control-height);
+  padding: 12px 0;
+  color: var(--accent-ink);
+  font-size: calc(13px * var(--text-scale));
+  line-height: 1.7;
+  cursor: pointer;
+}
+
+.inspiration-trait-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  padding-bottom: 12px;
+}
+
+.inspiration-trait-options .checkbox-label {
+  color: var(--foreground);
+  font-size: calc(12px * var(--text-scale));
+}
+
+.inspiration-trait-options input[type="checkbox"] {
+  width: 20px;
+}
+
+.inspiration-add-trait {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.inspiration-field > .field-error {
+  margin-top: 8px;
+}
+
+.inspiration-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+}
+
+.inspiration-stat {
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--background);
+}
+
+.inspiration-stat dt {
+  color: var(--muted);
+  font-size: calc(11px * var(--text-scale));
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.inspiration-stat dd {
+  margin: 8px 0;
+  color: var(--gold);
+  font-family: var(--font-display);
+  font-size: calc(32px * var(--text-scale));
+  line-height: 1.2;
+}
+
+.inspiration-stat dd span {
+  font-family: 'Inter', sans-serif;
+  color: var(--muted);
+  font-size: calc(10px * var(--text-scale));
+}
+
+.inspiration-stat-track {
+  height: 4px;
+  border-radius: 3px;
+  overflow: hidden;
+  background: var(--border);
+}
+
+.inspiration-stat-track > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--gold);
+}
+
+.inspiration-story {
+  color: var(--muted);
+  font-size: calc(13px * var(--text-scale));
+  line-height: 1.9;
+}
+
+.inspiration-create {
+  display: grid;
+  gap: 12px;
+  padding-top: 8px;
+}
+
+.inspiration-create .primary-button {
+  line-height: 1.4;
+  text-align: center;
+}
+
+.app-frame[data-element-size="large"] .inspiration-fields,
+.app-frame[data-element-size="extra-large"] .inspiration-fields,
+.app-frame[data-element-size="large"] .inspiration-stats,
+.app-frame[data-element-size="extra-large"] .inspiration-stats,
+.app-frame[data-text-size="extra-large"] .inspiration-trait-options {
+  grid-template-columns: 1fr;
+}
+
+@media (max-width: 350px) {
+  .inspiration-fields,
+  .inspiration-stats,
+  .inspiration-trait-options {
+    grid-template-columns: 1fr;
+  }
+}
