@@ -46,7 +46,7 @@ Usa el mismo navegador y la misma dirección con la que te registraste: `localho
 
 - **Inicio:** portada, acceso al editor y los dos personajes más recientes.
 - **Biblioteca:** búsqueda por nombre, clase, raza u origen; filtro de clase y favoritos; ordenación por actualización, nombre o nivel.
-- **Fichas:** crear, consultar, editar, duplicar y eliminar personajes con confirmación antes de borrar.
+- **Fichas:** crear, consultar, editar, duplicar y eliminar personajes. Cada ficha se abre en su propia pantalla (`/biblioteca/:id`), con scroll de página, enlace para volver y confirmación de eliminación dentro de la ficha. Los filtros de biblioteca se conservan en la dirección al volver.
 - **Personalización:** nombre, clase, raza, nivel, origen, historia, hasta seis rasgos y cuatro atributos: Fuerza, Destreza, Inteligencia y Carisma.
 - **Retratos:** imágenes incluidas, iniciales o un archivo propio PNG, JPG o WebP de hasta 750 KB, con vista previa.
 - **Inspiración:** ideas narrativas y personajes aleatorios que se pueden llevar al editor antes de guardarlos.
@@ -238,7 +238,7 @@ Use the same browser and address you registered with: `localhost:5173` and `127.
 
 - **Home:** landing screen, access to the editor, and the two most recently updated characters.
 - **Library:** search by name, class, race, or origin; filter by class and favorites; sort by update time, name, or level.
-- **Character sheets:** create, view, edit, duplicate, and delete characters, with confirmation before deletion.
+- **Character sheets:** create, view, edit, duplicate, and delete characters. Each sheet opens on its own screen (`/biblioteca/:id`), with normal page scrolling, a back link, and inline deletion confirmation. Library filters are kept in the URL when returning.
 - **Customization:** name, class, race, level, origin, story, up to six traits, and four attributes: Strength, Dexterity, Intelligence, and Charisma.
 - **Portraits:** included images, initials, or your own PNG, JPG, or WebP file of up to 750 KB, with a preview.
 - **Inspiration:** story prompts and random characters that can be taken to the editor before saving.

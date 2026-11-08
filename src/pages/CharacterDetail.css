@@ -1,0 +1,57 @@
+.character-detail {
+  display: grid;
+  gap: 20px;
+  padding-bottom: 28px;
+  min-width: 0;
+}
+
+.character-back {
+  gap: 8px;
+}
+
+.character-detail > .character-portrait {
+  aspect-ratio: 1;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+
+.character-detail-summary {
+  color: var(--gold);
+  font-size: calc(13px * var(--text-scale));
+  line-height: 1.8;
+}
+
+.character-detail-origin {
+  color: var(--muted);
+  font-size: calc(13px * var(--text-scale));
+  line-height: 1.8;
+}
+
+.character-detail-section {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+}
+
+.character-detail .character-story {
+  padding: 0;
+  font-size: calc(14px * var(--text-scale));
+}
+
+.character-detail .trait-list,
+.character-detail .attribute-grid {
+  margin: 0;
+}
+
+.character-delete-confirmation {
+  padding: 16px;
+  border: 1px solid var(--error);
+  border-radius: 4px;
+  background: var(--surface);
+}
+
+.character-delete-confirmation p {
+  color: var(--muted);
+  font-size: calc(13px * var(--text-scale));
+  line-height: 1.8;
+}
