@@ -12,7 +12,8 @@ import CreateCharacter from './pages/CreateCharacter.jsx'
 import Auth from './pages/Auth.jsx'
 import Profile from './pages/Profile.jsx'
 import Accessibility from './pages/Accessibility.jsx'
-import { Help, Inspiration, NotFound, Privacy } from './pages/Information.jsx'
+import Inspiration from './pages/Inspiration.jsx'
+import { Help, NotFound, Privacy } from './pages/Information.jsx'
 import { useCharacters } from './hooks/useCharacters.js'
 import { usePreferences } from './hooks/usePreferences.js'
 import { loginAccount, logoutAccount, readSession } from './utils/localAccounts.js'
@@ -55,7 +56,7 @@ function Workspace({ user, onLogin, onLogout, accountError }) {
         <Route path="/biblioteca/:id" element={<CharacterDetail key={path} characters={characters} onSave={saveCharacter} onDelete={deleteCharacter} onToggleFavorite={toggleFavorite} preferences={preferences} />} />
         <Route path="/crear-personaje" element={<CreateCharacter key="create" characters={characters} onSave={saveCharacter} />} />
         <Route path="/personaje/:id/editar" element={<CreateCharacter key={path} characters={characters} onSave={saveCharacter} />} />
-        <Route path="/inspiracion" element={<Inspiration />} />
+        <Route path="/inspiracion" element={<Inspiration preferences={preferences} onSave={saveCharacter} />} />
         <Route path="/perfil" element={<Profile user={user} characters={characters} onLogout={onLogout} onImport={replaceCharacters} />} />
         <Route path="/login" element={user ? <Navigate to="/perfil" replace /> : <Login onLogin={onLogin} />} />
         <Route path="/registro" element={user ? <Navigate to="/perfil" replace /> : <Auth key="register" />} />

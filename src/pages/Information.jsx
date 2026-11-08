@@ -1,33 +1,4 @@
-import { useState } from 'react'
 import { Link } from 'react-router'
-import Icon from '../components/icon/Icon.jsx'
-import { randomCharacter } from '../data/characters.js'
-
-const prompts = [
-  'Tu personaje recibe una carta escrita con su propia letra, fechada cien años en el futuro. ¿Qué advertencia contiene?',
-  'Una ciudad olvida el nombre de uno de sus habitantes cada amanecer. Hoy ha desaparecido el tuyo. ¿Quién te recuerda?',
-  'La espada que heredaste se niega a herir a tu enemigo. ¿Qué secreto comparten?',
-  'Un dragón te ofrece su último deseo a cambio de un recuerdo. ¿Qué estás dispuesto a perder?',
-  'Todas las estatuas del reino han empezado a llorar. Una de ellas tiene tu rostro. ¿Qué anuncia?',
-  'Tu sombra abandona tus pasos para proteger a alguien que nunca has visto. ¿La sigues?',
-]
-
-export function Inspiration() {
-  const [prompt, setPrompt] = useState(0)
-  const [character, setCharacter] = useState(randomCharacter)
-  function generate() {
-    setPrompt(index => (index + 1 + Math.floor(Math.random() * (prompts.length - 1))) % prompts.length)
-    setCharacter(randomCharacter())
-  }
-  return <section className="inspiration-panel">
-    <Icon name="sparkle" size={30} />
-    <h2>El comienzo de una leyenda</h2>
-    <p role="status">{prompts[prompt]}</p>
-    <div className="inspiration-seed"><h2>{character.name}</h2><p>{character.race} · {character.type} · Nivel {character.level}</p><p>{character.traits.join(' · ')}</p></div>
-    <button className="secondary-button" onClick={generate}>Otra inspiración</button>
-    <Link className="primary-button" to="/crear-personaje" state={{ draft: { ...character, story: prompts[prompt] } }}>Crear a partir de esta idea</Link>
-  </section>
-}
 
 export function Help() {
   return <section className="information-page">

@@ -49,7 +49,7 @@ Usa el mismo navegador y la misma dirección con la que te registraste: `localho
 - **Fichas:** crear, consultar, editar, duplicar y eliminar personajes. Cada ficha se abre en su propia pantalla (`/biblioteca/:id`), con scroll de página, enlace para volver y confirmación de eliminación dentro de la ficha. Los filtros de biblioteca se conservan en la dirección al volver.
 - **Personalización:** nombre, clase, raza, nivel, origen, historia, hasta seis rasgos y cuatro atributos: Fuerza, Destreza, Inteligencia y Carisma.
 - **Retratos:** imágenes incluidas, iniciales o un archivo propio PNG, JPG o WebP de hasta 750 KB, con vista previa.
-- **Inspiración:** ideas narrativas y personajes aleatorios que se pueden llevar al editor antes de guardarlos.
+- **Inspiración:** ficha visual con todos los campos aleatorios y editables directamente: nombre, clase, raza, nivel, origen, retrato, personalidad, historia y atributos. Puedes subir un retrato, añadir rasgos propios, regenerar un campo y recuperar la idea anterior. Los cambios manuales se fijan automáticamente para conservarlos al generar otra combinación. **Guardar personaje** valida y guarda directamente en la biblioteca del perfil activo. El editor utiliza el mismo generador completo.
 - **Cuentas locales:** registro, acceso, cierre de sesión, Recordarme y recuperación mediante el código entregado al registrarse.
 - **Perfil:** identidad, recuento de personajes y favoritos, copias de seguridad y acceso a los ajustes.
 - **Ayuda y feedback:** preguntas frecuentes, privacidad, avisos de conexión, mensajes de validación y pantalla 404.
@@ -241,7 +241,7 @@ Use the same browser and address you registered with: `localhost:5173` and `127.
 - **Character sheets:** create, view, edit, duplicate, and delete characters. Each sheet opens on its own screen (`/biblioteca/:id`), with normal page scrolling, a back link, and inline deletion confirmation. Library filters are kept in the URL when returning.
 - **Customization:** name, class, race, level, origin, story, up to six traits, and four attributes: Strength, Dexterity, Intelligence, and Charisma.
 - **Portraits:** included images, initials, or your own PNG, JPG, or WebP file of up to 750 KB, with a preview.
-- **Inspiration:** story prompts and random characters that can be taken to the editor before saving.
+- **Inspiration:** a visual draft with every field randomized and directly editable: name, class, race, level, origin, portrait, personality, story, and attributes. Upload a portrait, add custom traits, reroll a field, or restore the previous idea. Manual changes are automatically locked to preserve them when generating another combination. **Guardar personaje** (Save character) validates and saves directly to the active profile's library. The editor uses the same complete generator.
 - **Local accounts:** registration, sign-in, sign-out, Remember me, and recovery using the code provided during registration.
 - **Profile:** identity, character and favorite counts, backups, and access to settings.
 - **Help and feedback:** frequently asked questions, privacy information, connection notices, validation messages, and a 404 screen.

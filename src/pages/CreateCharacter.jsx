@@ -3,8 +3,8 @@ import { useLocation, useNavigate, useParams } from 'react-router'
 import AppForm from '../components/forms/AppForm.jsx'
 import Portrait from '../components/charactercard/Portrait.jsx'
 import { attributeNames, blankCharacter, characterRaces, characterTypes, personalityTraits } from '../data/characterOptions.js'
-import { randomCharacter } from '../data/characters.js'
-import { MAX_IMAGE_BYTES } from '../utils/characterStore.js'
+import { randomCharacter } from '../utils/generateCharacter.js'
+import { readPortrait } from '../utils/readPortrait.js'
 import { NotFound } from './Information.jsx'
 
 function CharacterEditor({ initial, onSave, editing }) {
@@ -24,30 +24,14 @@ function CharacterEditor({ initial, onSave, editing }) {
   ]
 
   async function upload(event) {
-    const file = event.target.files[0]
+    const input = event.currentTarget
+    const file = input.files[0]
     if (!file) return
     setImageError('')
-    if (!['image/png', 'image/jpeg', 'image/webp'].includes(file.type) || file.size > MAX_IMAGE_BYTES) {
-      setImageError('Selecciona una imagen PNG, JPG o WebP de hasta 750 KB.')
-      event.target.value = ''
-      return
-    }
     setReadingImage(true)
     try {
-      const imageDataUrl = await new Promise((resolve, reject) => {
-        const reader = new FileReader()
-        reader.onload = () => resolve(reader.result)
-        reader.onerror = () => reject(new Error('No se pudo leer el retrato.'))
-        reader.readAsDataURL(file)
-      })
-      await new Promise((resolve, reject) => {
-        const preview = new Image()
-        preview.onload = resolve
-        preview.onerror = () => reject(new Error('El archivo no contiene una imagen válida.'))
-        preview.src = imageDataUrl
-      })
-      setImage({ imageDataUrl, imageName: file.name })
-    } catch (error) { setImageError(error.message) }
+      setImage(await readPortrait(file))
+    } catch (error) { setImageError(error.message); input.value = '' }
     finally { setReadingImage(false) }
   }
 

@@ -36,14 +36,3 @@ export const initialCharacters = [
     traits: ['Extrovertida', 'Dominante', 'Audaz'], stats: [8, 20, 18, 19],
   },
 ]
-
-export function randomCharacter() {
-  const template = initialCharacters[Math.floor(Math.random() * initialCharacters.length)]
-  const names = ['Lyra del Alba', 'Aren Noctis', 'Nerea de Ceniza', 'Valen del Umbral', 'Angélica Mangus', 'Eira Sombraluna']
-  return {
-    ...template,
-    id: `draft-${Date.now()}`,
-    name: names[Math.floor(Math.random() * names.length)],
-    stats: Array.from({ length: 4 }, () => 6 + Math.floor(Math.random() * 15)),
-  }
-}
