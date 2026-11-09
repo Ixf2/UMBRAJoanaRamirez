@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { obtenerPersonajesPublicos } from '../../services/api.js'
 import CharacterCard from '../charactercard/CharacterCard.jsx'
+import { Link } from 'react-router'
+
 
 export default function PublicCharacters() {
   const [personajes, setPersonajes] = useState([])
@@ -60,11 +62,17 @@ export default function PublicCharacters() {
             }
 
             return (
-              <CharacterCard
-                key={personaje.idPersonaje}
-                character={personajeAdaptado}
-                interactive={false}
-              />
+              <Link
+  key={personaje.idPersonaje}
+  to={`/personajes-publicos/${personaje.idPersonaje}`}
+  className="public-character-link"
+  aria-label={`Consultar ficha pública de ${personaje.nombre}`}
+>
+  <CharacterCard
+    character={personajeAdaptado}
+    interactive={false}
+  />
+</Link>
             )
           })}
         </div>

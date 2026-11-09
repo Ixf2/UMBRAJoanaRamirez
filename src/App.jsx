@@ -18,6 +18,7 @@ import { useCharacters } from './hooks/useCharacters.js'
 import { usePreferences } from './hooks/usePreferences.js'
 import { loginAccount, logoutAccount, readSession } from './utils/localAccounts.js'
 import { pageTitles } from './data/navigation.js'
+import PublicCharacterDetail from './pages/PublicCharacterDetail.jsx'
 import './App.css'
 
 function Workspace({ user, onLogin, onLogout, accountError }) {
@@ -50,6 +51,7 @@ function Workspace({ user, onLogin, onLogout, accountError }) {
     <main ref={main} className="main-content" id="main-content" tabIndex={-1}>
       {path !== '/inicio' && path !== '/' && !isLogin && <div className="page-heading"><p className="eyebrow">UMBRA · TUS HISTORIAS</p><h1>{page}</h1></div>}
       <Routes>
+        <Route path="/personajes-publicos/:id" element={<PublicCharacterDetail />}/>
         <Route path="/" element={<Navigate to="/inicio" replace />} />
         <Route path="/inicio" element={<Home characters={characters} user={user} />} />
         <Route path="/biblioteca" element={<Library characters={characters} />} />
