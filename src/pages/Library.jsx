@@ -2,6 +2,7 @@ import { Link, useLocation, useSearchParams } from 'react-router'
 import CharacterCard from '../components/charactercard/CharacterCard.jsx'
 import Icon from '../components/icon/Icon.jsx'
 import { characterTypes } from '../data/characterOptions.js'
+import PublicCharacters from '../components/publiccharacters/PublicCharacters.jsx'
 
 const simplify = value => value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase('es')
 
@@ -38,5 +39,6 @@ export default function Library({ characters }) {
     <div className="character-grid">{results.map(character => <CharacterCard key={character.id} character={character} />)}</div>
     {results.length === 0 && <div className="empty-state"><p>{characters.length ? 'No hay personajes que coincidan con los filtros.' : 'Tu biblioteca está vacía. Empieza una nueva leyenda.'}</p>{characters.length ? <button className="secondary-button" onClick={() => setParams({}, { replace: true })}>Limpiar filtros</button> : <Link className="primary-button" to="/crear-personaje">Crear mi primer personaje</Link>}</div>}
     <p className="page-description">Tus cambios se guardan en este navegador. Puedes exportar una copia de seguridad desde Perfil.</p>
+    <PublicCharacters />
   </section>
 }

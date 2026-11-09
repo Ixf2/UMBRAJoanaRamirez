@@ -1,11 +1,9 @@
-const API_URL = import.meta.env.VITE_API_URL;
-
 export async function obtenerPersonajesPublicos() {
-    const respuesta = await fetch(`${API_URL}/personajes/publicos`);
+  const respuesta = await fetch('/api/personajes/publicos')
 
-    if (!respuesta.ok) {
-        throw new Error("Error al obtener los personajes públicos");
-    }
+  if (!respuesta.ok) {
+    throw new Error(`Error HTTP: ${respuesta.status}`)
+  }
 
-    return respuesta.json();
+  return respuesta.json()
 }
