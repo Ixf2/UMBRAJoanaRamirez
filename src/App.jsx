@@ -16,7 +16,7 @@ import Inspiration from './pages/Inspiration.jsx'
 import { Help, NotFound, Privacy } from './pages/Information.jsx'
 import { useCharacters } from './hooks/useCharacters.js'
 import { usePreferences } from './hooks/usePreferences.js'
-import { loginAccount, logoutAccount, readSession } from './utils/localAccounts.js'
+import { iniciarSesion, obtenerSesion, cerrarSesion } from './services/api.js'
 import { pageTitles } from './data/navigation.js'
 import PublicCharacterDetail from './pages/PublicCharacterDetail.jsx'
 import './App.css'
@@ -77,12 +77,65 @@ function Workspace({ user, onLogin, onLogout, accountError }) {
 }
 
 export default function App() {
-  const [initial] = useState(() => {
-    try { return { user: readSession(), error: '' } }
-    catch { return { user: null, error: 'No se pudo leer la sesión local. Comprueba los permisos de almacenamiento del navegador.' } }
-  })
-  const [user, setUser] = useState(initial.user)
-  async function login(data) { setUser(await loginAccount(data)) }
-  function logout() { logoutAccount(); setUser(null) }
-  return <Workspace key={user?.id || 'guest'} user={user} onLogin={login} onLogout={logout} accountError={initial.error} />
+  const [user, setUser] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [accountError, setAccountError] = useState('')
+
+  useEffect(() => {
+    let activo = true
+
+    obtenerSesion()
+      .then(datos => {
+        if (activo && datos) {
+          setUser({
+            id: String(datos.idUsuario),
+            name: datos.nombreUsuario,
+            email: datos.email,
+            rol: datos.rol,
+          })
+        }
+      })
+      .catch(() => {
+        if (activo) {
+          setAccountError('No se pudo comprobar la sesión con el servidor.')
+        }
+      })
+      .finally(() => {
+        if (activo) setLoading(false)
+      })
+
+    return () => {
+      activo = false
+    }
+  }, [])
+
+  async function login(datos) {
+    const respuesta = await iniciarSesion(datos)
+
+    setUser({
+      id: String(respuesta.idUsuario),
+      name: respuesta.nombreUsuario,
+      email: respuesta.email,
+      rol: respuesta.rol,
+    })
+  }
+
+  async function logout() {
+    await cerrarSesion()
+    setUser(null)
+  }
+
+  if (loading) {
+    return <p role="status">Comprobando sesión...</p>
+  }
+
+  return (
+    <Workspace
+      key={user?.id || 'guest'}
+      user={user}
+      onLogin={login}
+      onLogout={logout}
+      accountError={accountError}
+    />
+  )
 }

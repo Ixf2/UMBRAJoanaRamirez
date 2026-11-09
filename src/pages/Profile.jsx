@@ -36,7 +36,13 @@ export default function Profile({ user, characters, onLogout, onImport }) {
     <p>{user ? user.email : 'Puedes crear y guardar personajes sin una cuenta. Cada cuenta local y el modo invitado tienen su propia biblioteca.'}</p>
     <div className="profile-stats"><p><strong>{characters.length}</strong> personajes</p><p><strong>{characters.filter(character => character.favorite).length}</strong> favoritos</p></div>
     <Link className="primary-button" to="/biblioteca">Abrir mi biblioteca</Link>
-    {user ? <button className="secondary-button" onClick={() => { try { onLogout() } catch { setError('No se pudo cerrar la sesión. Comprueba los permisos del navegador.') } }}>Cerrar sesión</button> : <><Link className="secondary-button" to="/login">Iniciar sesión</Link><Link className="secondary-button" to="/registro">Crear cuenta local</Link></>}
+    {user ? <button className="secondary-button" onClick={async () => {
+      try {
+        await onLogout()
+      } catch {
+        setError('No se pudo cerrar la sesión. Inténtalo de nuevo.')
+      }
+    }}>Cerrar sesión</button> : <><Link className="secondary-button" to="/login">Iniciar sesión</Link><Link className="secondary-button" to="/registro">Crear cuenta local</Link></>}
     <h2>Copia de seguridad</h2>
     <p>Exporta tus personajes, favoritos y retratos para conservarlos o llevarlos a otro navegador. Las cuentas y contraseñas no se incluyen.</p>
     <button className="secondary-button" onClick={() => { try { downloadCharacters(characters); setMessage('Copia de seguridad preparada para descargar.'); setError('') } catch { setError('No se pudo preparar la descarga.') } }}>Exportar biblioteca (JSON)</button>
