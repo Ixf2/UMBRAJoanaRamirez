@@ -10,11 +10,13 @@ Aplicación para crear personajes de fantasía, escribir sus historias y organiz
 
 ### Estado actual
 
-El frontend funciona con almacenamiento en el navegador. Permite trabajar como Invitado o con una cuenta local, cada uno con su biblioteca y sus ajustes.
+Documentación revisada el **09/11/2026** a partir del código del repositorio.
+
+La app combina **servicios HTTP de Spring Boot** con **almacenamiento local del navegador**. El registro, el inicio y cierre de sesión y la comprobación de la sesión ya llaman al backend. Biblioteca muestra además personajes públicos del servidor, con una pantalla de detalle propia.
+
+La creación, edición, duplicado, eliminación, favoritos y copias de la biblioteca personal siguen siendo locales, al igual que los ajustes de accesibilidad por perfil. Iniciar sesión no sube esas fichas al servidor ni sincroniza bibliotecas entre dispositivos.
 
 La interfaz está diseñada principalmente para móvil y tiene un ancho máximo general de **390 px**. Incluye ajustes para pantallas estrechas y texto ampliado; la distribución específica para tablet y PC queda como una futura mejora.
-
-La conexión con el backend de **Spring Boot, ORM y API REST** está pendiente. Actualmente no hay peticiones a un servidor de datos, sincronización entre dispositivos ni roles de administrador.
 
 ### Empezar
 
@@ -34,13 +36,27 @@ npm.cmd run dev
 
 Con `package-lock.json` disponible también puedes utilizar `npm ci` para instalar las dependencias según el lock.
 
+#### Configuración de la API en desarrollo
+
+Arranca por separado el backend Spring Boot en **`http://localhost:8080`**, con su configuración de base de datos. Este repositorio contiene el frontend; no incluye el servidor ni la configuración de MariaDB.
+
+[vite.config.js](vite.config.js) reenvía las solicitudes que comienzan por `/api` a `http://localhost:8080`, con `changeOrigin: true` y sin reescribir la ruta. Por ejemplo, `/api/auth/me` llega al backend como `http://localhost:8080/api/auth/me`. Conserva también la exclusión de `public/fonts/**` del observador de archivos.
+
+[.env.development](.env.development) declara:
+
+```dotenv
+VITE_API_URL=http://localhost:8080/api
+```
+
+Actualmente [api.js](src/services/api.js) utiliza rutas relativas `/api/...` y **no lee `VITE_API_URL`**. Cambiar únicamente esa variable no cambia el destino: la dirección efectiva de desarrollo es el `target` del proxy de Vite. Reinicia Vite después de modificar su configuración.
+
 #### Primera entrada
 
-Puedes crear y guardar personajes como Invitado. Para tener otra biblioteca, entra en **Iniciar sesión → Crear cuenta**, completa el registro y guarda el código de recuperación. Después inicia sesión con el correo y la contraseña registrados.
+Puedes crear y guardar personajes como Invitado. Para registrarte en el servidor, entra en **Iniciar sesión → Crear cuenta**, introduce nombre de 2 a 50 caracteres, correo de hasta 100 y contraseña de 8 a 72 caracteres con un carácter especial, y confirma la contraseña. Tras el registro se muestra un enlace para iniciar sesión; no se genera un código de recuperación local.
 
-No hay credenciales precreadas. Llamar a una cuenta «Administrador» no le concede permisos adicionales.
+El inicio de sesión envía correo y contraseña a la API. Al abrir la app se consulta `/api/auth/me`; si devuelve 401 se continúa como Invitado. Si falla la comprobación se muestra un aviso y también se permite continuar como Invitado.
 
-Usa el mismo navegador y la misma dirección con la que te registraste: `localhost:5173` y `127.0.0.1:5173` tienen almacenamientos diferentes.
+Usa el mismo navegador y la misma dirección para conservar bibliotecas y preferencias locales: `localhost:5173` y `127.0.0.1:5173` tienen almacenamientos diferentes. El frontend no configura credenciales precreadas.
 
 ### Funciones
 
@@ -50,7 +66,8 @@ Usa el mismo navegador y la misma dirección con la que te registraste: `localho
 - **Personalización:** nombre, clase, raza, nivel, origen, historia, hasta seis rasgos y cuatro atributos: Fuerza, Destreza, Inteligencia y Carisma.
 - **Retratos:** imágenes incluidas, iniciales o un archivo propio PNG, JPG o WebP de hasta 750 KB, con vista previa.
 - **Inspiración:** ficha visual con todos los campos aleatorios y editables directamente: nombre, clase, raza, nivel, origen, retrato, personalidad, historia y atributos. Puedes subir un retrato, añadir rasgos propios, regenerar un campo y recuperar la idea anterior. Los cambios manuales se fijan automáticamente para conservarlos al generar otra combinación. **Guardar personaje** valida y guarda directamente en la biblioteca del perfil activo. El editor utiliza el mismo generador completo.
-- **Cuentas locales:** registro, acceso, cierre de sesión, Recordarme y recuperación mediante el código entregado al registrarse.
+- **Personajes públicos:** listado independiente al final de Biblioteca, con estados de carga, error y lista vacía. Cada tarjeta abre `/personajes-publicos/:id` para consultar historia, personalidad, visibilidad y atributos del servidor. Los filtros locales no filtran este listado.
+- **Cuentas del servidor:** registro, acceso, comprobación inicial y cierre de sesión mediante la API; consulta las limitaciones de Recordarme y recuperación más abajo.
 - **Perfil:** identidad, recuento de personajes y favoritos, copias de seguridad y acceso a los ajustes.
 - **Ayuda y feedback:** preguntas frecuentes, privacidad, avisos de conexión, mensajes de validación y pantalla 404.
 
@@ -72,26 +89,33 @@ El contraste tiene prioridad sobre los colores del tema y del acento, pero conse
 
 La navegación utiliza controles semánticos, etiquetas, textos alternativos y diálogos con gestión del foco. La lectura en voz alta usa las voces disponibles en el navegador o dispositivo y se detiene al cerrar la ficha o salir de su pantalla. Es una función adicional al lector de pantalla del sistema.
 
-### Datos y cuentas
+### Datos, sesión y cuentas
 
-Las bibliotecas se guardan en `localStorage`. Cada perfil empieza con seis personajes de ejemplo; una biblioteca guardada vacía permanece vacía. Los datos de Invitado se conservan al iniciar o cerrar sesión.
+Las bibliotecas personales se guardan en `localStorage`. Cada perfil empieza con seis personajes de ejemplo; una biblioteca guardada vacía permanece vacía. Los datos de Invitado se conservan al iniciar o cerrar sesión. La clave del perfil autenticado usa el `idUsuario` devuelto por el servidor, convertido a cadena.
 
-| Clave | Contenido |
+| Dato | Ubicación y comportamiento |
 | --- | --- |
-| `umbra.characters.v1.<owner>` | Biblioteca del perfil; `owner` es el identificador de la cuenta o `guest`. |
-| `umbra.accessibility.v2.<owner>` | Ajustes de accesibilidad y apariencia de ese perfil. |
-| `umbra.accounts.v1` | Cuentas locales y verificadores de credenciales. |
-| `umbra.session.v1` | Identificador de la cuenta activa, en `localStorage` con Recordarme o en `sessionStorage` sin marcarlo. |
+| `umbra.characters.v1.<owner>` | Biblioteca local; `owner` es el identificador del usuario del servidor o `guest`. |
+| `umbra.accessibility.v2.<owner>` | Ajustes locales de accesibilidad y apariencia de ese perfil. |
+| Sesión actual | React conserva `id`, `name`, `email` y `rol` a partir de la respuesta del backend. Al recargar se vuelve a consultar `/api/auth/me`. |
+| `umbra.accounts.v1` / `umbra.session.v1` | Claves del módulo local anterior. El registro y acceso actuales no las utilizan; la recuperación todavía depende de las cuentas locales antiguas. |
 
-Las antiguas preferencias globales de `umbra.accessibility.v1` se recuperan únicamente para Invitado. El cierre de sesión elimina ambas referencias de sesión.
+Las antiguas preferencias globales de `umbra.accessibility.v1` se recuperan únicamente para Invitado. Borrar los datos del sitio elimina las bibliotecas y ajustes de ese navegador; no elimina la cuenta del backend.
 
-Las contraseñas se verifican con PBKDF2-SHA-256, sal aleatoria por cuenta y 100 000 iteraciones. El código de recuperación se verifica mediante SHA-256. Las contraseñas y los códigos no se persisten en texto plano. Web Crypto requiere un contexto seguro, como localhost o HTTPS.
+El login, la comprobación de sesión y el logout utilizan `credentials: 'same-origin'`. El cliente espera que el backend gestione la sesión mediante cookies y no almacena un token de autenticación. La duración y los atributos de las cookies dependen del servidor; no se pueden determinar desde este repositorio.
 
-Las cuentas organizan bibliotecas locales; no proporcionan autenticación ni permisos de servidor. No hay envío de correos. Borrar los datos del sitio elimina las cuentas, las bibliotecas y sus ajustes de ese navegador.
+#### Integración todavía parcial
+
+- **Recordarme:** la casilla permanece en el formulario, pero el servicio solo envía `email` y `password`. Marcarla no configura una duración de sesión diferente en la implementación actual.
+- **Recuperación:** `/recuperar` sigue llamando a `recoverAccount` de [localAccounts.js](src/utils/localAccounts.js). Solo modifica cuentas locales antiguas; no restablece la contraseña de las cuentas creadas por la API y no hay envío de correos implementado en el frontend.
+- **Roles:** la respuesta de sesión aporta `rol`, pero no existen pantallas ni controles de permisos por rol en este frontend. Los permisos efectivos corresponden al backend.
+- **Textos de la interfaz:** algunas etiquetas, ayuda y privacidad aún hablan de «cuenta local». El flujo de registro e inicio de sesión vigente es el de la API descrito aquí.
+
+El módulo local anterior conserva PBKDF2-SHA-256 con sal y 100 000 iteraciones para contraseñas y SHA-256 para códigos. Esto describe las cuentas locales antiguas, no el almacenamiento de contraseñas del backend. Esa recuperación requiere Web Crypto en localhost o HTTPS.
 
 Si no se puede guardar un cambio en la biblioteca, se muestra un error y se conserva el estado anterior. Los ajustes de accesibilidad sí se aplican temporalmente cuando el almacenamiento está bloqueado, con un aviso de que no han podido persistirse.
 
-Sin conexión puedes continuar con la app ya abierta. Recargarla requiere acceso al sitio o tener disponible el servidor local; no hay un service worker para cargarla sin conexión.
+Con la app ya abierta puedes seguir trabajando con la biblioteca local sin conexión. El registro, el acceso y las fichas públicas necesitan el servidor; recargar requiere acceso al sitio o al servidor local. No hay un service worker para cargar la app sin conexión.
 
 ### Copias de seguridad de personajes
 
@@ -116,7 +140,9 @@ Las copias de personajes no incluyen cuentas, contraseñas ni ajustes de accesib
 
 #### Pruebas en navegador
 
-[browser-smoke.mjs](scripts/browser-smoke.mjs) comprueba los recorridos principales: personajes, filtros, retratos, favoritos, cuentas, recuperación, copias JSON, accesibilidad, separación de perfiles, teclado, fallos de almacenamiento y pantallas de 320 y 390 px.
+[browser-smoke.mjs](scripts/browser-smoke.mjs) contiene recorridos de la versión local anterior: personajes, filtros, retratos, favoritos, cuentas, recuperación, copias JSON, accesibilidad, separación de perfiles, teclado, fallos de almacenamiento y pantallas de 320 y 390 px.
+
+**Pendiente de adaptar a la API:** el recorrido todavía espera el antiguo registro local, su código de recuperación y sus etiquetas. No valida de extremo a extremo el nuevo flujo de sesión ni los personajes públicos; no debe darse por compatible con la integración actual. Las pruebas unitarias de cuentas locales tampoco prueban la autenticación de Spring Boot.
 
 Es una herramienta de desarrollo. Utiliza un contexto temporal aislado y lo elimina al terminar; las cuentas y bibliotecas de prueba pertenecen a ese contexto.
 
@@ -154,7 +180,8 @@ src/
   pages/              Pantallas de cada ruta y sus estilos específicos
   components/         Navegación, tarjetas, retratos, formularios y avisos
   hooks/              Estado y persistencia de bibliotecas y preferencias
-  utils/              Validación, cuentas, almacenamiento y copias JSON
+  services/           Peticiones HTTP de personajes públicos y autenticación
+  utils/              Validación, cuentas locales antiguas, almacenamiento y copias JSON
   data/               Personajes iniciales, catálogos y navegación
 tests/                Pruebas unitarias
 scripts/              Recorridos automáticos de navegador
@@ -173,15 +200,24 @@ Las rutas y los títulos se coordinan en [App.jsx](src/App.jsx) y [navigation.js
 
 El manual y el ZIP son una instantánea del proyecto en el momento de su generación. No se actualizan automáticamente al editar el código o este README. El ZIP de código tampoco incluye los datos guardados por las personas en sus navegadores.
 
-### Futura conexión con Spring Boot
+### API de Spring Boot integrada
 
-La integración con la API REST se concentrará en una capa de servicios HTTP, conectada con los puntos de persistencia actuales:
+Las solicitudes están concentradas en [src/services/api.js](src/services/api.js). Estas son las rutas que consume actualmente el frontend:
 
-- [useCharacters.js](src/hooks/useCharacters.js) coordina las operaciones de biblioteca que pasarían a consultar o modificar personajes mediante la API.
-- [localAccounts.js](src/utils/localAccounts.js) contiene el acceso, registro y recuperación locales que se sustituirían por la autenticación del backend.
-- [preferenceStore.js](src/utils/preferenceStore.js) guarda los ajustes; se podrá decidir si permanecen locales o se sincronizan con el perfil del servidor.
+| Método y ruta | Uso y respuesta esperada |
+| --- | --- |
+| `GET /api/personajes/publicos` | Lista JSON de personajes públicos; las tarjetas usan `idPersonaje` y `nombre`. |
+| `GET /api/personajes/{id}` | Detalle JSON con `nombre`, `visibilidad`, `historia`, `personalidad`, `fuerza`, `destreza`, `inteligencia` y `carisma`. El servicio codifica el identificador en la URL. |
+| `POST /api/auth/register` | Envía JSON `{ nombreUsuario, email, password }`; espera JSON en caso de éxito. Traduce 409 a correo registrado y 400 a datos incorrectos. |
+| `POST /api/auth/login` | Envía JSON `{ email, password }`; espera `{ idUsuario, nombreUsuario, email, rol }`. Traduce 401 a credenciales incorrectas. |
+| `GET /api/auth/me` | Recupera esa misma identidad; 401 se trata como ausencia de sesión. Envía `X-Requested-By: XMLHttpRequest`. |
+| `POST /api/auth/logout` | Solicita cerrar la sesión; después del éxito, la app vuelve a Invitado. No necesita cuerpo JSON de respuesta. |
 
-Antes de conectarla habrá que acordar rutas, DTO, identificadores, tratamiento de imágenes, autenticación y permisos. El ORM y el acceso a la base de datos pertenecen al backend. Esta capa HTTP todavía no está implementada en el frontend.
+Los personajes públicos se adaptan al componente `CharacterCard` con `interactive={false}`, dentro de un enlace al detalle público. Usan un id visual `public-<idPersonaje>`, muestran «Personaje público» y omiten el nivel. El adaptador actual no asigna retrato, por lo que muestra las iniciales. El detalle público es de consulta; no ofrece edición ni favoritos locales.
+
+`Portrait` elige `imageDataUrl`, después `image` y después un retrato incluido; si no hay imagen o falla la carga, muestra iniciales. Permite ajustar el encuadre con `imagePosition` (por defecto `center`).
+
+Quedan pendientes el CRUD remoto de la biblioteca personal, la sincronización de ajustes, la recuperación de contraseña del servidor y la conexión de Recordarme. El frontend no accede directamente a MariaDB ni al ORM; esas capas pertenecen al backend.
 
 ### Compilar y publicar
 
@@ -190,7 +226,7 @@ npm run build
 npm run preview
 ```
 
-Publica el contenido generado en `dist/`. Como se utiliza `BrowserRouter`, configura el alojamiento para devolver `index.html` en las rutas internas de la aplicación. Utiliza HTTPS fuera del entorno local para disponer de Web Crypto.
+Publica el contenido generado en `dist/`. Como se utiliza `BrowserRouter`, configura el alojamiento para devolver `index.html` en las rutas internas de la aplicación. En producción configura también un proxy inverso para `/api` hacia Spring Boot en el mismo origen: el proxy definido en `server.proxy` es de desarrollo y no acompaña a los archivos compilados. `npm run preview` hereda el proxy de desarrollo de Vite; sigue necesitando el backend activo. Cambiar `VITE_API_URL` no modifica las rutas relativas actuales. Utiliza HTTPS fuera del entorno local y revisa la sesión con la configuración real del servidor.
 
 ---
 
@@ -202,11 +238,13 @@ An application for creating fantasy characters, writing their stories, and organ
 
 ### Current status
 
-The frontend uses browser storage. You can work as a Guest or with a local account, each with its own library and settings.
+Documentation reviewed on **9 November 2026** against the repository source.
 
-The interface is designed primarily for mobile and has a general maximum width of **390 px**. It includes adjustments for narrow screens and enlarged text; dedicated tablet and desktop layouts are planned as a future improvement.
+The app combines **Spring Boot HTTP services** with **local browser storage**. Registration, sign-in, sign-out, and session checks already call the backend. Library also displays public characters from the server, with a dedicated detail screen.
 
-Integration with the **Spring Boot backend, ORM, and REST API** is pending. There are currently no requests to a data server, no synchronization between devices, and no administrator roles.
+Personal character creation, editing, duplication, deletion, favorites, and backups remain local, as do accessibility settings per profile. Signing in does not upload these characters or synchronize libraries between devices.
+
+The interface is designed primarily for mobile and has a general maximum width of **390 px**. It includes adjustments for narrow screens and enlarged text; dedicated tablet and desktop layouts remain a future improvement.
 
 ### Getting started
 
@@ -226,13 +264,27 @@ npm.cmd run dev
 
 With `package-lock.json` available, you can also use `npm ci` to install dependencies according to the lockfile.
 
+#### Development API configuration
+
+Run the Spring Boot backend separately at **`http://localhost:8080`**, with its database configured. This repository contains the frontend; it does not include the backend or MariaDB configuration.
+
+[vite.config.js](vite.config.js) proxies requests starting with `/api` to `http://localhost:8080`, with `changeOrigin: true` and no path rewrite. For example, `/api/auth/me` reaches `http://localhost:8080/api/auth/me`. It also excludes `public/fonts/**` from file watching.
+
+[.env.development](.env.development) declares:
+
+```dotenv
+VITE_API_URL=http://localhost:8080/api
+```
+
+[api.js](src/services/api.js) currently uses relative `/api/...` paths and **does not read `VITE_API_URL`**. Changing that variable alone does not change the destination; Vite's proxy `target` determines the development destination. Restart Vite after changing its configuration.
+
 #### First visit
 
-You can create and save characters as a Guest. For a separate library, open **Iniciar sesión → Crear cuenta** (Sign in → Create account), complete registration, and save the recovery code. Then sign in using the email address and password you registered.
+You can create and save characters as a Guest. To register on the server, open **Iniciar sesión → Crear cuenta** (Sign in → Create account). Enter a name of 2–50 characters, an email address of up to 100 characters, and a password of 8–72 characters including a special character, then confirm the password. Successful registration displays a sign-in link; it does not issue a local recovery code.
 
-There are no preconfigured credentials. Naming an account “Administrator” does not grant additional permissions.
+Sign-in sends email and password to the API. On startup, the app checks `/api/auth/me`; a 401 response continues as Guest. If the session check fails, a notice is displayed and Guest access remains available.
 
-Use the same browser and address you registered with: `localhost:5173` and `127.0.0.1:5173` have separate storage.
+Use the same browser and address to retain local libraries and preferences: `localhost:5173` and `127.0.0.1:5173` have separate storage. The frontend does not configure precreated credentials.
 
 ### Features
 
@@ -242,7 +294,8 @@ Use the same browser and address you registered with: `localhost:5173` and `127.
 - **Customization:** name, class, race, level, origin, story, up to six traits, and four attributes: Strength, Dexterity, Intelligence, and Charisma.
 - **Portraits:** included images, initials, or your own PNG, JPG, or WebP file of up to 750 KB, with a preview.
 - **Inspiration:** a visual draft with every field randomized and directly editable: name, class, race, level, origin, portrait, personality, story, and attributes. Upload a portrait, add custom traits, reroll a field, or restore the previous idea. Manual changes are automatically locked to preserve them when generating another combination. **Guardar personaje** (Save character) validates and saves directly to the active profile's library. The editor uses the same complete generator.
-- **Local accounts:** registration, sign-in, sign-out, Remember me, and recovery using the code provided during registration.
+- **Public characters:** an independent list below the personal Library, with loading, error, and empty states. Each card opens `/personajes-publicos/:id` to read server-provided story, personality, visibility, and attributes. Local filters do not filter this list.
+- **Server accounts:** registration, sign-in, startup session checks, and sign-out through the API; see the Remember me and recovery limitations below.
 - **Profile:** identity, character and favorite counts, backups, and access to settings.
 - **Help and feedback:** frequently asked questions, privacy information, connection notices, validation messages, and a 404 screen.
 
@@ -264,26 +317,33 @@ Contrast takes priority over theme and accent colors while preserving those choi
 
 Navigation uses semantic controls, labels, alternative text, and dialogs with focus management. Read-aloud uses the voices available in the browser or device and stops when the character sheet is closed or its screen is left. It is an additional feature alongside the system screen reader.
 
-### Data and accounts
+### Data, sessions, and accounts
 
-Libraries are saved in `localStorage`. Each profile starts with six example characters; a saved empty library stays empty. Guest data is preserved when signing in or out.
+Personal libraries are saved in `localStorage`. Each profile starts with six example characters; a saved empty library stays empty. Guest data is preserved when signing in or out. An authenticated profile uses the server's `idUsuario`, converted to a string, as its storage owner.
 
-| Key | Content |
+| Data | Location and behavior |
 | --- | --- |
-| `umbra.characters.v1.<owner>` | The profile's library; `owner` is the account identifier or `guest`. |
-| `umbra.accessibility.v2.<owner>` | Accessibility and appearance settings for that profile. |
-| `umbra.accounts.v1` | Local accounts and credential verifiers. |
-| `umbra.session.v1` | The active account identifier, stored in `localStorage` with Remember me or in `sessionStorage` without it. |
+| `umbra.characters.v1.<owner>` | Local library; `owner` is the server user identifier or `guest`. |
+| `umbra.accessibility.v2.<owner>` | Local accessibility and appearance settings for that profile. |
+| Current session | React holds `id`, `name`, `email`, and `rol` from the backend response. Reloading checks `/api/auth/me` again. |
+| `umbra.accounts.v1` / `umbra.session.v1` | Legacy local module keys. Current registration and sign-in do not use them; recovery still depends on old local accounts. |
 
-Legacy global preferences from `umbra.accessibility.v1` are restored only for the Guest profile. Signing out removes both session references.
+Legacy global preferences from `umbra.accessibility.v1` are restored only for Guest. Clearing site data removes that browser's libraries and preferences; it does not delete the backend account.
 
-Passwords are verified using PBKDF2-SHA-256, a random salt per account, and 100,000 iterations. The recovery code is verified using SHA-256. Passwords and codes are not persisted in plain text. Web Crypto requires a secure context, such as localhost or HTTPS.
+Login, session checks, and logout use `credentials: 'same-origin'`. The client expects the backend to manage cookie sessions and does not store an authentication token. Cookie lifetime and attributes depend on the server and cannot be established from this repository.
 
-Accounts organize local libraries; they do not provide server authentication or permissions. No emails are sent. Clearing site data removes the accounts, libraries, and settings from that browser.
+#### Integration limitations
 
-If a library change cannot be saved, an error is displayed and the previous state is preserved. Accessibility settings are still applied temporarily when storage is blocked, with a notice explaining that they could not be persisted.
+- **Remember me:** the checkbox remains in the form, but the service only sends `email` and `password`. Selecting it does not configure a different session lifetime in the current implementation.
+- **Recovery:** `/recuperar` still calls `recoverAccount` in [localAccounts.js](src/utils/localAccounts.js). It only updates legacy local accounts; it does not reset passwords for API-created accounts. The frontend implements no email delivery.
+- **Roles:** the session response supplies `rol`, but this frontend has no role-specific screens or permission checks. Effective authorization belongs to the backend.
+- **Interface text:** some labels, help, and privacy text still refer to a “local account”. Current registration and sign-in use the API described here.
 
-You can continue using the app while offline if it is already open. Reloading requires access to the site or an available local server; there is no service worker for offline loading.
+The legacy local module retains PBKDF2-SHA-256 with a salt and 100,000 iterations for passwords and SHA-256 for recovery codes. This describes old local accounts, not backend password storage. That recovery requires Web Crypto on localhost or HTTPS.
+
+If saving a library change fails, an error is shown and the previous state is preserved. Accessibility settings still apply temporarily when storage is blocked, with a notice that they could not be persisted.
+
+With the app already open, the local library can still be used offline. Registration, sign-in, and public characters require the server. Reloading requires access to the website or local server; there is no offline service worker.
 
 ### Character backups
 
@@ -308,7 +368,9 @@ Character backups do not include accounts, passwords, or accessibility settings.
 
 #### Browser tests
 
-[browser-smoke.mjs](scripts/browser-smoke.mjs) checks the main workflows: characters, filters, portraits, favorites, accounts, recovery, JSON backups, accessibility, profile isolation, keyboard navigation, storage failures, and screens 320 and 390 px wide.
+[browser-smoke.mjs](scripts/browser-smoke.mjs) contains workflows for the previous local version: characters, filters, portraits, favorites, accounts, recovery, JSON backups, accessibility, profile isolation, keyboard navigation, storage failures, and screens 320 and 390 px wide.
+
+**API adaptation pending:** the workflow still expects legacy local registration, its recovery code, and its labels. It does not validate the new session flow or public characters end to end and should not be assumed compatible with the current integration. Local account unit tests do not test Spring Boot authentication either.
 
 It is a development tool. It uses an isolated temporary browser context and disposes of it when finished; test accounts and libraries belong to that context.
 
@@ -346,7 +408,8 @@ src/
   pages/              Route screens and their specific styles
   components/         Navigation, cards, portraits, forms, and notices
   hooks/              State and persistence for libraries and preferences
-  utils/              Validation, accounts, storage, and JSON backups
+  services/           HTTP requests for public characters and authentication
+  utils/              Validation, legacy local accounts, storage, and JSON backups
   data/               Initial characters, option catalogs, and navigation
 tests/                Unit tests
 scripts/              Automated browser workflows
@@ -365,15 +428,24 @@ Routes and titles are coordinated in [App.jsx](src/App.jsx) and [navigation.js](
 
 The manual and ZIP are snapshots of the project at the time they were generated. They do not update automatically when the code or this README changes. The source ZIP also excludes data saved by people in their browsers.
 
-### Future Spring Boot integration
+### Integrated Spring Boot API
 
-REST API integration will be organized through an HTTP service layer connected to the current persistence points:
+Requests are centralized in [src/services/api.js](src/services/api.js). The frontend currently consumes these routes:
 
-- [useCharacters.js](src/hooks/useCharacters.js) coordinates library operations that would use the API to retrieve or modify characters.
-- [localAccounts.js](src/utils/localAccounts.js) contains local sign-in, registration, and recovery, which would be replaced by backend authentication.
-- [preferenceStore.js](src/utils/preferenceStore.js) saves settings; they may remain local or be synchronized with the profile on the server.
+| Method and route | Purpose and expected response |
+| --- | --- |
+| `GET /api/personajes/publicos` | JSON public character list; cards use `idPersonaje` and `nombre`. |
+| `GET /api/personajes/{id}` | JSON detail with `nombre`, `visibilidad`, `historia`, `personalidad`, `fuerza`, `destreza`, `inteligencia`, and `carisma`. The service URL-encodes the identifier. |
+| `POST /api/auth/register` | Sends JSON `{ nombreUsuario, email, password }`; expects JSON on success. Maps 409 to an existing email and 400 to invalid input. |
+| `POST /api/auth/login` | Sends JSON `{ email, password }`; expects `{ idUsuario, nombreUsuario, email, rol }`. Maps 401 to invalid credentials. |
+| `GET /api/auth/me` | Restores the same identity; 401 means no active session. Sends `X-Requested-By: XMLHttpRequest`. |
+| `POST /api/auth/logout` | Requests session termination; successful logout returns the app to Guest. No JSON response body is required. |
 
-Before integration, routes, DTOs, identifiers, image handling, authentication, and permissions need to be agreed on. The ORM and database access belong to the backend. This HTTP layer is not yet implemented in the frontend.
+Public characters use `CharacterCard` with `interactive={false}`, wrapped in a link to public detail. Their display id is `public-<idPersonaje>`; cards show “Personaje público” and omit the level. The current adapter assigns no portrait, so initials are displayed. Public detail is read-only and provides no editing or local favorite controls.
+
+`Portrait` chooses `imageDataUrl`, then `image`, then an included portrait. Missing or failed images fall back to initials. `imagePosition` adjusts the crop, defaulting to `center`.
+
+Remote personal-library CRUD, preference synchronization, server password recovery, and Remember me integration remain pending. The frontend does not access MariaDB or the ORM directly; those layers belong to the backend.
 
 ### Build and deployment
 
@@ -382,4 +454,4 @@ npm run build
 npm run preview
 ```
 
-Deploy the generated contents of `dist/`. Because the app uses `BrowserRouter`, configure hosting to return `index.html` for internal application routes. Use HTTPS outside the local environment so Web Crypto is available.
+Deploy the generated contents of `dist/`. Because the app uses `BrowserRouter`, configure hosting to return `index.html` for internal application routes. In production, also configure a reverse proxy for `/api` to Spring Boot on the same origin: `server.proxy` is a development setting and is not shipped with the compiled files. `npm run preview` inherits Vite’s development proxy and still requires the backend to be running. Changing `VITE_API_URL` does not change the current relative paths. Use HTTPS outside local development and verify sessions against the actual server configuration.

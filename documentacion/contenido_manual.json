@@ -1,274 +1,701 @@
 {
   "index.html": {
     "summary": "Documento HTML que recibe el navegador y punto de entrada de Vite.",
-    "details": ["Declara el idioma español, la codificación UTF-8, el viewport móvil, el icono y la descripción.", "El div #root es el lugar donde React monta la interfaz. El script de tipo module carga src/main.jsx."],
-    "functions": {"#root": "Contenedor de montaje de React; no es una función de JavaScript."}
+    "details": [
+      "Declara el idioma español, la codificación UTF-8, el viewport móvil, el icono y la descripción.",
+      "El div #root es el lugar donde React monta la interfaz. El script de tipo module carga src/main.jsx."
+    ],
+    "functions": {
+      "#root": "Contenedor de montaje de React; no es una función de JavaScript."
+    }
   },
   "src/main.jsx": {
     "summary": "Arranca React, conecta el enrutador y carga los estilos globales.",
-    "details": ["createRoot(document.getElementById('root')) crea la raíz de React.", "BrowserRouter permite interpretar las rutas de la barra de direcciones. StrictMode ayuda a detectar efectos y limpiezas incorrectos durante el desarrollo."],
-    "functions": {"createRoot(...).render(...)": "Monta App dentro de BrowserRouter y StrictMode."}
+    "details": [
+      "createRoot(document.getElementById('root')) crea la raíz de React.",
+      "BrowserRouter permite interpretar las rutas de la barra de direcciones. StrictMode ayuda a detectar efectos y limpiezas incorrectos durante el desarrollo."
+    ],
+    "functions": {
+      "createRoot(...).render(...)": "Monta App dentro de BrowserRouter y StrictMode."
+    }
   },
   "src/App.jsx": {
-    "summary": "Coordina la sesión, las rutas, la biblioteca del perfil activo, sus ajustes y los diálogos de la aplicación.",
-    "props": "Workspace recibe user, onLogin, onLogout y accountError. App es el componente raíz y no necesita props.",
-    "state": "App conserva la sesión inicial y user. Workspace conserva modal y actionError; obtiene characters y preferences de los hooks.",
-    "details": ["Workspace se monta con una key basada en el identificador del usuario o guest. Cambiar de cuenta vuelve a cargar biblioteca y preferencias de ese perfil.", "El efecto de navegación actualiza document.title, dirige el foco al contenido principal y vuelve al principio de la pantalla.", "Los atributos data-text-size, data-contrast, data-theme, data-element-size y data-accent conectan los ajustes con CSS.", "La ficha se abre en Modal y ofrece favoritos, edición, duplicado y eliminación con confirmación. Las notificaciones muestran información local de la biblioteca.", "Las rutas de acceso, registro y recuperación redirigen a Perfil cuando ya existe una sesión. La ruta desconocida muestra NotFound."],
-    "functions": {"Workspace": "Compone cabecera, contenido, rutas, navegación inferior, avisos y diálogos.", "selectCharacter": "Recibe un personaje y abre su ficha mediante el identificador.", "act": "Ejecuta una acción y convierte sus errores en feedback dentro del diálogo.", "leaveModal": "Borra el error de acción y cierra el diálogo activo.", "App": "Recupera la sesión local y entrega sus cambios a Workspace.", "login": "Espera loginAccount y actualiza user con la identidad devuelta.", "logout": "Elimina las referencias de sesión y cambia al perfil Invitado."}
+    "summary": "Coordina la sesión del servidor, las rutas y el espacio local de cada perfil.",
+    "details": [
+      "Al montar consulta obtenerSesion; transforma idUsuario en id de cadena y conserva nombreUsuario, email y rol.",
+      "Muestra Comprobando sesión... hasta terminar. Un 401 equivale a Invitado; otros fallos muestran un aviso sin impedir el uso local.",
+      "Workspace usa una key igual al id o guest y monta useCharacters y usePreferences para ese propietario.",
+      "La ficha local abre /biblioteca/:id; la pública abre /personajes-publicos/:id. El diálogo de notificaciones sigue siendo local.",
+      "El login llama a iniciarSesion; el logout espera cerrarSesion antes de volver a Invitado. rol se conserva sin controles de autorización en el frontend."
+    ],
+    "functions": {
+      "Workspace": "Compone rutas, navegación, avisos y ajustes.",
+      "App": "Comprueba la sesión HTTP inicial y conserva user, loading y accountError.",
+      "login": "Envía credenciales al backend y adapta la identidad devuelta.",
+      "logout": "Espera el cierre de sesión HTTP y cambia a Invitado."
+    },
+    "props": "Workspace recibe user, onLogin, onLogout y accountError.",
+    "state": "App: user, loading y accountError. Workspace: notificationsOpen; biblioteca y preferencias proceden de hooks."
   },
   "src/pages/Home.jsx": {
     "summary": "Pantalla de inicio: portada, acceso a crear personajes y las dos fichas más recientes.",
-    "props": "characters: biblioteca activa; onSelect: abre una ficha; user: nombre de la cuenta o null.",
-    "details": ["Ordena una copia de characters por updatedAt y toma los dos primeros. No cambia el orden del array original.", "Utiliza Hero y CharacterCard. Muestra un estado vacío cuando no existen personajes y un acceso al perfil o al login."],
-    "functions": {"Home": "Construye Inicio a partir de la biblioteca y de la sesión activa."}
+    "props": "characters: biblioteca local activa; user: identidad del servidor o null.",
+    "details": [
+      "Ordena una copia de characters por updatedAt y toma los dos primeros. No cambia el orden del array original.",
+      "Utiliza Hero y CharacterCard. Muestra un estado vacío cuando no existen personajes y un acceso al perfil o al login."
+    ],
+    "functions": {
+      "Home": "Construye Inicio a partir de la biblioteca y de la sesión activa."
+    }
   },
   "src/pages/Library.jsx": {
     "summary": "Explora toda la biblioteca con búsqueda, filtros, ordenación y estados vacíos.",
-    "props": "characters: biblioteca del perfil; onSelect: acción al pulsar una tarjeta.",
-    "state": "search, type, favorites y sort representan los filtros que está usando la persona.",
-    "details": ["La búsqueda abarca nombre, clase, raza y reino. Normaliza mayúsculas y tildes para que angelica encuentre Angélica.", "Combina la búsqueda con la clase seleccionada y con Solo favoritos. Ordena por actualización, nombre o mayor nivel.", "Lee location.state.message para mostrar la confirmación recibida tras crear, editar o duplicar. Limpiar filtros no elimina personajes."],
-    "functions": {"simplify": "Normaliza una cadena con NFD, elimina marcas diacríticas y convierte a minúsculas españolas.", "Library": "Calcula los resultados y presenta los filtros, el contador y las tarjetas."}
+    "props": "characters: biblioteca local del perfil.",
+    "state": "Los parámetros q, class, favorites y sort de la URL conservan los filtros.",
+    "details": [
+      "Busca en nombre, clase, raza y origen de la biblioteca local, normalizando tildes y mayúsculas.",
+      "Combina clase, favoritos y orden; updateFilter actualiza los parámetros con replace para conservarlos al volver de una ficha.",
+      "Al final monta PublicCharacters, que consulta su propia lista remota. Los filtros locales no afectan a los personajes públicos."
+    ],
+    "functions": {
+      "simplify": "Normaliza una cadena con NFD, elimina marcas diacríticas y convierte a minúsculas españolas.",
+      "Library": "Calcula los resultados y presenta los filtros, el contador y las tarjetas.",
+      "updateFilter": "Modifica un parámetro de filtro en la URL."
+    }
   },
   "src/pages/CreateCharacter.jsx": {
     "summary": "Comparte un editor entre la creación y la modificación de fichas.",
     "props": "CreateCharacter recibe characters y onSave. CharacterEditor recibe initial, onSave y editing.",
     "state": "El contenedor mantiene draft y revision. El editor mantiene el retrato, el estilo, el error de imagen y si está leyéndose un archivo.",
-    "details": ["La ruta con :id busca la ficha existente. Sin :id utiliza blankCharacter o el borrador enviado desde Inspiración. Un id ausente muestra NotFound.", "Declara campos de nombre, clase, raza, nivel, origen, historia y cuatro atributos para AppForm. Ofrece hasta seis rasgos de personalidad.", "El retrato puede ser uno de los recursos incluidos, las iniciales o una imagen PNG/JPG/WebP de hasta 750 KB. FileReader convierte la imagen a data URL y un objeto Image comprueba que se pueda decodificar.", "Generar personaje aleatorio sustituye el borrador del editor; revision cambia la key para inicializar de nuevo los campos. Esta acción no guarda nada hasta pulsar Guardar.", "Cancelar muestra confirmación si AppForm ha detectado cambios; no existe un bloqueo general de todos los enlaces internos ni una recuperación automática de borradores."],
-    "functions": {"CharacterEditor": "Presenta AppForm, los rasgos y la selección o carga del retrato.", "upload": "Revisa tipo y tamaño del archivo, lee su contenido, comprueba la imagen y actualiza la vista previa.", "submit": "Construye la ficha con FormData, llama onSave y navega a Biblioteca con un mensaje.", "CreateCharacter": "Decide si se está creando o editando y prepara la ficha inicial."}
+    "details": [
+      "La ruta con :id busca la ficha existente. Sin :id utiliza blankCharacter o el borrador enviado desde Inspiración. Un id ausente muestra NotFound.",
+      "Declara campos de nombre, clase, raza, nivel, origen, historia y cuatro atributos para AppForm. Ofrece hasta seis rasgos de personalidad.",
+      "readPortrait valida y decodifica PNG/JPEG/WebP de hasta 750 KB y devuelve imageDataUrl e imageName para la vista previa.",
+      "Generar personaje aleatorio usa utils/generateCharacter.js y renueva el borrador completo; se guarda al enviar el editor.",
+      "Cancelar muestra confirmación si AppForm ha detectado cambios; no existe un bloqueo general de todos los enlaces internos ni una recuperación automática de borradores."
+    ],
+    "functions": {
+      "CharacterEditor": "Presenta AppForm, los rasgos y la selección o carga del retrato.",
+      "upload": "Revisa tipo y tamaño del archivo, lee su contenido, comprueba la imagen y actualiza la vista previa.",
+      "submit": "Construye la ficha con FormData, llama onSave y navega a Biblioteca con un mensaje.",
+      "CreateCharacter": "Decide si se está creando o editando y prepara la ficha inicial."
+    }
   },
   "src/pages/Login.jsx": {
-    "summary": "Formulario de acceso a una cuenta local del navegador.",
-    "props": "onLogin: callback asíncrono que verifica credenciales y actualiza la sesión.",
-    "state": "showPassword controla la visibilidad; errors contiene errores de campos; message muestra fallos del acceso; pending evita envíos repetidos.",
-    "details": ["Valida que correo y contraseña estén presentes y que el correo tenga formato válido. Los requisitos de creación de contraseña se comprueban en Registro, no se vuelven a exigir al iniciar sesión.", "Permite mostrar u ocultar la contraseña, elegir Recordarme y abrir Registro o Recuperar acceso.", "No existe una cuenta de administrador precreada ni un sistema de roles. Una cuenta llamada Administrador tiene las mismas funciones que las demás."],
-    "functions": {"Login": "Dibuja el formulario y sus mensajes accesibles.", "handleSubmit": "Valida, enfoca el primer error o espera onLogin; al tener éxito navega a Perfil."}
+    "summary": "Formulario de acceso que delega la autenticación en la API.",
+    "details": [
+      "Valida correo y contraseña, evita envíos repetidos y permite mostrar u ocultar la contraseña.",
+      "handleSubmit entrega email, password y remember a onLogin; el servicio HTTP solo serializa email y password.",
+      "Recordarme no cambia actualmente la duración de la sesión. El texto de cuenta local sigue pendiente de actualizar en la interfaz."
+    ],
+    "functions": {
+      "Login": "Presenta el formulario de acceso.",
+      "handleSubmit": "Valida, espera onLogin y navega a Perfil o muestra un error."
+    },
+    "props": "onLogin: callback asíncrono de App.",
+    "state": "showPassword, errors, message y pending."
   },
   "src/pages/Auth.jsx": {
-    "summary": "Utiliza AppForm para registrar una cuenta o recuperar su contraseña.",
+    "summary": "Registro mediante API y recuperación local antigua en un formulario compartido.",
+    "details": [
+      "Registro: nombre entre 2 y 50 caracteres, email hasta 100, contraseña entre 8 y 72 con carácter especial y confirmación.",
+      "submit llama registrarUsuario, que transforma name en nombreUsuario. Al terminar muestra éxito y enlace a Login; no genera un código de recuperación.",
+      "La rama recovery sigue usando recoverAccount y solo restablece cuentas locales antiguas. No modifica contraseñas del backend."
+    ],
+    "functions": {
+      "Auth": "Elige campos y muestra confirmación de registro o recuperación.",
+      "submit": "Envía el registro al servidor o ejecuta la recuperación local antigua."
+    },
     "props": "recovery: false para registro y true para recuperación.",
-    "state": "recoveryCode conserva el código recién entregado; recovered indica que terminó el cambio de contraseña.",
-    "details": ["Registro solicita nombre, correo, contraseña de 8 a 256 caracteres con carácter especial, confirmación y aceptación del almacenamiento local.", "La recuperación solicita correo, código y una nueva contraseña confirmada. No envía un email.", "Al crear la cuenta muestra el código de recuperación completo solo en esa pantalla. La persona debe guardarlo; después accede desde Login."],
-    "functions": {"Auth": "Elige los campos y cambia entre formulario, código de recuperación y confirmación de cambio.", "submit": "Convierte FormData en un objeto y llama registerAccount o recoverAccount."}
+    "state": "registrado y recovered controlan las confirmaciones."
   },
   "src/pages/Profile.jsx": {
     "summary": "Muestra la identidad activa, sus recuentos, el cierre de sesión y los controles de copia de seguridad.",
     "props": "user, characters, onLogout y onImport. onImport está conectado a replaceCharacters en App.",
     "state": "backup conserva temporalmente la copia validada; message y error dan feedback.",
-    "details": ["Exportar prepara un JSON con la biblioteca actual. Importar lee un archivo de hasta 10 MB, lo valida y abre un diálogo antes de sustituir datos.", "La restauración reemplaza toda la biblioteca del perfil activo, incluidos sus favoritos y retratos; no mezcla listas ni afecta a otras cuentas.", "Las copias no incluyen cuentas, contraseñas ni ajustes de accesibilidad. La pantalla incluye enlaces a accesibilidad y privacidad."],
-    "functions": {"Profile": "Presenta la información del perfil y los controles de biblioteca y copia.", "readBackup": "Lee el archivo elegido, revisa su tamaño y utiliza importCharacters para validarlo.", "restore": "Llama onImport con la copia validada y muestra el resultado; los errores no se anuncian como éxito."}
+    "details": [
+      "Exportar prepara un JSON con la biblioteca actual. Importar lee un archivo de hasta 10 MB, lo valida y abre un diálogo antes de sustituir datos.",
+      "La restauración reemplaza toda la biblioteca del perfil activo, incluidos sus favoritos y retratos; no mezcla listas ni afecta a otras cuentas.",
+      "Las copias no incluyen cuentas, contraseñas ni ajustes de accesibilidad. La pantalla incluye enlaces a accesibilidad y privacidad.",
+      "El botón Cerrar sesión espera onLogout y muestra un error si falla. El enlace de creación para Invitado conserva la etiqueta antigua Crear cuenta local, aunque el registro usa la API."
+    ],
+    "functions": {
+      "Profile": "Presenta la información del perfil y los controles de biblioteca y copia.",
+      "readBackup": "Lee el archivo elegido, revisa su tamaño y utiliza importCharacters para validarlo.",
+      "restore": "Llama onImport con la copia validada y muestra el resultado; los errores no se anuncian como éxito."
+    }
   },
   "src/pages/Accessibility.jsx": {
     "summary": "Contiene el menú principal de accesibilidad y los cinco submenús, con configuración independiente por perfil.",
     "props": "preferences, onChange, error y user; useParams aporta el submenú solicitado.",
     "state": "message confirma cambios. Los valores permanentes viven en usePreferences y no en esta pantalla.",
-    "details": ["Texto: cuatro tamaños y deslizador. Contraste: normal, alto e invertido. Lectura: avisos de pantalla, voz voluntaria y velocidad.", "Teclado: foco reforzado y tabla de atajos nativos. Apariencia: tres temas, tres tamaños de elementos, seis acentos y movimiento reducido.", "Choices utiliza radios reales dentro de fieldset y legend para que se puedan recorrer con teclado y lectores de pantalla. Preview permite ver el efecto.", "Restablecer entrega defaultPreferences al perfil activo. Un submenú desconocido muestra NotFound. El modo de contraste prevalece sobre el color del tema sin borrar la elección."],
-    "functions": {"labelFor": "Encuentra el texto visible correspondiente a un valor de configuración.", "Choices": "Construye un grupo de opciones con radios, descripciones y marca de selección.", "Preview": "Presenta una ficha de texto de ejemplo que hereda los ajustes actuales.", "Accessibility": "Elige el menú a mostrar y compone los controles de configuración.", "update": "Entrega cambios a onChange y prepara la confirmación para el perfil activo."}
+    "details": [
+      "Texto: cuatro tamaños y deslizador. Contraste: normal, alto e invertido. Lectura: avisos de pantalla, voz voluntaria y velocidad.",
+      "Teclado: foco reforzado y tabla de atajos nativos. Apariencia: tres temas, tres tamaños de elementos, seis acentos y movimiento reducido.",
+      "Choices utiliza radios reales dentro de fieldset y legend para que se puedan recorrer con teclado y lectores de pantalla. Preview permite ver el efecto.",
+      "Restablecer entrega defaultPreferences al perfil activo. Un submenú desconocido muestra NotFound. El modo de contraste prevalece sobre el color del tema sin borrar la elección."
+    ],
+    "functions": {
+      "labelFor": "Encuentra el texto visible correspondiente a un valor de configuración.",
+      "Choices": "Construye un grupo de opciones con radios, descripciones y marca de selección.",
+      "Preview": "Presenta una ficha de texto de ejemplo que hereda los ajustes actuales.",
+      "Accessibility": "Elige el menú a mostrar y compone los controles de configuración.",
+      "update": "Entrega cambios a onChange y prepara la confirmación para el perfil activo."
+    }
   },
   "src/pages/Information.jsx": {
     "summary": "Agrupa Inspiración, Ayuda, Privacidad y la pantalla de ruta inexistente.",
     "state": "Inspiration mantiene el índice de la idea narrativa y un personaje aleatorio.",
-    "details": ["Las ideas narrativas se encuentran en el array prompts. El enlace a crear pasa un borrador mediante el estado de navegación; todavía no lo guarda.", "Ayuda utiliza details y summary para preguntas desplegables. Privacidad explica la persistencia local. NotFound permite volver a Inicio o Ayuda."],
-    "functions": {"Inspiration": "Muestra una idea y una semilla de personaje para comenzar una ficha.", "generate": "Escoge una idea distinta de la actual y vuelve a generar el personaje.", "Help": "Presenta preguntas frecuentes y accesos a ayuda de accesibilidad.", "Privacy": "Explica qué datos se conservan y qué contiene la copia de personajes.", "NotFound": "Presenta el estado 404 para rutas o fichas que no se encuentran."}
+    "details": [
+      "Las ideas narrativas se encuentran en el array prompts. El enlace a crear pasa un borrador mediante el estado de navegación; todavía no lo guarda.",
+      "Ayuda utiliza details y summary para preguntas desplegables. Privacidad explica la persistencia local. NotFound permite volver a Inicio o Ayuda."
+    ],
+    "functions": {
+      "Inspiration": "Muestra una idea y una semilla de personaje para comenzar una ficha.",
+      "generate": "Escoge una idea distinta de la actual y vuelve a generar el personaje.",
+      "Help": "Presenta preguntas frecuentes y accesos a ayuda de accesibilidad.",
+      "Privacy": "Explica qué datos se conservan y qué contiene la copia de personajes.",
+      "NotFound": "Presenta el estado 404 para rutas o fichas que no se encuentran."
+    }
   },
   "src/components/header/Header.jsx": {
     "summary": "Cabecera compartida con marca, menú de secciones y acceso a avisos o ayuda.",
     "props": "onNotify abre los avisos; login adapta la cabecera del acceso; user permite ocultar Iniciar sesión cuando ya hay sesión.",
     "state": "menuOpen indica si el menú está abierto. Las refs identifican la cabecera y su botón.",
-    "details": ["Cierra el menú al elegir una sección, pulsar su botón de cierre, usar Escape o pulsar fuera de la cabecera.", "aria-expanded y aria-controls describen el desplegable. El listener pointerdown se añade solo con el menú abierto y se limpia después."],
-    "functions": {"Header": "Dibuja la cabecera y el menú de navegación.", "closeOutside": "Detecta un clic o toque fuera y cierra el menú.", "closeMenu": "Cierra el menú y devuelve el foco al botón que lo abre."}
+    "details": [
+      "Cierra el menú al elegir una sección, pulsar su botón de cierre, usar Escape o pulsar fuera de la cabecera.",
+      "aria-expanded y aria-controls describen el desplegable. El listener pointerdown se añade solo con el menú abierto y se limpia después."
+    ],
+    "functions": {
+      "Header": "Dibuja la cabecera y el menú de navegación.",
+      "closeOutside": "Detecta un clic o toque fuera y cierra el menú.",
+      "closeMenu": "Cierra el menú y devuelve el foco al botón que lo abre."
+    }
   },
   "src/components/bottomnavigation/BottomNavigation.jsx": {
     "summary": "Barra inferior para Inicio, Biblioteca, Inspiración y Perfil.",
-    "details": ["Lee mainTabs de navigation.js. NavLink identifica la ruta activa.", "Las flechas izquierda/derecha mueven el foco entre enlaces de forma circular; Inicio y Fin van al primero y al último. Enter activa el enlace enfocado."],
-    "functions": {"BottomNavigation": "Construye los cuatro enlaces con icono y texto.", "handleKeys": "Calcula el enlace que debe recibir el foco según la tecla pulsada."}
+    "details": [
+      "Lee mainTabs de navigation.js. NavLink identifica la ruta activa.",
+      "Las flechas izquierda/derecha mueven el foco entre enlaces de forma circular; Inicio y Fin van al primero y al último. Enter activa el enlace enfocado."
+    ],
+    "functions": {
+      "BottomNavigation": "Construye los cuatro enlaces con icono y texto.",
+      "handleKeys": "Calcula el enlace que debe recibir el foco según la tecla pulsada."
+    }
   },
   "src/components/hero/Hero.jsx": {
     "summary": "Portada de Inicio con paisaje, mensaje de bienvenida y acceso al editor.",
-    "details": ["El paisaje tiene un nombre accesible. Crear personaje es un Link a /crear-personaje, de modo que no necesita guardar estado ni recibir callbacks."],
-    "functions": {"Hero": "Renderiza la portada y el acceso a crear una ficha."}
+    "details": [
+      "El paisaje tiene un nombre accesible. Crear personaje es un Link a /crear-personaje, de modo que no necesita guardar estado ni recibir callbacks."
+    ],
+    "functions": {
+      "Hero": "Renderiza la portada y el acceso a crear una ficha."
+    }
   },
   "src/components/charactercard/CharacterCard.jsx": {
-    "summary": "Tarjeta pulsable de un personaje en Inicio y Biblioteca.",
-    "props": "character aporta la ficha; onSelect recibe ese personaje al pulsar.",
-    "details": ["Es un button real con nombre accesible que incluye nombre, clase y nivel. Reutiliza Portrait y muestra una marca si la ficha es favorita."],
-    "functions": {"CharacterCard": "Presenta la tarjeta y comunica su selección al componente padre."}
+    "summary": "Tarjeta reutilizable para fichas locales y públicas.",
+    "details": [
+      "Por defecto crea un Link a /biblioteca/:id y guarda la ruta y filtros de retorno en location.state.",
+      "Con interactive=false devuelve un article sin enlace interno, para envolverlo en el enlace al detalle público sin anidar enlaces.",
+      "Solo muestra nivel si level no es null ni undefined. Comparte Portrait y el indicador de favorito."
+    ],
+    "functions": {
+      "CharacterCard": "Construye el contenido de tarjeta y decide si incluye enlace."
+    },
+    "props": "character e interactive (true por defecto)."
   },
   "src/components/charactercard/Portrait.jsx": {
-    "summary": "Presenta un retrato y ofrece iniciales si no hay imagen utilizable.",
-    "props": "character determina la imagen, el nombre y la posición; el resto de props se reenvía al elemento.",
-    "state": "failedImage guarda la URL de una imagen que falló para no volver a mostrarla.",
-    "details": ["Prioridad de imagen: imageDataUrl, image y finalmente el retrato local indicado por portrait. Los recursos locales disponibles son Elara y Kael.", "Si no hay imagen o su carga falla, genera hasta dos iniciales y las describe mediante aria-label. Las imágenes tienen alt con el nombre de la persona ficticia."],
-    "functions": {"Portrait": "Decide entre imagen e iniciales y aplica las alternativas accesibles."}
+    "summary": "Retrato con prioridades de imagen, encuadre configurable e iniciales de respaldo.",
+    "details": [
+      "Elige character.imageDataUrl, después character.image y después uno de los dos PNG incluidos según portrait.",
+      "failedImage registra una URL que no cargó; si no hay imagen o coincide con la fallida se muestran hasta dos iniciales.",
+      "objectPosition usa character.imagePosition o center. Los atributos adicionales se transmiten al elemento renderizado."
+    ],
+    "functions": {
+      "Portrait": "Presenta imagen o iniciales con texto accesible."
+    },
+    "props": "character y atributos adicionales.",
+    "state": "failedImage guarda la imagen que produjo un error."
   },
   "src/components/modal/Modal.jsx": {
     "summary": "Ventana modal reutilizable basada en el elemento nativo dialog.",
     "props": "title, onClose y children. useId relaciona el título con aria-labelledby.",
-    "details": ["showModal coloca el diálogo en la capa superior y activa el comportamiento modal del navegador.", "Puede cerrarse con el botón, Escape o un clic en el fondo. Al desmontarse cierra el diálogo y devuelve el foco anterior si el elemento sigue existiendo."],
-    "functions": {"Modal": "Abre y presenta un diálogo accesible, ejecuta la limpieza y comunica su cierre."}
+    "details": [
+      "showModal coloca el diálogo en la capa superior y activa el comportamiento modal del navegador.",
+      "Puede cerrarse con el botón, Escape o un clic en el fondo. Al desmontarse cierra el diálogo y devuelve el foco anterior si el elemento sigue existiendo."
+    ],
+    "functions": {
+      "Modal": "Abre y presenta un diálogo accesible, ejecuta la limpieza y comunica su cierre."
+    }
   },
   "src/components/forms/AppForm.jsx": {
     "summary": "Motor de formularios reutilizable para personajes, registro y recuperación.",
     "props": "fields describe los campos; onSubmit ejecuta el guardado; submitLabel, successMessage, children, cancelTo y notice personalizan el formulario.",
     "state": "errors, success, dirty, confirmCancel, failure y pending controlan validación, confirmaciones y envío.",
-    "details": ["Genera inputs, selects, textareas y casillas según la definición recibida. Asocia etiquetas, ayudas y errores mediante identificadores únicos.", "La validación es propia: noValidate evita mensajes distintos entre navegadores. El primer campo inválido recibe foco después de actualizar React.", "Mientras espera el envío desactiva los campos y el botón. La cancelación confirma el descarte si hubo cambios detectados dentro del formulario."],
-    "functions": {"AppForm": "Genera los controles y las zonas de feedback y cancelación.", "handleSubmit": "Valida FormData, impide envíos repetidos, espera onSubmit y gestiona éxito o error."}
+    "details": [
+      "Genera inputs, selects, textareas y casillas según la definición recibida. Asocia etiquetas, ayudas y errores mediante identificadores únicos.",
+      "La validación es propia: noValidate evita mensajes distintos entre navegadores. El primer campo inválido recibe foco después de actualizar React.",
+      "Mientras espera el envío desactiva los campos y el botón. La cancelación confirma el descarte si hubo cambios detectados dentro del formulario."
+    ],
+    "functions": {
+      "AppForm": "Genera los controles y las zonas de feedback y cancelación.",
+      "handleSubmit": "Valida FormData, impide envíos repetidos, espera onSubmit y gestiona éxito o error."
+    }
   },
   "src/components/feedback/ConnectionStatus.jsx": {
     "summary": "Aviso de pérdida y recuperación de conexión del navegador.",
     "state": "message conserva el aviso que se anuncia mediante una región de estado.",
-    "details": ["Escucha los eventos offline y online y elimina ambos listeners al desmontarse.", "navigator.onLine describe el estado que comunica el navegador, no comprueba la disponibilidad de un backend. No implementa caché ni un service worker."],
-    "functions": {"ConnectionStatus": "Inicia y presenta el estado de conexión.", "offline": "Prepara el aviso de falta de conexión.", "online": "Prepara el aviso de conexión restablecida."}
+    "details": [
+      "Escucha los eventos offline y online y elimina ambos listeners al desmontarse.",
+      "navigator.onLine describe el estado que comunica el navegador, no comprueba la disponibilidad de un backend. No implementa caché ni un service worker."
+    ],
+    "functions": {
+      "ConnectionStatus": "Inicia y presenta el estado de conexión.",
+      "offline": "Prepara el aviso de falta de conexión.",
+      "online": "Prepara el aviso de conexión restablecida."
+    }
   },
   "src/components/feedback/ReadAloud.jsx": {
     "summary": "Botón para leer texto en español mediante las voces del navegador o dispositivo.",
     "props": "text contiene lo que se leerá; rate define la velocidad, normalmente 0.75, 1 o 1.25.",
     "state": "reading y error controlan la interfaz; la ref current conserva la locución en curso.",
-    "details": ["Comprueba SpeechSynthesis y SpeechSynthesisUtterance antes de ofrecer el botón. Prefiere una voz cuyo idioma empiece por es.", "La lectura comienza solo por acción de la persona. Al detenerla o desmontarse el componente cancela la locución.", "La reproducción depende de las voces disponibles y puede fallar con un mensaje. Esta función es distinta del lector de pantalla del sistema."],
-    "functions": {"ReadAloud": "Presenta el botón o la explicación de que no hay soporte.", "toggle": "Inicia una locución con el texto y velocidad actuales o detiene la que se está leyendo."}
+    "details": [
+      "Comprueba SpeechSynthesis y SpeechSynthesisUtterance antes de ofrecer el botón. Prefiere una voz cuyo idioma empiece por es.",
+      "La lectura comienza solo por acción de la persona. Al detenerla o desmontarse el componente cancela la locución.",
+      "La reproducción depende de las voces disponibles y puede fallar con un mensaje. Esta función es distinta del lector de pantalla del sistema."
+    ],
+    "functions": {
+      "ReadAloud": "Presenta el botón o la explicación de que no hay soporte.",
+      "toggle": "Inicia una locución con el texto y velocidad actuales o detiene la que se está leyendo."
+    }
   },
   "src/components/icon/Icon.jsx": {
     "summary": "Catálogo de iconos SVG reutilizables sin archivos externos.",
     "props": "name elige el dibujo y size fija el tamaño; por defecto es 22.",
-    "details": ["paths contiene los trazados de cada icono. aria-hidden evita que un dibujo decorativo repita el nombre que ya aporta su botón o enlace."],
-    "functions": {"Icon": "Genera un svg con el trazado, tamaño y estilo comunes."}
+    "details": [
+      "paths contiene los trazados de cada icono. aria-hidden evita que un dibujo decorativo repita el nombre que ya aporta su botón o enlace."
+    ],
+    "functions": {
+      "Icon": "Genera un svg con el trazado, tamaño y estilo comunes."
+    }
   },
   "src/hooks/useCharacters.js": {
     "summary": "Mantiene la biblioteca React del perfil y coordina las escrituras persistentes.",
     "props": "owner es el identificador estable de la cuenta o guest.",
     "state": "loaded contiene el resultado inicial; characters es la biblioteca visible; storageError informa de fallos.",
-    "details": ["Carga una vez al montarse. App vuelve a montar Workspace cuando cambia el perfil.", "Actualiza el estado visible solo después de guardar correctamente. Si el almacenamiento falla conserva la biblioteca anterior y lanza un error para el formulario o diálogo."],
-    "functions": {"useCharacters": "Devuelve personajes, errores y operaciones de biblioteca.", "commit": "Valida la nueva lista, la escribe y actualiza el estado; transforma fallos de almacenamiento en un mensaje.", "saveCharacter": "Normaliza una ficha, crea identificador cuando hace falta y actualiza updatedAt. Sustituye por id o añade al inicio.", "deleteCharacter": "Filtra la ficha con el id indicado y guarda la nueva lista.", "toggleFavorite": "Invierte favorite en la ficha indicada y guarda los datos.", "replaceCharacters": "Expone commit para sustituir la biblioteca al restaurar una copia."}
+    "details": [
+      "Carga una vez al montarse. App vuelve a montar Workspace cuando cambia el perfil.",
+      "Actualiza el estado visible solo después de guardar correctamente. Si el almacenamiento falla conserva la biblioteca anterior y lanza un error para el formulario o diálogo."
+    ],
+    "functions": {
+      "useCharacters": "Devuelve personajes, errores y operaciones de biblioteca.",
+      "commit": "Valida la nueva lista, la escribe y actualiza el estado; transforma fallos de almacenamiento en un mensaje.",
+      "saveCharacter": "Normaliza una ficha, crea identificador cuando hace falta y actualiza updatedAt. Sustituye por id o añade al inicio.",
+      "deleteCharacter": "Filtra la ficha con el id indicado y guarda la nueva lista.",
+      "toggleFavorite": "Invierte favorite en la ficha indicada y guarda los datos.",
+      "replaceCharacters": "Expone commit para sustituir la biblioteca al restaurar una copia."
+    }
   },
   "src/hooks/usePreferences.js": {
     "summary": "Carga y aplica los ajustes de accesibilidad del perfil activo.",
     "props": "owner es el identificador del perfil o guest.",
     "state": "preferences conserva la configuración; preferenceError informa de lectura o guardado fallidos.",
-    "details": ["Si no puede leer los ajustes utiliza los valores predeterminados y muestra un aviso.", "A diferencia de los personajes, un ajuste de accesibilidad se aplica visualmente incluso si no se puede persistir. Se avisa de que solo durará mientras la app siga abierta."],
-    "functions": {"usePreferences": "Recupera ajustes y devuelve su valor, su error y la operación de cambio.", "updatePreferences": "Combina cambios parciales, normaliza, aplica al estado y trata de guardar para owner."}
+    "details": [
+      "Si no puede leer los ajustes utiliza los valores predeterminados y muestra un aviso.",
+      "A diferencia de los personajes, un ajuste de accesibilidad se aplica visualmente incluso si no se puede persistir. Se avisa de que solo durará mientras la app siga abierta."
+    ],
+    "functions": {
+      "usePreferences": "Recupera ajustes y devuelve su valor, su error y la operación de cambio.",
+      "updatePreferences": "Combina cambios parciales, normaliza, aplica al estado y trata de guardar para owner."
+    }
   },
   "src/utils/characterStore.js": {
     "summary": "Valida fichas, lee y escribe bibliotecas y prepara las copias JSON.",
-    "details": ["MAX_IMAGE_BYTES fija 750 KB para la carga de retratos; imagePattern limita el formato de data URL a PNG, JPEG o WebP.", "readCharacters inicia una biblioteca nueva con seis ejemplos si la clave no existe. Una lista guardada vacía se conserva vacía.", "La importación acepta hasta 500 fichas y una versión de copia reconocida; la pantalla Perfil limita también el archivo a 10 MB."],
-    "functions": {"normalizeCharacter": "Construye una ficha con las propiedades admitidas; comprueba nombre, clase, raza, nivel, atributos, rasgos e imagen. Añade un id nuevo si no recibe uno utilizable.", "text": "Ayudante interno que recorta y limita campos de texto.", "parseCharacters": "Comprueba que recibe una lista, valida cada ficha y rechaza identificadores repetidos.", "readCharacters": "Lee la clave del propietario y devuelve su biblioteca o los ejemplos iniciales.", "writeCharacters": "Valida la lista y la serializa en localStorage para el propietario.", "importCharacters": "Analiza el JSON, verifica app y version y devuelve las fichas validadas.", "downloadCharacters": "Serializa app, version y characters, crea un Blob y un enlace temporal y dispara la descarga; después libera la URL."}
+    "details": [
+      "MAX_IMAGE_BYTES fija 750 KB para la carga de retratos; imagePattern limita el formato de data URL a PNG, JPEG o WebP.",
+      "readCharacters inicia una biblioteca nueva con seis ejemplos si la clave no existe. Una lista guardada vacía se conserva vacía.",
+      "La importación acepta hasta 500 fichas y una versión de copia reconocida; la pantalla Perfil limita también el archivo a 10 MB."
+    ],
+    "functions": {
+      "normalizeCharacter": "Construye una ficha con las propiedades admitidas; comprueba nombre, clase, raza, nivel, atributos, rasgos e imagen. Añade un id nuevo si no recibe uno utilizable.",
+      "text": "Ayudante interno que recorta y limita campos de texto.",
+      "parseCharacters": "Comprueba que recibe una lista, valida cada ficha y rechaza identificadores repetidos.",
+      "readCharacters": "Lee la clave del propietario y devuelve su biblioteca o los ejemplos iniciales.",
+      "writeCharacters": "Valida la lista y la serializa en localStorage para el propietario.",
+      "importCharacters": "Analiza el JSON, verifica app y version y devuelve las fichas validadas.",
+      "downloadCharacters": "Serializa app, version y characters, crea un Blob y un enlace temporal y dispara la descarga; después libera la URL."
+    }
   },
   "src/utils/localAccounts.js": {
-    "summary": "Implementa cuentas y sesiones locales mediante Web Crypto y almacenamiento del navegador.",
-    "details": ["La cuenta guarda id, nombre, correo normalizado, sal y verificadores. No persiste la contraseña ni el código de recuperación en texto plano.", "PBKDF2-SHA-256 utiliza una sal aleatoria de 16 bytes, 100000 iteraciones y resultado de 256 bits. El código aleatorio de recuperación usa 16 bytes y se verifica con SHA-256.", "Con Recordarme el id de sesión queda en localStorage; sin marcarlo queda en sessionStorage. No son sesiones autenticadas por un servidor.", "No existe una cuenta semilla, rol ADMIN, token de backend, envío de correo ni control de permisos de servidor."],
-    "functions": {"bytesToHex": "Convierte un array de bytes en una cadena hexadecimal.", "normalizeEmail": "Elimina espacios en los extremos y convierte el correo a minúsculas.", "passwordHash": "Deriva el verificador de contraseña con PBKDF2 y la sal recibida.", "recoveryHash": "Calcula SHA-256 del código recortado y convertido a mayúsculas.", "accounts": "Lee y comprueba el array de cuentas locales.", "readSession": "Busca el id de sesión temporal o persistente y devuelve solo id, nombre y correo.", "registerAccount": "Rechaza correo duplicado, genera identificadores y verificadores, guarda la cuenta y devuelve el código de recuperación.", "loginAccount": "Verifica correo y contraseña, escribe la sesión en el almacén elegido y devuelve la identidad.", "logoutAccount": "Borra la referencia de sesión en los dos tipos de almacenamiento.", "recoverAccount": "Verifica correo y código, cambia sal y contraseña y retira las referencias de sesión de esa cuenta."}
+    "summary": "Módulo local anterior; la recuperación todavía lo usa, el acceso y registro actuales usan la API.",
+    "details": [
+      "readSession, registerAccount, loginAccount y logoutAccount siguen disponibles y probados, pero App no los utiliza para la sesión actual. recoverAccount permanece conectado a /recuperar.",
+      "La cuenta guarda id, nombre, correo normalizado, sal y verificadores. No persiste la contraseña ni el código de recuperación en texto plano.",
+      "PBKDF2-SHA-256 utiliza una sal aleatoria de 16 bytes, 100000 iteraciones y resultado de 256 bits. El código aleatorio de recuperación usa 16 bytes y se verifica con SHA-256.",
+      "Con Recordarme el id de sesión queda en localStorage; sin marcarlo queda en sessionStorage. No son sesiones autenticadas por un servidor.",
+      "Estas cuentas locales no proporcionan autorización de servidor. No se conoce desde este módulo cómo almacena el backend las credenciales; la identidad HTTP actual incluye rol."
+    ],
+    "functions": {
+      "bytesToHex": "Convierte un array de bytes en una cadena hexadecimal.",
+      "normalizeEmail": "Elimina espacios en los extremos y convierte el correo a minúsculas.",
+      "passwordHash": "Deriva el verificador de contraseña con PBKDF2 y la sal recibida.",
+      "recoveryHash": "Calcula SHA-256 del código recortado y convertido a mayúsculas.",
+      "accounts": "Lee y comprueba el array de cuentas locales.",
+      "readSession": "Busca el id de sesión temporal o persistente y devuelve solo id, nombre y correo.",
+      "registerAccount": "Rechaza correo duplicado, genera identificadores y verificadores, guarda la cuenta y devuelve el código de recuperación.",
+      "loginAccount": "Verifica correo y contraseña, escribe la sesión en el almacén elegido y devuelve la identidad.",
+      "logoutAccount": "Borra la referencia de sesión en los dos tipos de almacenamiento.",
+      "recoverAccount": "Verifica correo y código, cambia sal y contraseña y retira las referencias de sesión de esa cuenta."
+    }
   },
   "src/utils/preferenceStore.js": {
     "summary": "Define valores predeterminados y persistencia de accesibilidad separada por perfil.",
-    "details": ["defaultPreferences usa texto normal, contraste normal, tema oscuro, controles normales, acento rojo y anuncios de navegación. La voz, el foco reforzado y el movimiento reducido empiezan desactivados.", "La antigua clave global v1 solo se recupera para guest. Las cuentas nuevas empiezan con sus propios valores predeterminados.", "La normalización admite únicamente tamaños, contrastes, temas, acentos y velocidades conocidos."],
-    "functions": {"normalizePreferences": "Construye una configuración válida y sustituye opciones desconocidas por sus valores predeterminados.", "choose": "Ayudante interno que acepta un valor solo si aparece en el catálogo de opciones.", "readPreferences": "Lee la clave v2 del propietario, considera la migración de Invitado o devuelve defaults.", "writePreferences": "Normaliza y guarda la configuración del propietario."}
+    "details": [
+      "defaultPreferences usa texto normal, contraste normal, tema oscuro, controles normales, acento rojo y anuncios de navegación. La voz, el foco reforzado y el movimiento reducido empiezan desactivados.",
+      "La antigua clave global v1 solo se recupera para guest. Las cuentas nuevas empiezan con sus propios valores predeterminados.",
+      "La normalización admite únicamente tamaños, contrastes, temas, acentos y velocidades conocidos."
+    ],
+    "functions": {
+      "normalizePreferences": "Construye una configuración válida y sustituye opciones desconocidas por sus valores predeterminados.",
+      "choose": "Ayudante interno que acepta un valor solo si aparece en el catálogo de opciones.",
+      "readPreferences": "Lee la clave v2 del propietario, considera la migración de Invitado o devuelve defaults.",
+      "writePreferences": "Normaliza y guarda la configuración del propietario."
+    }
   },
   "src/utils/validateForm.js": {
     "summary": "Validación declarativa compartida por AppForm y Login.",
-    "details": ["Recibe la definición de campos y un FormData. Devuelve un objeto de errores, con el nombre del campo como clave.", "Comprueba obligatoriedad, formato de correo, longitudes, opciones permitidas, carácter especial, enteros en rango y coincidencia de contraseñas.", "Se detiene en el primer error de cada campo. Las comprobaciones del navegador y de la interfaz no sustituyen la validación de un futuro backend."],
-    "functions": {"validateForm": "Recorre las reglas y devuelve mensajes listos para asociarse a los controles."}
+    "details": [
+      "Recibe la definición de campos y un FormData. Devuelve un objeto de errores, con el nombre del campo como clave.",
+      "Comprueba obligatoriedad, formato de correo, longitudes, opciones permitidas, carácter especial, enteros en rango y coincidencia de contraseñas.",
+      "Se detiene en el primer error de cada campo. Las comprobaciones del navegador y de la interfaz no sustituyen la validación de un futuro backend."
+    ],
+    "functions": {
+      "validateForm": "Recorre las reglas y devuelve mensajes listos para asociarse a los controles."
+    }
   },
   "src/data/characters.js": {
-    "summary": "Seis fichas iniciales y generador de semillas de personaje.",
-    "details": ["initialCharacters incluye Elara, Kael, Seraphine, Draeg, Inquisidor y Angélica. Los arrays stats siguen el orden de attributeNames.", "El generador reutiliza una plantilla y cambia nombre, id de borrador y atributos; no escribe nada en el almacenamiento."],
-    "functions": {"randomCharacter": "Escoge plantilla y nombre aleatorios; genera cuatro atributos enteros entre 6 y 20."}
+    "summary": "Seis personajes de ejemplo para inicializar bibliotecas locales.",
+    "details": [
+      "initialCharacters incluye Elara, Kael, Seraphine, Draeg, Inquisidor y Angélica.",
+      "El generador completo se encuentra ahora en src/utils/generateCharacter.js. Este archivo no envía datos al servidor."
+    ],
+    "functions": {}
   },
   "src/data/characterOptions.js": {
     "summary": "Catálogos de clases, razas, rasgos y nombres de atributos, además de la ficha vacía.",
-    "details": ["Fuerza, Destreza, Inteligencia y Carisma determinan el orden del array stats en toda la app.", "blankCharacter prepara los campos iniciales del editor, con nivel 1 y cuatro atributos de valor 10."],
-    "functions": {"blankCharacter": "Devuelve un objeto nuevo de personaje todavía sin nombre ni identificador persistente."}
+    "details": [
+      "Fuerza, Destreza, Inteligencia y Carisma determinan el orden del array stats en toda la app.",
+      "blankCharacter prepara los campos iniciales del editor, con nivel 1 y cuatro atributos de valor 10."
+    ],
+    "functions": {
+      "blankCharacter": "Devuelve un objeto nuevo de personaje todavía sin nombre ni identificador persistente."
+    }
   },
   "src/data/navigation.js": {
     "summary": "Fuente común de enlaces y títulos de pantalla.",
-    "details": ["menuItems define las secciones de la cabecera; mainTabs define los cuatro accesos inferiores; pageTitles relaciona rutas con títulos.", "App utiliza estos títulos para el encabezado, la pestaña del navegador y el aviso de cambio de pantalla."],
+    "details": [
+      "menuItems define las secciones de la cabecera; mainTabs define los cuatro accesos inferiores; pageTitles relaciona rutas con títulos.",
+      "App utiliza estos títulos para el encabezado, la pestaña del navegador y el aviso de cambio de pantalla."
+    ],
     "functions": {}
   },
   "src/data/accessibility.js": {
     "summary": "Catálogos de valores y etiquetas de los cinco menús de accesibilidad.",
-    "details": ["Define textSizes, contrastModes, themes, elementSizes y accentColors.", "accessibilityMenus contiene id, etiqueta, icono y descripción de cada submenú. La pantalla y la validación leen los mismos catálogos para evitar opciones divergentes."],
+    "details": [
+      "Define textSizes, contrastModes, themes, elementSizes y accentColors.",
+      "accessibilityMenus contiene id, etiqueta, icono y descripción de cada submenú. La pantalla y la validación leen los mismos catálogos para evitar opciones divergentes."
+    ],
     "functions": {}
   },
   "src/index.css": {
     "summary": "Fuentes locales, reinicio de estilos y variables base de color, texto y controles.",
-    "details": ["Declara Cormorant Garamond e Inter con font-face y recursos de public/fonts.", "Define los tokens base: foreground, background, surface, accent, text-scale, control-height y otros.", "Establece box-sizing, estilo base de enlaces y controles, foco visible y respeto a prefers-reduced-motion."],
+    "details": [
+      "Declara Cormorant Garamond e Inter con font-face y recursos de public/fonts.",
+      "Define los tokens base: foreground, background, surface, accent, text-scale, control-height y otros.",
+      "Establece box-sizing, estilo base de enlaces y controles, foco visible y respeto a prefers-reduced-motion."
+    ],
     "functions": {}
   },
   "src/App.css": {
     "summary": "Composición general, tarjetas, formularios, diálogos y reglas globales de accesibilidad.",
-    "details": ["La interfaz tiene un marco máximo de 390 px y se adapta a pantallas estrechas. Grid y flex distribuyen tarjetas, barras y controles.", "Los selectores data-text-size multiplican los tamaños de fuente. data-element-size ajusta alturas y espacios de controles e iconos.", "Los selectores data-theme eligen oscuro, claro o sepia; data-accent cambia el acento. Las reglas de contraste se declaran después y tienen prioridad.", "enhanced-focus refuerza el contorno y reduce-motion elimina transiciones. Se ajustan las columnas para evitar desbordamiento en móvil."],
+    "details": [
+      "La interfaz tiene un marco máximo de 390 px y se adapta a pantallas estrechas. Grid y flex distribuyen tarjetas, barras y controles.",
+      "Los selectores data-text-size multiplican los tamaños de fuente. data-element-size ajusta alturas y espacios de controles e iconos.",
+      "Los selectores data-theme eligen oscuro, claro o sepia; data-accent cambia el acento. Las reglas de contraste se declaran después y tienen prioridad.",
+      "enhanced-focus refuerza el contorno y reduce-motion elimina transiciones. Se ajustan las columnas para evitar desbordamiento en móvil."
+    ],
     "functions": {}
   },
   "src/pages/Login.css": {
     "summary": "Composición específica de la pantalla de acceso.",
-    "details": ["Estiliza el marco de login, el símbolo, los campos con iconos, el botón de visibilidad, las opciones y los separadores.", "Utiliza las variables de color y text-scale para respetar los ajustes del perfil Invitado que se ven antes del acceso."],
+    "details": [
+      "Estiliza el marco de login, el símbolo, los campos con iconos, el botón de visibilidad, las opciones y los separadores.",
+      "Utiliza las variables de color y text-scale para respetar los ajustes del perfil Invitado que se ven antes del acceso."
+    ],
     "functions": {}
   },
   "src/pages/Accessibility.css": {
     "summary": "Presentación del menú y los controles de accesibilidad.",
-    "details": ["Da forma a las filas de navegación, el perfil activo, radios, marcas de selección, muestras de color, deslizador y vista previa.", "La tabla keyboard-shortcuts describe atajos. Todos los estilos heredan las variables del tema, el contraste y el tamaño elegido."],
+    "details": [
+      "Da forma a las filas de navegación, el perfil activo, radios, marcas de selección, muestras de color, deslizador y vista previa.",
+      "La tabla keyboard-shortcuts describe atajos. Todos los estilos heredan las variables del tema, el contraste y el tamaño elegido."
+    ],
     "functions": {}
   },
   "package.json": {
     "summary": "Identidad del paquete, dependencias directas y comandos de desarrollo.",
-    "details": ["React y React DOM componen la interfaz; React Router gestiona las rutas; Vite desarrolla y compila; ESLint comprueba el código.", "Los comandos son dev, build, test, test:browser, lint y preview. Las versiones con ^ son rangos declarados; package-lock.json concreta la resolución instalada."],
+    "details": [
+      "React y React DOM componen la interfaz; React Router gestiona las rutas; Vite desarrolla y compila; ESLint comprueba el código.",
+      "Los comandos son dev, build, test, test:browser, lint y preview. Las versiones con ^ son rangos declarados; package-lock.json concreta la resolución instalada."
+    ],
     "functions": {}
   },
   "vite.config.js": {
-    "summary": "Configuración del compilador y del servidor Vite.",
-    "details": ["Activa el plugin React y excluye public/fonts de la vigilancia de archivos para evitar bloqueos EBUSY en Windows.", "No define proxy de API ni configuración de backend. El comentario enlazado a Vite forma parte del código original."],
-    "functions": {"defineConfig": "Ayudante de Vite que recibe la configuración exportada."}
+    "summary": "Plugin React, proxy de API de desarrollo y exclusión de fuentes del observador.",
+    "details": [
+      "server.proxy reenvía /api a http://localhost:8080 con changeOrigin: true y sin rewrite.",
+      "server.watch.ignored excluye **/public/fonts/** para evitar bloqueos de vigilancia en Windows.",
+      "El proxy no se incluye en dist. Al no declarar preview.proxy, Vite hereda server.proxy para la vista previa local. VITE_API_URL no se lee en api.js."
+    ],
+    "functions": {
+      "defineConfig": "Define la configuración exportada de Vite."
+    }
   },
   "eslint.config.js": {
     "summary": "Reglas de análisis estático para JavaScript y JSX.",
-    "details": ["Ignora dist y combina recomendaciones de JavaScript, hooks de React y React Refresh.", "Declara globals de navegador y soporte para JSX. No ejecuta la app ni sustituye las pruebas de comportamiento."],
-    "functions": {"defineConfig": "Compone el array de reglas de ESLint.", "globalIgnores": "Indica los directorios que se excluyen del análisis."}
+    "details": [
+      "Ignora dist y combina recomendaciones de JavaScript, hooks de React y React Refresh.",
+      "Declara globals de navegador y soporte para JSX. No ejecuta la app ni sustituye las pruebas de comportamiento."
+    ],
+    "functions": {
+      "defineConfig": "Compone el array de reglas de ESLint.",
+      "globalIgnores": "Indica los directorios que se excluyen del análisis."
+    }
   },
   "tests/characterStore.test.js": {
     "summary": "Pruebas del almacenamiento y las copias de personajes.",
-    "details": ["Comprueba aislamiento de bibliotecas, persistencia de listas vacías, importación válida e inválida, ids repetidos y que un fallo de escritura conserve datos anteriores."],
-    "functions": {"memoryStorage": "Crea un almacenamiento de prueba basado en Map para no usar datos reales de navegador."}
+    "details": [
+      "Comprueba aislamiento de bibliotecas, persistencia de listas vacías, importación válida e inválida, ids repetidos y que un fallo de escritura conserve datos anteriores."
+    ],
+    "functions": {
+      "memoryStorage": "Crea un almacenamiento de prueba basado en Map para no usar datos reales de navegador."
+    }
   },
   "tests/localAccounts.test.js": {
-    "summary": "Pruebas de registro, verificadores, sesiones y recuperación.",
-    "details": ["Comprueba correos duplicados, contraseñas erróneas, ausencia de secretos en texto plano, sesión temporal, Recordarme y cierre de sesión.", "Verifica que el código es necesario para recuperar y que cambiar la contraseña conserva el id de la cuenta."],
-    "functions": {"memoryStorage": "Simula localStorage y sessionStorage mediante Map."}
+    "summary": "Pruebas del módulo de cuentas locales anterior; no prueban la autenticación de Spring Boot.",
+    "details": [
+      "Comprueba correos duplicados, contraseñas erróneas, ausencia de secretos en texto plano, sesión temporal, Recordarme y cierre de sesión.",
+      "Verifica que el código es necesario para recuperar y que cambiar la contraseña conserva el id de la cuenta."
+    ],
+    "functions": {
+      "memoryStorage": "Simula localStorage y sessionStorage mediante Map."
+    }
   },
   "tests/preferenceStore.test.js": {
     "summary": "Pruebas de accesibilidad independiente por perfil.",
-    "details": ["Comprueba dos cuentas e Invitado, restablecimiento aislado, migración de la antigua configuración global y rechazo de valores desconocidos.", "También verifica que un fallo de escritura no borre la configuración persistida anterior."],
-    "functions": {"memoryStorage": "Proporciona un almacén aislado para cada escenario de prueba."}
+    "details": [
+      "Comprueba dos cuentas e Invitado, restablecimiento aislado, migración de la antigua configuración global y rechazo de valores desconocidos.",
+      "También verifica que un fallo de escritura no borre la configuración persistida anterior."
+    ],
+    "functions": {
+      "memoryStorage": "Proporciona un almacén aislado para cada escenario de prueba."
+    }
   },
   "tests/validateForm.test.js": {
     "summary": "Pruebas de las reglas compartidas de formularios.",
-    "details": ["Incluye campos vacíos, correos, longitud y carácter especial de contraseña, confirmación, nivel entero entre 1 y 20 y casilla obligatoria."],
-    "functions": {"values": "Construye FormData a partir de un objeto sencillo para cada caso de prueba."}
+    "details": [
+      "Incluye campos vacíos, correos, longitud y carácter especial de contraseña, confirmación, nivel entero entre 1 y 20 y casilla obligatoria."
+    ],
+    "functions": {
+      "values": "Construye FormData a partir de un objeto sencillo para cada caso de prueba."
+    }
   },
   "scripts/browser-smoke.mjs": {
     "summary": "Recorridos de integración en Chrome o Edge mediante Chrome DevTools Protocol, sin dependencia de Playwright.",
-    "details": ["Necesita la app ejecutándose y un navegador con CDP en el puerto 9222. Crea un contexto aislado y lo elimina al terminar; las limpiezas de almacenamiento ocurren dentro de ese contexto.", "Prueba personajes, filtros, retratos, favoritos, duplicado, eliminación, fallos de guardado, copias, cuentas y recuperación.", "Comprueba los cinco menús, los cambios de texto y contraste, el árbol de accesibilidad, el foco, los tamaños, el cambio entre perfiles y el diseño de 320/390 px.", "La voz se sustituye por una simulación en algunos recorridos para comprobar texto, velocidad y cancelación; esos casos no verifican la reproducción de sonido real ni un lector de pantalla externo.", "UMBRA_URL elige la dirección de la app. UMBRA_SCREENSHOT permite guardar una captura. Los fallos producen un código de salida distinto de cero."],
-    "functions": {"send": "Envía una orden CDP con id y sesión y relaciona su respuesta con una promesa.", "evaluate": "Ejecuta JavaScript en la página y devuelve el valor o su error.", "wait": "Consulta una condición de la página hasta cumplirla o agotar el plazo.", "click": "Enfoca y pulsa un elemento encontrado mediante selector.", "clickText": "Encuentra un botón o enlace por texto, lo enfoca y lo pulsa.", "fill": "Rellena un control identificado por name.", "fillSelector": "Utiliza el setter nativo y eventos para actualizar inputs o textareas de React.", "select": "Cambia un select y dispara su evento change.", "importFile": "Simula la selección de una copia JSON con File y DataTransfer.", "go": "Carga una ruta y espera a que aparezca el contenido principal.", "reload": "Recarga la página y espera a que React vuelva a montarse."}
+    "details": [
+      "Pendiente de adaptar: el recorrido de cuentas espera el registro local anterior, el código de recuperación y etiquetas antiguas. No demuestra compatibilidad con la API ni prueba los personajes públicos de extremo a extremo.",
+      "Necesita la app ejecutándose y un navegador con CDP en el puerto 9222. Crea un contexto aislado y lo elimina al terminar; las limpiezas de almacenamiento ocurren dentro de ese contexto.",
+      "Prueba personajes, filtros, retratos, favoritos, duplicado, eliminación, fallos de guardado, copias, cuentas y recuperación.",
+      "Comprueba los cinco menús, los cambios de texto y contraste, el árbol de accesibilidad, el foco, los tamaños, el cambio entre perfiles y el diseño de 320/390 px.",
+      "La voz se sustituye por una simulación en algunos recorridos para comprobar texto, velocidad y cancelación; esos casos no verifican la reproducción de sonido real ni un lector de pantalla externo.",
+      "UMBRA_URL elige la dirección de la app. UMBRA_SCREENSHOT permite guardar una captura. Los fallos producen un código de salida distinto de cero."
+    ],
+    "functions": {
+      "send": "Envía una orden CDP con id y sesión y relaciona su respuesta con una promesa.",
+      "evaluate": "Ejecuta JavaScript en la página y devuelve el valor o su error.",
+      "wait": "Consulta una condición de la página hasta cumplirla o agotar el plazo.",
+      "click": "Enfoca y pulsa un elemento encontrado mediante selector.",
+      "clickText": "Encuentra un botón o enlace por texto, lo enfoca y lo pulsa.",
+      "fill": "Rellena un control identificado por name.",
+      "fillSelector": "Utiliza el setter nativo y eventos para actualizar inputs o textareas de React.",
+      "select": "Cambia un select y dispara su evento change.",
+      "importFile": "Simula la selección de una copia JSON con File y DataTransfer.",
+      "go": "Carga una ruta y espera a que aparezca el contenido principal.",
+      "reload": "Recarga la página y espera a que React vuelva a montarse."
+    }
   },
   "public/favicon.svg": {
     "summary": "Icono vectorial de la pestaña del navegador.",
-    "details": ["Lo referencia index.html. Se incluye su código SVG completo; los PNG y las fuentes se guardan como archivos binarios en el ZIP."],
+    "details": [
+      "Lo referencia index.html. Se incluye su código SVG completo; los PNG y las fuentes se guardan como archivos binarios en el ZIP."
+    ],
     "functions": {}
   },
   "public/images/ASSETS.md": {
     "summary": "Descripción y procedencia de los recursos gráficos incluidos.",
-    "details": ["Documenta los prompts utilizados para los tres PNG. No genera imágenes al ejecutar la app."],
+    "details": [
+      "Documenta los prompts utilizados para los tres PNG. No genera imágenes al ejecutar la app."
+    ],
     "functions": {}
   },
   ".gitignore": {
     "summary": "Patrones que Git ignora para evitar añadir dependencias, compilados y archivos temporales.",
-    "details": ["Incluye node_modules, dist, archivos de log y datos locales de herramientas. No elimina esos archivos del equipo."],
+    "details": [
+      "Incluye node_modules, dist, archivos de log y datos locales de herramientas. No elimina esos archivos del equipo."
+    ],
     "functions": {}
   },
   "README.md": {
-    "summary": "Guía breve original del repositorio con comandos, funciones y límites del almacenamiento local.",
-    "details": ["Complementa este manual. El listado de código reproduce el archivo tal como estaba al generar el documento."],
+    "summary": "Guía bilingüe del frontend, configuración de API y límites de la integración actual.",
+    "details": [
+      "Complementa este manual. El listado de código reproduce el archivo tal como estaba al generar el documento."
+    ],
     "functions": {}
   },
   "LICENSE": {
     "summary": "Licencia del proyecto incluida en el repositorio.",
-    "details": ["Se reproduce íntegra en la documentación y se conserva también en el ZIP. Las fuentes tienen sus propias licencias en public/fonts."],
+    "details": [
+      "Se reproduce íntegra en la documentación y se conserva también en el ZIP. Las fuentes tienen sus propias licencias en public/fonts."
+    ],
+    "functions": {}
+  },
+  ".env.development": {
+    "summary": "Variable de entorno declarada para la dirección de la API.",
+    "details": [
+      "VITE_API_URL=http://localhost:8080/api.",
+      "El servicio actual utiliza /api relativo sin leer import.meta.env; la dirección efectiva de desarrollo la fija el proxy de Vite."
+    ],
+    "functions": {}
+  },
+  "src/services/api.js": {
+    "summary": "Servicios fetch para personajes públicos y autenticación de Spring Boot.",
+    "details": [
+      "Utiliza rutas relativas /api; no consume VITE_API_URL.",
+      "El registro envía nombreUsuario, email y password como JSON; distingue errores 409 y 400.",
+      "Login envía email y password, sin remember; login, me y logout declaran credentials: same-origin.",
+      "GET /api/auth/me añade X-Requested-By: XMLHttpRequest y devuelve null ante 401.",
+      "Registro, login, sesión y personajes esperan JSON en respuestas correctas; logout solo comprueba el estado HTTP."
+    ],
+    "functions": {
+      "obtenerPersonajesPublicos": "GET /api/personajes/publicos.",
+      "obtenerPersonajePorId": "GET /api/personajes/{id}, codificando el id.",
+      "registrarUsuario": "POST /api/auth/register y traducción de errores.",
+      "iniciarSesion": "POST /api/auth/login y error específico para 401.",
+      "obtenerSesion": "GET /api/auth/me; 401 devuelve null.",
+      "cerrarSesion": "POST /api/auth/logout; lanza error si falla."
+    }
+  },
+  "src/components/publiccharacters/PublicCharacters.jsx": {
+    "summary": "Listado remoto independiente al final de la biblioteca.",
+    "details": [
+      "Al montar consulta obtenerPersonajesPublicos; muestra carga, error o lista vacía y evita actualizar tras desmontarse.",
+      "Adapta idPersonaje a public-<id> y nombre a name, con type Personaje público, level null, image vacío, portrait null y favorite false.",
+      "Envuelve CharacterCard interactive=false en un enlace a /personajes-publicos/:id. Sin imagen asignada muestra iniciales.",
+      "Los filtros de la biblioteca personal no se aplican a esta consulta."
+    ],
+    "functions": {
+      "PublicCharacters": "Carga y representa las tarjetas públicas."
+    },
+    "state": "personajes, cargando y error."
+  },
+  "src/pages/PublicCharacterDetail.jsx": {
+    "summary": "Consulta por id una ficha del backend.",
+    "details": [
+      "Obtiene el id de la ruta y consulta obtenerPersonajePorId; limpia la ficha al cambiar id y evita actualizaciones después del desmontaje.",
+      "Muestra nombre, visibilidad, historia, personalidad y fuerza, destreza, inteligencia y carisma.",
+      "Incluye carga, error y enlace a Biblioteca. No ofrece edición, favoritos o duplicado."
+    ],
+    "functions": {
+      "PublicCharacterDetail": "Presenta el detalle público y sus estados de consulta."
+    },
+    "state": "personaje, cargando y error."
+  },
+  "src/pages/CharacterDetail.jsx": {
+    "summary": "Pantalla propia de cada ficha local, con acciones y confirmación de borrado.",
+    "details": [
+      "Busca el id en characters; si no existe muestra NotFound.",
+      "Conserva una ruta de retorno admitida desde Inicio o Biblioteca y sus filtros.",
+      "Incluye lectura opcional, favoritos, edición, duplicado y eliminación con confirmación en la página."
+    ],
+    "functions": {
+      "CharacterDetail": "Compone la ficha local.",
+      "act": "Captura errores de las acciones.",
+      "cancelDelete": "Cancela la confirmación y devuelve el foco.",
+      "duplicate": "Guarda una copia con nuevo id y vuelve a Biblioteca.",
+      "remove": "Elimina la ficha y vuelve a Biblioteca."
+    },
+    "props": "characters, onSave, onDelete, onToggleFavorite y preferences."
+  },
+  "src/pages/CharacterDetail.css": {
+    "summary": "Estilos de la ficha local y su confirmación de borrado.",
+    "details": [
+      "Distribuye retrato, historia, rasgos, atributos y acciones en una pantalla con desplazamiento de página."
+    ],
+    "functions": {}
+  },
+  "src/pages/Inspiration.jsx": {
+    "summary": "Generador visual editable que guarda directamente en la biblioteca local.",
+    "details": [
+      "Genera todos los campos, permite regenerarlos por separado y conserva los campos fijados.",
+      "Una edición manual fija el campo automáticamente; permite subir retrato, añadir rasgos y recuperar ideas anteriores.",
+      "Valida con validateForm y guarda mediante onSave sin pasar obligatoriamente por el editor."
+    ],
+    "functions": {
+      "Field": "Sección editable con bloqueo y regeneración.",
+      "Inspiration": "Gestiona borrador, historial, validación y guardado."
+    },
+    "props": "preferences y onSave."
+  },
+  "src/pages/Inspiration.css": {
+    "summary": "Estilos de la ficha editable de Inspiración.",
+    "details": [
+      "Presenta controles de fijación, campos, vista previa y mensajes según el tema y la accesibilidad."
+    ],
+    "functions": {}
+  },
+  "src/data/inspiration.js": {
+    "summary": "Catálogos narrativos y campos del generador.",
+    "details": [
+      "Incluye nombres, apellidos, orígenes, trasfondos, objetivos, secretos y etiquetas de inspirationFields."
+    ],
+    "functions": {}
+  },
+  "src/utils/generateCharacter.js": {
+    "summary": "Genera todos los campos respetando bloqueos y evitando repetir valores anteriores.",
+    "details": [
+      "randomCharacter recibe previous, lockedFields y una función random opcional.",
+      "Genera nombre, clase, raza, nivel, origen, retrato, rasgos, historia y cuatro atributos de 1 a 20.",
+      "Copia los arrays de campos conservados y no escribe en almacenamiento."
+    ],
+    "functions": {
+      "randomCharacter": "Devuelve un borrador completo a partir de catálogos y campos fijados."
+    }
+  },
+  "src/utils/readPortrait.js": {
+    "summary": "Lectura y comprobación compartida de retratos subidos.",
+    "details": [
+      "Valida tipo PNG/JPEG/WebP, tamaño máximo de 750 KB y decodificación de la imagen.",
+      "Devuelve imageDataUrl e imageName para guardar en la ficha."
+    ],
+    "functions": {
+      "readPortrait": "Lee y valida una imagen sin persistirla."
+    }
+  },
+  "tests/generateCharacter.test.js": {
+    "summary": "Pruebas del generador completo y sus campos fijados.",
+    "details": [
+      "Comprueba validez de borradores, cambios al regenerar, conservación de campos y ausencia de mutaciones."
+    ],
     "functions": {}
   }
 }

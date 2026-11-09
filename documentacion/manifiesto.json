@@ -1,8 +1,8 @@
 {
-  "date": "08/11/2026",
-  "source_files": 50,
-  "source_lines": 2892,
-  "unit_tests": 13,
+  "date": "09/11/2026",
+  "source_files": 62,
+  "source_lines": 5943,
+  "unit_tests": 17,
   "files": [
     {
       "path": "index.html",
@@ -18,27 +18,27 @@
     },
     {
       "path": "src/App.jsx",
-      "bytes": 8733,
-      "lines": 114,
-      "sha256": "6d07d99caa4e8e73f692ef39422f56836d7e14909aec8f62c07cf6b95a6d7f0d"
+      "bytes": 7132,
+      "lines": 141,
+      "sha256": "c03c4b5c97374ed7652227a4bffd9eaadf3db84a16b3f2add0ea4ffeade88b96"
     },
     {
       "path": "src/pages/Home.jsx",
-      "bytes": 1283,
+      "bytes": 1253,
       "lines": 21,
-      "sha256": "035f7ac6a58d3da2d7ef29f9f44eccc24f3b657da27da6622153ee4a702501f3"
+      "sha256": "757cb1e048186f6b9ea7e76afa9f84aba37321c9e688593ea117bd6ca920f78b"
     },
     {
       "path": "src/pages/Library.jsx",
-      "bytes": 3138,
-      "lines": 34,
-      "sha256": "936556e606f01ff84c8273acc319594f9b70d9321d590c3b6a9d8da92436cec3"
+      "bytes": 3664,
+      "lines": 44,
+      "sha256": "7e195469aeb6c10d0f32c2391e46c8a26b8e1ccf5d3cb1757eb6a9a66bbd6330"
     },
     {
       "path": "src/pages/CreateCharacter.jsx",
-      "bytes": 5977,
-      "lines": 92,
-      "sha256": "2e37c5f882c86bf1c5fb2133faa692ef872a89558ce7f28bfcadddac1f647a14"
+      "bytes": 5242,
+      "lines": 76,
+      "sha256": "95d2e845d25ee8042a17a92bbc6a21d3320ea5cd18331a409d88e3efc4fca4ad"
     },
     {
       "path": "src/pages/Login.jsx",
@@ -48,15 +48,15 @@
     },
     {
       "path": "src/pages/Auth.jsx",
-      "bytes": 3013,
-      "lines": 39,
-      "sha256": "f9a2022caaa080adac64a076ebe3dd187b626744e6b0631539777c41177ca152"
+      "bytes": 2791,
+      "lines": 117,
+      "sha256": "fd93435ae44ca3f70f96020dd5e87bfb6d8506c24b90665aaee7d4619ca36c46"
     },
     {
       "path": "src/pages/Profile.jsx",
-      "bytes": 3395,
-      "lines": 50,
-      "sha256": "7f687b3c23093c5669458a57c18a8a9e94d5954c9c68a1d60e05c81402a7e7f5"
+      "bytes": 3484,
+      "lines": 56,
+      "sha256": "1ce1d2e196b649b3024c1b312e40ab857ecc727b47b7ea40276613cdfc0c2594"
     },
     {
       "path": "src/pages/Accessibility.jsx",
@@ -66,9 +66,9 @@
     },
     {
       "path": "src/pages/Information.jsx",
-      "bytes": 5408,
-      "lines": 66,
-      "sha256": "acce321b2bc66ac25b5807fc9fda5e5c4f9a8f5b53d44cbc890cf559e482b09e"
+      "bytes": 3781,
+      "lines": 37,
+      "sha256": "34c021139a3f52fbf63a96c592d2a533366ad042c82b425d46c2b275e86e0afb"
     },
     {
       "path": "src/components/header/Header.jsx",
@@ -90,9 +90,9 @@
     },
     {
       "path": "src/components/charactercard/CharacterCard.jsx",
-      "bytes": 531,
-      "lines": 8,
-      "sha256": "1a4d5ca86bed78f929eb7e2c5813904ec0a21f6217cc00e9d31817eaceb4da98"
+      "bytes": 1077,
+      "lines": 41,
+      "sha256": "890463fb92fa7923aeeca4cb961a792e842408a2cd61b05e62343d0d13c03e4b"
     },
     {
       "path": "src/components/charactercard/Portrait.jsx",
@@ -126,9 +126,9 @@
     },
     {
       "path": "src/components/icon/Icon.jsx",
-      "bytes": 2717,
-      "lines": 35,
-      "sha256": "5de85065d74d5b71fce2b4886147b91b6860d5666e8c4cbf7f682cc48e63de1e"
+      "bytes": 3250,
+      "lines": 38,
+      "sha256": "1977265b8f47114bc14f3043b7319f93a62c2a909805c4022728bcc36f129ec6"
     },
     {
       "path": "src/hooks/useCharacters.js",
@@ -168,9 +168,9 @@
     },
     {
       "path": "src/data/characters.js",
-      "bytes": 2826,
-      "lines": 49,
-      "sha256": "555900b706070b7ea3c05c190dcfdde891c2297e3771940afc53b6e18531188a"
+      "bytes": 2356,
+      "lines": 38,
+      "sha256": "b868c716b17d873e9019daf55604b1e2ff5ce4f31ea41899a4425de74eb96193"
     },
     {
       "path": "src/data/characterOptions.js",
@@ -198,9 +198,9 @@
     },
     {
       "path": "src/App.css",
-      "bytes": 19205,
-      "lines": 255,
-      "sha256": "c31d037040bb76b8ec62d5837bec2c06213bc01fd399c35c84b561e884231a70"
+      "bytes": 21440,
+      "lines": 1159,
+      "sha256": "1a3d9232a1bc2254aa61f8294708aa4b5192ed1a229293c803c7941a09b2f8df"
     },
     {
       "path": "src/pages/Login.css",
@@ -210,9 +210,9 @@
     },
     {
       "path": "src/pages/Accessibility.css",
-      "bytes": 4857,
-      "lines": 44,
-      "sha256": "b0f317a6716b445e7c105892c481a0541c33db47c70fd5f05d5537523f27822f"
+      "bytes": 5219,
+      "lines": 294,
+      "sha256": "39ea18472a3037f82f55fbd59d189b02c2c15b003882d15e7d22481db5147dfc"
     },
     {
       "path": "package.json",
@@ -222,9 +222,9 @@
     },
     {
       "path": "vite.config.js",
-      "bytes": 324,
-      "lines": 13,
-      "sha256": "7ea68df159e6dcf1a4da387c5eb828a35f402484ba3189819a79c6a5e52ad3bd"
+      "bytes": 338,
+      "lines": 17,
+      "sha256": "3fa45147c9e6f1cb1a625f1ad3b19adc095d764c02a955611bee0dccdd3caa83"
     },
     {
       "path": "eslint.config.js",
@@ -258,9 +258,9 @@
     },
     {
       "path": "scripts/browser-smoke.mjs",
-      "bytes": 23634,
-      "lines": 366,
-      "sha256": "4e7869f75f0b3711184905afbd5d874ae70508b887415e3ccdc786aa6a716305"
+      "bytes": 34768,
+      "lines": 515,
+      "sha256": "667cf05d3460b4a5b4e8047f05bb6856d9f1bb0da3120f6d79cd745de215d0f2"
     },
     {
       "path": "public/favicon.svg",
@@ -282,9 +282,9 @@
     },
     {
       "path": "README.md",
-      "bytes": 5076,
-      "lines": 60,
-      "sha256": "7dda1427ac6139c9dc25225faff513b1b45813da65f1635402895bf1098ed103"
+      "bytes": 35162,
+      "lines": 457,
+      "sha256": "7ad1fd72d23f8bffce9e75d275dbd75de7ee0db3eb68a1f661f757f6bb8ca445"
     },
     {
       "path": "LICENSE",
@@ -303,6 +303,78 @@
       "bytes": 4480,
       "lines": 93,
       "sha256": "b2306305139223cbc000c2b9feffaa741687056066c227ba34de31c98eda0814"
+    },
+    {
+      "path": "src/data/inspiration.js",
+      "bytes": 2882,
+      "lines": 48,
+      "sha256": "a28167686bf45f1d2ce219beab92baee9e07c13a266724193aaf14d7f5483d36"
+    },
+    {
+      "path": "src/pages/CharacterDetail.css",
+      "bytes": 1006,
+      "lines": 57,
+      "sha256": "4a3d70292297796b801fe2d6286fc9de4af502e187461a19e1fc36cbae915d19"
+    },
+    {
+      "path": "src/pages/CharacterDetail.jsx",
+      "bytes": 5081,
+      "lines": 77,
+      "sha256": "62900754d529ee32dd7e3b4a7472c1e72f976a7766519e60282a06bed6bed394"
+    },
+    {
+      "path": "src/pages/Inspiration.css",
+      "bytes": 8774,
+      "lines": 446,
+      "sha256": "8c1a03ffbfdf43c93f0f132c7ab1cee43253e10f1dd9c2d3ce9891cb7b2400e4"
+    },
+    {
+      "path": "src/pages/Inspiration.jsx",
+      "bytes": 17283,
+      "lines": 238,
+      "sha256": "26b8caab32f88d84c1a740a519140ee25c543c226935e71d1ea9fdd46fcba606"
+    },
+    {
+      "path": "src/pages/PublicCharacterDetail.jsx",
+      "bytes": 1720,
+      "lines": 68,
+      "sha256": "16344be095736ef5e8c3a20c0692dd0099c2a90b58c12f1e07eb3af164579213"
+    },
+    {
+      "path": "src/services/api.js",
+      "bytes": 2364,
+      "lines": 100,
+      "sha256": "684a8abfa6a73cb4f8064d6a80a923171e32f9d712b311b59e768900130913f3"
+    },
+    {
+      "path": "src/utils/generateCharacter.js",
+      "bytes": 2283,
+      "lines": 47,
+      "sha256": "35e82d7bcd5992faa82e59d5ded05e33a2a497f74e22eb95ad3c969a196b81d2"
+    },
+    {
+      "path": "src/utils/readPortrait.js",
+      "bytes": 826,
+      "lines": 20,
+      "sha256": "e10bb7dced00f58044238c1c3bf80a9a61090faa9bf26247cd0d6b020664a8eb"
+    },
+    {
+      "path": "src/components/publiccharacters/PublicCharacters.jsx",
+      "bytes": 2159,
+      "lines": 82,
+      "sha256": "ebdcdb8bb089a49dd20dcb9d2f0203edd5dccfa94918445daacb437e0bde15aa"
+    },
+    {
+      "path": "tests/generateCharacter.test.js",
+      "bytes": 2791,
+      "lines": 62,
+      "sha256": "a7b9a1a2c58318e8b38c24443e3535072c7ada5ccbced53c31fcd6260d517f24"
+    },
+    {
+      "path": ".env.development",
+      "bytes": 38,
+      "lines": 1,
+      "sha256": "b1aea50188a63956872d37f0ecca36d84001edc3e344a81ef3b69ac45d2001d4"
     }
   ]
 }
