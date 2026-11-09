@@ -3,6 +3,8 @@
   gap: 16px;
   padding-bottom: 30px;
   min-width: 0;
+  max-width: 70rem;
+  margin-inline: auto;
 }
 
 .inspiration-intro {
@@ -315,6 +317,9 @@
   background: transparent;
   color: var(--foreground);
   font-size: calc(12px * var(--text-scale));
+  max-width: 100%;
+  text-align: left;
+  overflow-wrap: anywhere;
 }
 
 .inspiration-traits button svg {
@@ -434,7 +439,7 @@
 .app-frame[data-element-size="large"] .inspiration-stats,
 .app-frame[data-element-size="extra-large"] .inspiration-stats,
 .app-frame[data-text-size="extra-large"] .inspiration-trait-options {
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
 }
 
 @media (max-width: 350px) {
@@ -442,5 +447,52 @@
   .inspiration-stats,
   .inspiration-trait-options {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 768px) {
+  .inspiration-page,
+  .inspiration-draft {
+    gap: 24px;
+  }
+
+  .inspiration-intro {
+    padding: 32px;
+  }
+
+  .inspiration-draft {
+    grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+    align-items: start;
+  }
+
+  .inspiration-draft-heading,
+  .inspiration-draft > [data-field="stats"],
+  .inspiration-draft > [data-field="story"] {
+    grid-column: 1 / -1;
+  }
+
+  .inspiration-portrait-card {
+    grid-column: 1;
+    grid-row: 2 / span 2;
+  }
+
+  .inspiration-fields,
+  .inspiration-draft > [data-field="traits"] {
+    grid-column: 2;
+  }
+
+  .inspiration-stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .inspiration-create .primary-button {
+    max-width: 32rem;
+    justify-self: center;
+  }
+}
+
+@media (max-width: 479px) {
+  .app-frame[data-text-size="extra-large"] .inspiration-add-trait {
+    grid-template-columns: minmax(0, 1fr);
   }
 }

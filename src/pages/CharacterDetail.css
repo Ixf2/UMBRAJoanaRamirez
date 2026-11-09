@@ -3,6 +3,9 @@
   gap: 20px;
   padding-bottom: 28px;
   min-width: 0;
+  width: 100%;
+  max-width: 70rem;
+  margin-inline: auto;
 }
 
 .character-back {
@@ -54,4 +57,93 @@
   color: var(--muted);
   font-size: calc(13px * var(--text-scale));
   line-height: 1.8;
+}
+
+.character-detail-page {
+  display: grid;
+  gap: 24px;
+  max-width: 64rem;
+  margin-inline: auto;
+  padding-bottom: 28px;
+}
+
+.character-detail-page > article {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+
+.character-detail-page p,
+.character-detail-page li {
+  color: var(--muted);
+  font-size: calc(14px * var(--text-scale));
+  line-height: 1.8;
+  white-space: pre-wrap;
+}
+
+.character-detail-page h3 {
+  color: var(--gold);
+  font-family: var(--font-display);
+  font-size: calc(22px * var(--text-scale));
+  overflow-wrap: anywhere;
+}
+
+.character-detail-page ul {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.character-detail-page li {
+  padding: 12px;
+  border: 1px solid var(--border);
+}
+
+@media (min-width: 768px) {
+  .character-detail {
+    grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+    gap: 24px 32px;
+    align-items: start;
+  }
+
+  .character-detail > * {
+    grid-column: 2;
+  }
+
+  .character-detail > .character-back,
+  .character-detail > .action-stack,
+  .character-detail > .character-delete-confirmation,
+  .character-detail > .feedback {
+    grid-column: 1 / -1;
+  }
+
+  .character-detail > .character-portrait {
+    grid-column: 1;
+    grid-row: 2 / span 5;
+    align-self: start;
+    max-width: 24rem;
+    margin-inline: auto;
+  }
+
+  .character-detail > .action-stack {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .character-detail > .character-delete-confirmation > h2,
+  .character-detail > .character-delete-confirmation > p {
+    grid-column: 1 / -1;
+  }
+
+  .character-detail-page ul {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 479px) {
+  .app-frame[data-text-size="extra-large"] .character-detail-page ul {
+    grid-template-columns: 1fr;
+  }
 }

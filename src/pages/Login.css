@@ -1,10 +1,4 @@
-.app-frame.login-frame {
-  max-width: 336px;
-  min-height: 728px;
-}
-
 .login-frame .header {
-  height: 54px;
   padding: 0 8px;
 }
 
@@ -26,13 +20,15 @@
 
 .login-frame .main-content {
   display: flex;
-  padding: 0 20px;
+  padding: 0 var(--page-gutter);
 }
 
 .login-page {
   display: flex;
   flex-direction: column;
   width: 100%;
+  max-width: 28rem;
+  margin-inline: auto;
   min-width: 0;
 }
 
@@ -75,16 +71,19 @@
   content: '';
   flex: 1;
   height: 1px;
+  min-width: 1rem;
   background: var(--border);
 }
 
 .login-form {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 16px;
 }
 
 .login-field {
   display: grid;
+  min-width: 0;
   gap: 6px;
 }
 
@@ -157,8 +156,8 @@
 
 .login-remember input[type="checkbox"] {
   appearance: none;
-  width: 12px;
-  height: 12px;
+  width: 20px;
+  height: 20px;
   margin: 0;
   padding: 0;
   border: 1px solid var(--gold);
@@ -221,6 +220,12 @@
   line-height: 1.7;
 }
 
+.login-terms a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--control-height);
+}
+
 .login-motto {
   margin-top: auto;
   padding: 40px 0 17px;
@@ -231,8 +236,29 @@
   font-style: italic;
 }
 
-@media (max-width: 480px) {
-  .app-frame.login-frame {
-    max-width: 390px;
+@media (min-width: 768px) {
+  .login-page {
+    max-width: 32rem;
+  }
+
+  .login-intro {
+    padding-top: 3rem;
+  }
+
+  .login-intro h1 {
+    font-size: calc(34px * var(--text-scale));
+  }
+
+  .login-field > label,
+  .login-input input {
+    font-size: calc(16px * var(--text-scale));
+  }
+
+  .login-options {
+    font-size: calc(12px * var(--text-scale));
+  }
+
+  .login-terms {
+    font-size: calc(11px * var(--text-scale));
   }
 }

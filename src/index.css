@@ -60,7 +60,8 @@
 }
 
 * { box-sizing: border-box; }
-body { min-width: 280px; min-height: 100vh; margin: 0; }
+body { min-width: 0; min-height: 100vh; margin: 0; }
+#root { min-width: 0; min-height: 100dvh; }
 button, input, select, textarea { font: inherit; }
 button, a { -webkit-tap-highlight-color: transparent; }
 button { color: inherit; cursor: pointer; border: 0; }
@@ -73,5 +74,5 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 img { max-width: 100%; }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+  *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
 }

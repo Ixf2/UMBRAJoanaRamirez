@@ -2,6 +2,9 @@
   display: grid;
   gap: 22px;
   padding-bottom: 30px;
+  min-width: 0;
+  max-width: 64rem;
+  margin-inline: auto;
 }
 
 .settings-back {
@@ -28,6 +31,7 @@
 }
 
 .settings-profile p {
+  min-width: 0;
   font-size: calc(13px * var(--text-scale));
   line-height: 1.7;
 }
@@ -244,6 +248,10 @@
   font-size: calc(11px * var(--text-scale));
 }
 
+.settings-toggle > span {
+  min-width: 0;
+}
+
 .keyboard-shortcuts {
   width: 100%;
   border-collapse: collapse;
@@ -290,5 +298,22 @@
 
   .settings-icon {
     width: 27px;
+  }
+}
+
+@media (min-width: 768px) {
+  .settings-menu {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, calc(17rem * var(--text-scale))), 1fr));
+    gap: 16px;
+  }
+
+  .settings-choices {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, calc(15rem * var(--text-scale))), 1fr));
+    gap: 16px;
+  }
+
+  .settings-profile,
+  .settings-preview {
+    padding: 24px;
   }
 }
