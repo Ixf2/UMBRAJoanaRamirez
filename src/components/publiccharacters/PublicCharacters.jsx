@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { obtenerPersonajesPublicos } from '../../services/api.js'
+import CharacterCard from '../charactercard/CharacterCard.jsx'
 
 export default function PublicCharacters() {
   const [personajes, setPersonajes] = useState([])
@@ -47,16 +48,25 @@ export default function PublicCharacters() {
 
       {!cargando && !error && (
         <div className="character-grid">
-          {personajes.map(personaje => (
-            <article className="character-card" key={personaje.idPersonaje}>
-              <h3>{personaje.nombre}</h3>
-              <p>{personaje.historia}</p>
-              <p>Fuerza: {personaje.fuerza}</p>
-              <p>Destreza: {personaje.destreza}</p>
-              <p>Inteligencia: {personaje.inteligencia}</p>
-              <p>Carisma: {personaje.carisma}</p>
-            </article>
-          ))}
+          {personajes.map(personaje => {
+            const personajeAdaptado = {
+              id: `public-${personaje.idPersonaje}`,
+              name: personaje.nombre,
+              type: 'Personaje público',
+              level: null,
+              image: '',
+              portrait: null,
+              favorite: false,
+            }
+
+            return (
+              <CharacterCard
+                key={personaje.idPersonaje}
+                character={personajeAdaptado}
+                interactive={false}
+              />
+            )
+          })}
         </div>
       )}
     </section>
