@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 export default function Portrait({ character, ...props }) {
   const [failedImage, setFailedImage] = useState('')
-  const portraits = ['/images/elara-valen.png', '/images/kael-grim.png']
+  const portraits = ['/images/elara-valen.webp', '/images/kael-grim.webp']
   const image = character.imageDataUrl || character.image || portraits[character.portrait]
 
   if (!image || failedImage === image) {

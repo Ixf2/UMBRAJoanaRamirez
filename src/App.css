@@ -124,7 +124,7 @@
   position: absolute;
   inset: 0 0 auto;
   height: 246px;
-  background: linear-gradient(180deg, #090f0f05 5%, #090f0f40 35%, var(--background) 94%), url('/images/umbra-castle.png') center 38% / cover;
+  background: linear-gradient(180deg, #090f0f05 5%, #090f0f40 35%, var(--background) 94%), url('/images/umbra-castle.webp') center 38% / cover;
 }
 
 .hero-copy {
