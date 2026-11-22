@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router'
 import { obtenerPersonajePorId } from '../services/api.js'
@@ -18,13 +19,19 @@ export default function PublicCharacterDetail() {
 
     obtenerPersonajePorId(id)
       .then(datos => {
-        if (activo) setPersonaje(datos)
+        if (activo) {
+          setPersonaje(datos)
+        }
       })
       .catch(() => {
-        if (activo) setError('No se pudo cargar el personaje.')
+        if (activo) {
+          setError('No se pudo cargar el personaje público.')
+        }
       })
       .finally(() => {
-        if (activo) setCargando(false)
+        if (activo) {
+          setCargando(false)
+        }
       })
 
     return () => {
@@ -38,9 +45,15 @@ export default function PublicCharacterDetail() {
         Volver a biblioteca
       </Link>
 
-      {cargando && <p role="status">Cargando ficha...</p>}
+      {cargando && (
+        <p role="status">Cargando ficha...</p>
+      )}
 
-      {error && <p role="alert">{error}</p>}
+      {error && (
+        <p role="alert" className="feedback error">
+          {error}
+        </p>
+      )}
 
       {personaje && (
         <article>
