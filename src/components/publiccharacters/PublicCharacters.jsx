@@ -122,9 +122,9 @@ export default function PublicCharacters({
             aria-live="polite"
           >
             {resultados.length}{' '}
-            {resultados.length === 1
-              ? 'personaje público encontrado'
-              : 'personajes públicos encontrados'}.
+            {resultados.length > 0
+              ? `${resultados.length} ${resultados.length === 1 ? 'personaje público encontrado' : 'personajes públicos encontrados'}.`
+              : ''}
           </p>
 
           {resultados.length === 0 && (

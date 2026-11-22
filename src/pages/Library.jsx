@@ -201,10 +201,9 @@ export default function Library({ characters = [] }) {
 
       <p className="search-results" role="status" aria-live="polite">
         {results.length}{' '}
-        {results.length === 1
-          ? 'personaje personal encontrado'
-          : 'personajes personales encontrados'}
-        {hasFilters ? ' con los criterios actuales.' : '.'}
+        {results.length > 0
+          ? `${results.length} ${results.length === 1 ? 'personaje personal encontrado' : 'personajes personales encontrados'}.`
+          : ''}
       </p>
 
       <div className="character-grid">
@@ -224,15 +223,7 @@ export default function Library({ characters = [] }) {
               : 'Tu biblioteca personal está vacía. Empieza una nueva leyenda.'}
           </p>
 
-          {hasFilters && (
-            <button
-              type="button"
-              className="secondary-button"
-              onClick={clearFilters}
-            >
-              Limpiar filtros
-            </button>
-          )}
+
 
           {characters.length === 0 && (
             <Link
@@ -245,10 +236,7 @@ export default function Library({ characters = [] }) {
         </div>
       )}
 
-      <p className="page-description">
-        Tus personajes personales se guardan en este navegador.
-        Puedes exportar una copia de seguridad desde Perfil.
-      </p>
+      
 
       <PublicCharacters
         search={search}
