@@ -98,3 +98,25 @@ export async function cerrarSesion() {
     throw new Error('No se pudo cerrar sesión.')
   }
 }
+
+
+export async function obtenerMisPersonajes() {
+  const respuesta = await fetch('/api/personajes/mios', {
+    credentials: 'same-origin'
+  })
+
+  if (!respuesta.ok) {
+    throw new Error('No se pudieron cargar tus personajes de MariaDB.')
+  }
+  if (respuesta.status === 401) {
+    throw new Error('Debes iniciar sesión para consultar tus personajes.')
+  }
+
+  if (!respuesta.ok) {
+    throw new Error(
+      `No se pudieron cargar tus personajes. Código: ${respuesta.status}`
+    )
+  }
+
+  return respuesta.json()
+}

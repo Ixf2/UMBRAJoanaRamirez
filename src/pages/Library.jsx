@@ -1,4 +1,4 @@
-
+import DatabaseCharacters from '../components/databasecharacters/DatabaseCharacters.jsx'
 import { Link, useLocation, useSearchParams } from 'react-router'
 import CharacterCard from '../components/charactercard/CharacterCard.jsx'
 import Icon from '../components/icon/Icon.jsx'
@@ -235,8 +235,13 @@ export default function Library({ characters = [] }) {
           )}
         </div>
       )}
+      <DatabaseCharacters
+        search={search}
+        type={type}
+        favorites={favorites}
+        sort={sort}
+      />
 
-      
 
       <PublicCharacters
         search={search}
