@@ -1,7 +1,7 @@
 {
-  "date": "09/11/2026",
-  "source_files": 62,
-  "source_lines": 5943,
+  "date": "23/11/2026",
+  "source_files": 66,
+  "source_lines": 8229,
   "unit_tests": 17,
   "files": [
     {
@@ -18,9 +18,9 @@
     },
     {
       "path": "src/App.jsx",
-      "bytes": 7132,
-      "lines": 141,
-      "sha256": "c03c4b5c97374ed7652227a4bffd9eaadf3db84a16b3f2add0ea4ffeade88b96"
+      "bytes": 10773,
+      "lines": 417,
+      "sha256": "22562efcb50f677727254e73afdbf3d2fb79ddbb8cbc18083a32ef26b90f013a"
     },
     {
       "path": "src/pages/Home.jsx",
@@ -30,21 +30,21 @@
     },
     {
       "path": "src/pages/Library.jsx",
-      "bytes": 3664,
-      "lines": 44,
-      "sha256": "7e195469aeb6c10d0f32c2391e46c8a26b8e1ccf5d3cb1757eb6a9a66bbd6330"
+      "bytes": 7143,
+      "lines": 264,
+      "sha256": "39f47bfe5d6e91411277350365e037ad9fa02d9505b4d7cf4dfc97930818ce6f"
     },
     {
       "path": "src/pages/CreateCharacter.jsx",
-      "bytes": 5242,
-      "lines": 76,
-      "sha256": "95d2e845d25ee8042a17a92bbc6a21d3320ea5cd18331a409d88e3efc4fca4ad"
+      "bytes": 8372,
+      "lines": 343,
+      "sha256": "4974b442c221ba7a3e5c4a91b6887789722853f35c0c3afa5b98b43615786148"
     },
     {
       "path": "src/pages/Login.jsx",
-      "bytes": 4447,
+      "bytes": 4537,
       "lines": 90,
-      "sha256": "cf0768a1da6013d2d61e81398a606491589ef07d03658fef6b4e72b62dd55d7d"
+      "sha256": "e0ef2418b71b3f9a8c1dea1ff37fbf3ca769c49b46bb58250224b8d1868aec9c"
     },
     {
       "path": "src/pages/Auth.jsx",
@@ -54,15 +54,15 @@
     },
     {
       "path": "src/pages/Profile.jsx",
-      "bytes": 3484,
-      "lines": 56,
-      "sha256": "1ce1d2e196b649b3024c1b312e40ab857ecc727b47b7ea40276613cdfc0c2594"
+      "bytes": 5811,
+      "lines": 242,
+      "sha256": "9e3334fbda69ceae23cb59ea9290fdb99b560da5ec1ab6c67aa645d051de764d"
     },
     {
       "path": "src/pages/Accessibility.jsx",
-      "bytes": 9514,
+      "bytes": 9628,
       "lines": 114,
-      "sha256": "4e170d4f623bc21880cc444e25c33fc1863a323af2163d87fb929dba4836a285"
+      "sha256": "facf008831718b4688a597a6657eb16af25d4cc59175a8480756ed6c93e0a335"
     },
     {
       "path": "src/pages/Information.jsx",
@@ -96,9 +96,9 @@
     },
     {
       "path": "src/components/charactercard/Portrait.jsx",
-      "bytes": 939,
-      "lines": 26,
-      "sha256": "fb13bc4be4580e567430468de02d95b4aa232ed266d8850e6268ac8e976f0668"
+      "bytes": 1432,
+      "lines": 58,
+      "sha256": "5937bbe26cba54c1a996c5c6cd60af51a6a539d072756a9881a02986519484ef"
     },
     {
       "path": "src/components/modal/Modal.jsx",
@@ -120,9 +120,9 @@
     },
     {
       "path": "src/components/feedback/ReadAloud.jsx",
-      "bytes": 1853,
+      "bytes": 1901,
       "lines": 48,
-      "sha256": "6b8db696e2080055c48acb39dbaf6904f444089ce5c135a8a09fb4c9c3414069"
+      "sha256": "592181b97976c23024ea8359fc5f03df9dc6278c9b24925eff2e2a439487d1fb"
     },
     {
       "path": "src/components/icon/Icon.jsx",
@@ -132,9 +132,9 @@
     },
     {
       "path": "src/hooks/useCharacters.js",
-      "bytes": 1725,
-      "lines": 38,
-      "sha256": "a885b8a5c772dc0c583fbb3ceaf109b45df7b3b28ec9c0074243925f6b04aa14"
+      "bytes": 6184,
+      "lines": 267,
+      "sha256": "0020fdfa2ce4d531517a713febbf80adf49c9092ff47ed034f24cf0e04c7715f"
     },
     {
       "path": "src/hooks/usePreferences.js",
@@ -144,21 +144,21 @@
     },
     {
       "path": "src/utils/characterStore.js",
-      "bytes": 3894,
+      "bytes": 3962,
       "lines": 68,
-      "sha256": "ccf59fe9fab148b04558021ebbf4e148e02f272ec2b83bdaa779840457b1b510"
+      "sha256": "95f35bfd38639f7cc3182f406c73a9f40a6a35079cea415ce04abb75f1e0192f"
     },
     {
       "path": "src/utils/localAccounts.js",
-      "bytes": 3654,
+      "bytes": 3717,
       "lines": 63,
-      "sha256": "097f5b62a324833b5fa35bd1da92483cda3b00eb7fff68c072c2cce9ea0533cd"
+      "sha256": "07da4dcdfb7490017edc8dbe8f52ff0a98a1ddf72209e3db3f49e41ccd1568ac"
     },
     {
       "path": "src/utils/preferenceStore.js",
-      "bytes": 1938,
+      "bytes": 1974,
       "lines": 36,
-      "sha256": "b8f0d16a392951b7a68d78af14e91fdd1f28ca3d40889207ca74ebcb701c70e9"
+      "sha256": "307d1992c02f209fba8f8b6b6eb6c74919d848f0d43fe9a3996847c79f9e7787"
     },
     {
       "path": "src/utils/validateForm.js",
@@ -186,45 +186,45 @@
     },
     {
       "path": "src/data/accessibility.js",
-      "bytes": 1865,
+      "bytes": 1901,
       "lines": 36,
-      "sha256": "80a1383f7d244410cc28615ffe6b6f2a566c191656b219ed07995f320a452818"
+      "sha256": "8fba1d25f04a2d979362b8f97546113f3de840c4f400d116f968cd76cef17df7"
     },
     {
       "path": "src/index.css",
-      "bytes": 2249,
-      "lines": 77,
-      "sha256": "c978c61f6a0b248b94abc4091f7f8418e86dceb6738676638b7eb73e1e113af0"
+      "bytes": 2431,
+      "lines": 133,
+      "sha256": "eedc5010bb24a8fd9b994e69a36eff100514b901a7e10bd332e4960e0fd8b38c"
     },
     {
       "path": "src/App.css",
-      "bytes": 21440,
-      "lines": 1159,
-      "sha256": "1a3d9232a1bc2254aa61f8294708aa4b5192ed1a229293c803c7941a09b2f8df"
+      "bytes": 26863,
+      "lines": 1413,
+      "sha256": "2896a2eca1e981d8d281d8b324997ee595b6596ac9e4077c1da1d25e4d9cc4ba"
     },
     {
       "path": "src/pages/Login.css",
-      "bytes": 4341,
-      "lines": 238,
-      "sha256": "9171b7bceded35939c7f54794fde857b8e4a5636fff99f6c79b6ff68fd34d886"
+      "bytes": 4866,
+      "lines": 264,
+      "sha256": "8def9e7c8b68bbc8b48d53a7caf0901347cd91784d7c6f90a1f5b34825f01a67"
     },
     {
       "path": "src/pages/Accessibility.css",
-      "bytes": 5219,
-      "lines": 294,
-      "sha256": "39ea18472a3037f82f55fbd59d189b02c2c15b003882d15e7d22481db5147dfc"
+      "bytes": 6041,
+      "lines": 319,
+      "sha256": "a7b085692a84ff0cae2e30d0cda957864b020f639382b6429d70d954fbb52b5d"
     },
     {
       "path": "package.json",
-      "bytes": 774,
-      "lines": 30,
-      "sha256": "9bd88f61dd2f00d8cd60f4a9885a90e18f8772c2aa0751bca8a863a7d448f81b"
+      "bytes": 842,
+      "lines": 32,
+      "sha256": "8248c7b4c2e07d01fc601ed2ed1e701e19747ab583c260d4f3c3722eefdc3b13"
     },
     {
       "path": "vite.config.js",
-      "bytes": 338,
-      "lines": 17,
-      "sha256": "3fa45147c9e6f1cb1a625f1ad3b19adc095d764c02a955611bee0dccdd3caa83"
+      "bytes": 1601,
+      "lines": 78,
+      "sha256": "4c0d2c8ff84487d0edaf16d954bc64135b451ad50c06e81f7ccc465cf574ff14"
     },
     {
       "path": "eslint.config.js",
@@ -234,21 +234,21 @@
     },
     {
       "path": "tests/characterStore.test.js",
-      "bytes": 2353,
+      "bytes": 2396,
       "lines": 43,
-      "sha256": "66e4796c990f66f5da9eeda449a4a953c822d30de4ffee8d866dc8e2d95f12cd"
+      "sha256": "d3d6f58861989f6f2cf600b3ca59295ef4b3740721e1370f5c8cf6d2907724af"
     },
     {
       "path": "tests/localAccounts.test.js",
-      "bytes": 2563,
+      "bytes": 2609,
       "lines": 46,
-      "sha256": "f9c74b3be3d6b928482ef505aff66a27eebf49e46cd6689ac47108c804688b8c"
+      "sha256": "4396f41e95d5922f259135d5695d061c7ce97cb67d999cbe0618d25d6e64fbfe"
     },
     {
       "path": "tests/preferenceStore.test.js",
-      "bytes": 2657,
+      "bytes": 2699,
       "lines": 42,
-      "sha256": "44f18b3026203a6c61dcb97cf28c841a10937f78486391c25a6e6e77810d4a53"
+      "sha256": "78149cd8c12c029cf55c68981c95c63331a425072f2a53b030117884aeb6dc47"
     },
     {
       "path": "tests/validateForm.test.js",
@@ -258,9 +258,9 @@
     },
     {
       "path": "scripts/browser-smoke.mjs",
-      "bytes": 34768,
+      "bytes": 35283,
       "lines": 515,
-      "sha256": "667cf05d3460b4a5b4e8047f05bb6856d9f1bb0da3120f6d79cd745de215d0f2"
+      "sha256": "83be39470f31023c94fb1b4e1eb17b0dec5090bd2213b9c84c601b76ea68fd41"
     },
     {
       "path": "public/favicon.svg",
@@ -270,9 +270,9 @@
     },
     {
       "path": "public/images/ASSETS.md",
-      "bytes": 2036,
-      "lines": 15,
-      "sha256": "b47a7657182ce862ccd9e88a9b70ae4ae33ea49660a9d52875a18fdea6997172"
+      "bytes": 2565,
+      "lines": 25,
+      "sha256": "232e41af78c029013c0bb85be9a4311043c73ec6f254ea6ee52c0f801c8a6c06"
     },
     {
       "path": ".gitignore",
@@ -282,9 +282,9 @@
     },
     {
       "path": "README.md",
-      "bytes": 35162,
-      "lines": 457,
-      "sha256": "7ad1fd72d23f8bffce9e75d275dbd75de7ee0db3eb68a1f661f757f6bb8ca445"
+      "bytes": 17861,
+      "lines": 171,
+      "sha256": "a249e25557c3e204958b7251b538c12aeac503518866eb8647254ab8a74479d7"
     },
     {
       "path": "LICENSE",
@@ -306,75 +306,99 @@
     },
     {
       "path": "src/data/inspiration.js",
-      "bytes": 2882,
+      "bytes": 2930,
       "lines": 48,
-      "sha256": "a28167686bf45f1d2ce219beab92baee9e07c13a266724193aaf14d7f5483d36"
+      "sha256": "2754b0e240c07057afc07010239fe005008b30c050d464f624e64273c8ef5170"
     },
     {
       "path": "src/pages/CharacterDetail.css",
-      "bytes": 1006,
-      "lines": 57,
-      "sha256": "4a3d70292297796b801fe2d6286fc9de4af502e187461a19e1fc36cbae915d19"
+      "bytes": 3040,
+      "lines": 149,
+      "sha256": "98b0a7bc23af9e8726507c7051edf58948ecfd083e9bf439b181ab5ac88972d0"
     },
     {
       "path": "src/pages/CharacterDetail.jsx",
-      "bytes": 5081,
-      "lines": 77,
-      "sha256": "62900754d529ee32dd7e3b4a7472c1e72f976a7766519e60282a06bed6bed394"
+      "bytes": 8403,
+      "lines": 339,
+      "sha256": "6423aadabeb1b8518af895301af266faeeea149eaf10da56a37045e824b1cd76"
     },
     {
       "path": "src/pages/Inspiration.css",
-      "bytes": 8774,
-      "lines": 446,
-      "sha256": "8c1a03ffbfdf43c93f0f132c7ab1cee43253e10f1dd9c2d3ce9891cb7b2400e4"
+      "bytes": 10328,
+      "lines": 498,
+      "sha256": "5132b53b65befa2db47b1388da54eee57dfae9e1149a699aa8d3ab14e1296dbf"
     },
     {
       "path": "src/pages/Inspiration.jsx",
-      "bytes": 17283,
+      "bytes": 17521,
       "lines": 238,
-      "sha256": "26b8caab32f88d84c1a740a519140ee25c543c226935e71d1ea9fdd46fcba606"
+      "sha256": "b72e32270ba4fc67c979fbb1ceec610c4632e2b1a5c7412e72a250b02c4709e9"
     },
     {
       "path": "src/pages/PublicCharacterDetail.jsx",
-      "bytes": 1720,
-      "lines": 68,
-      "sha256": "16344be095736ef5e8c3a20c0692dd0099c2a90b58c12f1e07eb3af164579213"
+      "bytes": 1894,
+      "lines": 81,
+      "sha256": "50ec0eb3473d6058c0dc348f80150bacf065a1182199b6e9b8c28280fe41b58e"
     },
     {
       "path": "src/services/api.js",
-      "bytes": 2364,
-      "lines": 100,
-      "sha256": "684a8abfa6a73cb4f8064d6a80a923171e32f9d712b311b59e768900130913f3"
+      "bytes": 2904,
+      "lines": 122,
+      "sha256": "c4d52e4837703231714654a0ebca6a9b5d23043c1c727593504c30edcbb9f368"
     },
     {
       "path": "src/utils/generateCharacter.js",
-      "bytes": 2283,
-      "lines": 47,
-      "sha256": "35e82d7bcd5992faa82e59d5ded05e33a2a497f74e22eb95ad3c969a196b81d2"
+      "bytes": 3222,
+      "lines": 61,
+      "sha256": "b0d89ce16763d1f683601ae48bee3b1773221212bbdd7112d07a27063e86fdca"
     },
     {
       "path": "src/utils/readPortrait.js",
-      "bytes": 826,
+      "bytes": 846,
       "lines": 20,
-      "sha256": "e10bb7dced00f58044238c1c3bf80a9a61090faa9bf26247cd0d6b020664a8eb"
+      "sha256": "4ca31d62f4c7044eb872fb15ee41ee27dc626dd9ccffdf88b79725daa184072f"
     },
     {
       "path": "src/components/publiccharacters/PublicCharacters.jsx",
-      "bytes": 2159,
-      "lines": 82,
-      "sha256": "ebdcdb8bb089a49dd20dcb9d2f0203edd5dccfa94918445daacb437e0bde15aa"
+      "bytes": 4988,
+      "lines": 187,
+      "sha256": "0b3dece828ae0410531ff1e7f04f7115ab327c9472ba45d35241ac793f867fa0"
     },
     {
       "path": "tests/generateCharacter.test.js",
-      "bytes": 2791,
+      "bytes": 2853,
       "lines": 62,
-      "sha256": "a7b9a1a2c58318e8b38c24443e3535072c7ada5ccbced53c31fcd6260d517f24"
+      "sha256": "fe5099c6bcd10c3865ef6bfd7ad26cb856231fa62b59c2d947b75db2b2e05ab6"
     },
     {
       "path": ".env.development",
       "bytes": 38,
       "lines": 1,
       "sha256": "b1aea50188a63956872d37f0ecca36d84001edc3e344a81ef3b69ac45d2001d4"
+    },
+    {
+      "path": "documentacion/LEEME.md",
+      "bytes": 3014,
+      "lines": 42,
+      "sha256": "a41cc07a5021db9e66518b30ac7e2ecad0590915ba4c31a9b4c16a79fb303be7"
+    },
+    {
+      "path": "scripts/convertir-fuentes.mjs",
+      "bytes": 1147,
+      "lines": 47,
+      "sha256": "44b8bc21dccf3da327b19c55eb4d03275cbd53fdbf7021434c94743a05aa1701"
+    },
+    {
+      "path": "src/components/databasecharacters/DatabaseCharacters.jsx",
+      "bytes": 3957,
+      "lines": 147,
+      "sha256": "a51bd413fa5d726e738d5264bcfccf44fe8c02b038ee64dad7d6e96c687c1e6b"
+    },
+    {
+      "path": "src/services/personajesApi.js",
+      "bytes": 3542,
+      "lines": 132,
+      "sha256": "d3c33451e361af17a3fcdade426f0016bf3df8a5adc7d539438bac9c8d3928f0"
     }
   ]
 }

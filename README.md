@@ -6,452 +6,166 @@
 
 ## Español
 
-Aplicación para crear personajes de fantasía, escribir sus historias y organizar sus fichas. Desarrollada con **React, Vite y React Router**, con temas personalizables y accesibilidad independiente para cada perfil.
+UMBRA es una aplicación para crear personajes de fantasía, escribir sus historias y organizar sus fichas. La interfaz usa React, React Router y Vite. Spring Boot gestiona la sesión y guarda los personajes en MariaDB. Los ajustes de apariencia y accesibilidad se guardan en el navegador.
 
-### Estado actual
+### Ejecutar en local
 
-Documentación revisada el **09/11/2026** a partir del código del repositorio.
+Necesitas **Node.js 24 LTS** como opción compatible con las dependencias del proyecto, npm y un backend Spring Boot en `http://localhost:8080` con MariaDB configurada. Este repositorio contiene el frontend. Arranca el backend por separado.
 
-La app combina **servicios HTTP de Spring Boot** con **almacenamiento local del navegador**. El registro, el inicio y cierre de sesión y la comprobación de la sesión ya llaman al backend. Biblioteca muestra además personajes públicos del servidor, con una pantalla de detalle propia.
-
-La creación, edición, duplicado, eliminación, favoritos y copias de la biblioteca personal siguen siendo locales, al igual que los ajustes de accesibilidad por perfil. Iniciar sesión no sube esas fichas al servidor ni sincroniza bibliotecas entre dispositivos.
-
-La interfaz está diseñada principalmente para móvil y tiene un ancho máximo general de **390 px**. Incluye ajustes para pantallas estrechas y texto ampliado; la distribución específica para tablet y PC queda como una futura mejora.
-
-### Empezar
-
-Necesitas Node.js y npm instalados. Desde la carpeta del proyecto:
+Desde la carpeta que contiene `package.json`:
 
 ```bash
-npm install
+npm ci
 npm run dev
 ```
 
-Abre la dirección que indique Vite. En PowerShell, si la ejecución de `npm.ps1` está bloqueada, utiliza `npm.cmd`:
+Abre la URL que muestre Vite. Si PowerShell bloquea `npm.ps1`, utiliza `npm.cmd ci` y `npm.cmd run dev`. El proxy de Vite reenvía `/api` a `http://localhost:8080`, conserva la ruta y utiliza `changeOrigin: true`. Los servicios usan URLs relativas. Si el backend escucha en otra dirección, ajusta el destino en [vite.config.js](vite.config.js) y reinicia Vite. La variable `VITE_API_URL` de [.env.development](.env.development) está declarada y los servicios actuales usan el proxy.
 
-```powershell
-npm.cmd install
-npm.cmd run dev
-```
+### Crear y consultar personajes
 
-Con `package-lock.json` disponible también puedes utilizar `npm ci` para instalar las dependencias según el lock.
+1. Abre **Iniciar sesión → Crear cuenta**. Tras registrarte, inicia sesión con tu correo y contraseña.
+2. Abre **Crear personaje**. Puedes escribirlo desde cero o generar un borrador. Completa nombre, clase, raza, nivel, origen, historia, personalidad, hasta seis rasgos y cuatro atributos. El editor permite elegir un retrato incluido, iniciales o un PNG, JPG o WebP de hasta 750 KB.
+3. Selecciona la **visibilidad**. Una ficha privada aparece en **Mis personajes privados**. Una pública aparece en el catálogo público cuando la devuelve el servidor. Tu ficha pública abre el detalle editable de tu biblioteca. Las fichas públicas de otras personas se abren en un detalle de solo lectura.
+4. Desde tu ficha puedes editar, marcar como favorita, duplicar o eliminar con confirmación. Al duplicar se crea una ficha nueva sin favorito y se conserva la elección de retrato incluido o iniciales. La imagen subida a la ficha original no se copia.
 
-#### Configuración de la API en desarrollo
+**Inspiración** genera una combinación editable y permite fijar campos, regenerarlos por separado y recuperar la idea anterior. Puedes guardar la idea en el servidor desde la propia pantalla. Si subes un retrato allí, se usa para la vista previa. Para guardarlo en el servidor, adjúntalo desde **Crear personaje** o **Editar**.
 
-Arranca por separado el backend Spring Boot en **`http://localhost:8080`**, con su configuración de base de datos. Este repositorio contiene el frontend; no incluye el servidor ni la configuración de MariaDB.
+**Biblioteca** comparte la búsqueda por nombre, clase, raza u origen y la ordenación por nombre, nivel o identificador descendente entre las secciones privada y pública. La búsqueda ignora tildes y mayúsculas. **Solo favoritos** filtra únicamente la sección privada. Los parámetros `q`, `class`, `favorites` y `sort` se guardan en la URL. El catálogo público muestra el total de resultados y estados de carga, error y lista vacía.
 
-[vite.config.js](vite.config.js) reenvía las solicitudes que comienzan por `/api` a `http://localhost:8080`, con `changeOrigin: true` y sin reescribir la ruta. Por ejemplo, `/api/auth/me` llega al backend como `http://localhost:8080/api/auth/me`. Conserva también la exclusión de `public/fonts/**` del observador de archivos.
+### Sesión y accesibilidad
 
-[.env.development](.env.development) declara:
+Al abrir UMBRA se consulta `GET /api/auth/me`. Si devuelve 401, la aplicación continúa como visitante. Si falla la petición, se muestra un aviso. Biblioteca, editor, Inspiración y Perfil redirigen a inicio de sesión cuando no hay una sesión activa. Inicio, ayuda, privacidad, accesibilidad y la ruta directa de detalle público siguen disponibles. La respuesta del servidor determina si se puede consultar una ficha pública.
 
-```dotenv
-VITE_API_URL=http://localhost:8080/api
-```
+La sesión depende de las cookies de Spring Boot. La casilla **Recordarme** permanece en el formulario y la petición de login envía correo y contraseña. **Recuperar acceso** todavía usa el sistema de cuentas locales antiguo y solo puede recuperar esas cuentas. El backend determina los permisos efectivos.
 
-Actualmente [api.js](src/services/api.js) utiliza rutas relativas `/api/...` y **no lee `VITE_API_URL`**. Cambiar únicamente esa variable no cambia el destino: la dirección efectiva de desarrollo es el `target` del proxy de Vite. Reinicia Vite después de modificar su configuración.
+En **Menú → Accesibilidad** puedes ajustar el tamaño del texto, contraste, anuncios de navegación, lectura en voz alta, foco de teclado, tema, tamaño de controles, acento y movimiento reducido. Puedes consultar los atajos de teclado desde el mismo menú. Los ajustes se guardan por perfil y origen en `localStorage`, con un perfil independiente para visitantes. La lectura usa las voces del navegador o dispositivo y se detiene al abandonar la ficha. El diseño se adapta a móvil, tablet desde 768 px y escritorio desde 1200 px.
 
-#### Primera entrada
+### Copias JSON y migración
 
-Puedes crear y guardar personajes como Invitado. Para registrarte en el servidor, entra en **Iniciar sesión → Crear cuenta**, introduce nombre de 2 a 50 caracteres, correo de hasta 100 y contraseña de 8 a 72 caracteres con un carácter especial, y confirma la contraseña. Tras el registro se muestra un enlace para iniciar sesión; no se genera un código de recuperación local.
+- **Perfil → Exportar biblioteca (JSON)** guarda los datos de las fichas cargadas de tu cuenta, incluidos los favoritos. Los retratos almacenados en MariaDB quedan fuera de la copia como archivos de imagen. El JSON contiene los campos que recibe la interfaz, incluida la referencia a la miniatura.
+- **Perfil → Importar copia de seguridad** valida un JSON de UMBRA de versión 1 de hasta 10 MB y 500 fichas. Rechaza identificadores duplicados en el archivo y pide confirmación antes de añadir fichas a MariaDB. La biblioteca existente se conserva.
+- La importación compara nombre normalizado, clase, raza, nivel e historia para omitir fichas equivalentes. Crea las demás con identificadores nuevos, intenta subir los retratos incrustados compatibles y muestra un resumen con importadas, omitidas, imágenes y errores. Si falla un retrato, la ficha creada se conserva.
+- Las copias antiguas se importan manualmente. El validador actual conserva los campos del formato local original. Al importar se aplican los valores predeterminados de personalidad, visibilidad privada y categoría 1. La copia está pensada para trasladar fichas y excluye cuentas, credenciales y preferencias.
 
-El inicio de sesión envía correo y contraseña a la API. Al abrir la app se consulta `/api/auth/me`; si devuelve 401 se continúa como Invitado. Si falla la comprobación se muestra un aviso y también se permite continuar como Invitado.
+### Arquitectura y API
 
-Usa el mismo navegador y la misma dirección para conservar bibliotecas y preferencias locales: `localhost:5173` y `127.0.0.1:5173` tienen almacenamientos diferentes. El frontend no configura credenciales precreadas.
+[App.jsx](src/App.jsx) coordina sesión y rutas. [useCharacters.js](src/hooks/useCharacters.js) carga las fichas propias y vuelve a consultar la biblioteca después de cambios. [personajesApi.js](src/services/personajesApi.js) convierte los datos entre el formato React y el del servidor. [api.js](src/services/api.js) gestiona autenticación y lecturas públicas. MariaDB se consulta desde Spring Boot.
 
-### Funciones
-
-- **Inicio:** portada, acceso al editor y los dos personajes más recientes.
-- **Biblioteca:** búsqueda por nombre, clase, raza u origen; filtro de clase y favoritos; ordenación por actualización, nombre o nivel.
-- **Fichas:** crear, consultar, editar, duplicar y eliminar personajes. Cada ficha se abre en su propia pantalla (`/biblioteca/:id`), con scroll de página, enlace para volver y confirmación de eliminación dentro de la ficha. Los filtros de biblioteca se conservan en la dirección al volver.
-- **Personalización:** nombre, clase, raza, nivel, origen, historia, hasta seis rasgos y cuatro atributos: Fuerza, Destreza, Inteligencia y Carisma.
-- **Retratos:** imágenes incluidas, iniciales o un archivo propio PNG, JPG o WebP de hasta 750 KB, con vista previa.
-- **Inspiración:** ficha visual con todos los campos aleatorios y editables directamente: nombre, clase, raza, nivel, origen, retrato, personalidad, historia y atributos. Puedes subir un retrato, añadir rasgos propios, regenerar un campo y recuperar la idea anterior. Los cambios manuales se fijan automáticamente para conservarlos al generar otra combinación. **Guardar personaje** valida y guarda directamente en la biblioteca del perfil activo. El editor utiliza el mismo generador completo.
-- **Personajes públicos:** listado independiente al final de Biblioteca, con estados de carga, error y lista vacía. Cada tarjeta abre `/personajes-publicos/:id` para consultar historia, personalidad, visibilidad y atributos del servidor. Los filtros locales no filtran este listado.
-- **Cuentas del servidor:** registro, acceso, comprobación inicial y cierre de sesión mediante la API; consulta las limitaciones de Recordarme y recuperación más abajo.
-- **Perfil:** identidad, recuento de personajes y favoritos, copias de seguridad y acceso a los ajustes.
-- **Ayuda y feedback:** preguntas frecuentes, privacidad, avisos de conexión, mensajes de validación y pantalla 404.
-
-### Accesibilidad por perfil
-
-Se abre desde **Menú → Accesibilidad** o desde el enlace del Perfil. Está organizada en cinco submenús:
-
-| Menú | Opciones |
+| Método y ruta | Uso desde el frontend |
 | --- | --- |
-| Tamaño de texto | Pequeño, normal, grande y extra grande; selección mediante radios o deslizador. |
-| Modo de contraste | Normal, alto contraste e invertido. |
-| Lectores de pantalla | Anuncios de cambio de pantalla, lectura voluntaria en voz alta y velocidad pausada, normal o rápida. |
-| Navegación por teclado | Foco reforzado y guía de Tab, Mayús + Tab, Enter, Espacio, flechas, Inicio, Fin y Escape. |
-| Personalización visual | Temas oscuro, claro y sepia; tres tamaños de controles; seis colores de acento; movimiento reducido. |
+| `POST /api/auth/register` | Envía `nombreUsuario`, `email` y `password` como JSON. |
+| `POST /api/auth/login`, `GET /api/auth/me` | Obtienen `idUsuario`, `nombreUsuario`, `email` y `rol`. La comprobación de sesión envía `X-Requested-By: XMLHttpRequest`. |
+| `POST /api/auth/logout` | Pide al servidor cerrar la sesión. |
+| `GET /api/personajes/mios` | Carga la lista de fichas propias. |
+| `GET /api/personajes/publicos`, `GET /api/personajes/{id}` | Obtienen el catálogo público y la ficha consultada por ID. |
+| `POST /api/personajes`, `PUT /api/personajes/{id}`, `DELETE /api/personajes/{id}` | Crean, actualizan y eliminan. Favoritos usa el mismo `PUT`. |
+| `POST /api/personajes/{id}/imagen` | Sube un retrato mediante `multipart/form-data`, campo `archivo`. |
+| `GET /api/personajes/{id}/imagen/miniatura` | Sirve la imagen que usa la interfaz para retratos remotos. |
 
-Cada cuenta e Invitado conservan sus propios ajustes. Al cambiar de perfil se recupera su configuración; **Restablecer ajustes** afecta únicamente al perfil activo.
+El editor guarda primero la ficha y después sube el archivo cuando hay uno nuevo. Si la subida falla, la ficha puede estar ya guardada y se muestra un aviso. Los retratos prueban la imagen de vista previa o del servidor, después el retrato incluido si existe y, como último recurso, las iniciales.
 
-El contraste tiene prioridad sobre los colores del tema y del acento, pero conserva esas elecciones para cuando vuelvas al contraste normal. La interfaz respeta también la preferencia del sistema de reducir el movimiento.
+### Compilación, rendimiento y comprobaciones
 
-La navegación utiliza controles semánticos, etiquetas, textos alternativos y diálogos con gestión del foco. La lectura en voz alta usa las voces disponibles en el navegador o dispositivo y se detiene al cerrar la ficha o salir de su pantalla. Es una función adicional al lector de pantalla del sistema.
-
-### Datos, sesión y cuentas
-
-Las bibliotecas personales se guardan en `localStorage`. Cada perfil empieza con seis personajes de ejemplo; una biblioteca guardada vacía permanece vacía. Los datos de Invitado se conservan al iniciar o cerrar sesión. La clave del perfil autenticado usa el `idUsuario` devuelto por el servidor, convertido a cadena.
-
-| Dato | Ubicación y comportamiento |
+| Comando | Resultado |
 | --- | --- |
-| `umbra.characters.v1.<owner>` | Biblioteca local; `owner` es el identificador del usuario del servidor o `guest`. |
-| `umbra.accessibility.v2.<owner>` | Ajustes locales de accesibilidad y apariencia de ese perfil. |
-| Sesión actual | React conserva `id`, `name`, `email` y `rol` a partir de la respuesta del backend. Al recargar se vuelve a consultar `/api/auth/me`. |
-| `umbra.accounts.v1` / `umbra.session.v1` | Claves del módulo local anterior. El registro y acceso actuales no las utilizan; la recuperación todavía depende de las cuentas locales antiguas. |
+| `npm run build` | Genera `dist/` con la aplicación, el manifiesto PWA y el service worker. |
+| `npm run preview` | Sirve la compilación para revisarla localmente. Las funciones con datos necesitan el backend. |
+| `npm test` | Ejecuta pruebas unitarias de generación, validación, copias, cuentas locales antiguas y preferencias. |
+| `npm run lint` | Comprueba reglas de JavaScript, JSX y hooks. |
+| `npm run test:browser` | Ejecuta un recorrido de la versión local anterior. Aún espera su flujo de registro y recuperación, por lo que no valida la integración actual con Spring Boot. |
 
-Las antiguas preferencias globales de `umbra.accessibility.v1` se recuperan únicamente para Invitado. Borrar los datos del sitio elimina las bibliotecas y ajustes de ese navegador; no elimina la cuenta del backend.
+Para publicar, sirve `dist/` por HTTPS, dirige `/api` a Spring Boot en el mismo origen y devuelve `index.html` para las rutas internas de React. La PWA usa `/inicio` como entrada, iconos de 192 y 512 px y actualización automática. El service worker precachea recursos estáticos de la interfaz y excluye `/api/` del fallback de navegación. La sesión, las fichas y los retratos del backend requieren conexión.
 
-El login, la comprobación de sesión y el logout utilizan `credentials: 'same-origin'`. El cliente espera que el backend gestione la sesión mediante cookies y no almacena un token de autenticación. La duración y los atributos de las cookies dependen del servidor; no se pueden determinar desde este repositorio.
+La interfaz utiliza imágenes WebP y fuentes locales WOFF2 con `font-display: swap`. Los originales PNG y TTF se conservan como recursos. El [conversor de fuentes](scripts/convertir-fuentes.mjs) se puede ejecutar desde la raíz con `node scripts/convertir-fuentes.mjs`. Consulta las imágenes y licencias del proyecto. [Recursos gráficos](public/images/ASSETS.md) · [Licencia](LICENSE)
 
-#### Integración todavía parcial
+### Documentación
 
-- **Recordarme:** la casilla permanece en el formulario, pero el servicio solo envía `email` y `password`. Marcarla no configura una duración de sesión diferente en la implementación actual.
-- **Recuperación:** `/recuperar` sigue llamando a `recoverAccount` de [localAccounts.js](src/utils/localAccounts.js). Solo modifica cuentas locales antiguas; no restablece la contraseña de las cuentas creadas por la API y no hay envío de correos implementado en el frontend.
-- **Roles:** la respuesta de sesión aporta `rol`, pero no existen pantallas ni controles de permisos por rol en este frontend. Los permisos efectivos corresponden al backend.
-- **Textos de la interfaz:** algunas etiquetas, ayuda y privacidad aún hablan de «cuenta local». El flujo de registro e inicio de sesión vigente es el de la API descrito aquí.
+El manual en español incluye arquitectura, recorridos, contrato HTTP y listados del frontend con números de línea. El ZIP incluye una copia editable en `codigo/` con recursos y archivo de dependencias. Esta edición corresponde al **23/11/2026**.
 
-El módulo local anterior conserva PBKDF2-SHA-256 con sal y 100 000 iteraciones para contraseñas y SHA-256 para códigos. Esto describe las cuentas locales antiguas, no el almacenamiento de contraseñas del backend. Esa recuperación requiere Web Crypto en localhost o HTTPS.
-
-Si no se puede guardar un cambio en la biblioteca, se muestra un error y se conserva el estado anterior. Los ajustes de accesibilidad sí se aplican temporalmente cuando el almacenamiento está bloqueado, con un aviso de que no han podido persistirse.
-
-Con la app ya abierta puedes seguir trabajando con la biblioteca local sin conexión. El registro, el acceso y las fichas públicas necesitan el servidor; recargar requiere acceso al sitio o al servidor local. No hay un service worker para cargar la app sin conexión.
-
-### Copias de seguridad de personajes
-
-En **Perfil → Copia de seguridad**:
-
-1. **Exportar biblioteca (JSON)** descarga los personajes, favoritos y retratos del perfil activo.
-2. **Importar copia de seguridad** permite seleccionar un JSON de UMBRA de hasta 10 MB.
-3. La app valida el contenido y pide confirmación antes de sustituir toda la biblioteca actual. Admite hasta 500 personajes y rechaza identificadores repetidos.
-
-Las copias de personajes no incluyen cuentas, contraseñas ni ajustes de accesibilidad. Puedes utilizarlas para trasladar una biblioteca a otro navegador o perfil. La implementación está en [characterStore.js](src/utils/characterStore.js) y los controles están en [Profile.jsx](src/pages/Profile.jsx).
-
-### Comandos y comprobaciones
-
-| Comando | Función |
-| --- | --- |
-| `npm run dev` | Inicia el servidor de desarrollo Vite. |
-| `npm test` | Ejecuta las pruebas unitarias de validación, bibliotecas, cuentas y preferencias. |
-| `npm run lint` | Comprueba las reglas de JavaScript, JSX y hooks de React. |
-| `npm run build` | Genera la aplicación compilada en `dist/`. |
-| `npm run preview` | Sirve la compilación para revisarla localmente. |
-| `npm run test:browser` | Ejecuta recorridos automáticos en Chrome o Edge. |
-
-#### Pruebas en navegador
-
-[browser-smoke.mjs](scripts/browser-smoke.mjs) contiene recorridos de la versión local anterior: personajes, filtros, retratos, favoritos, cuentas, recuperación, copias JSON, accesibilidad, separación de perfiles, teclado, fallos de almacenamiento y pantallas de 320 y 390 px.
-
-**Pendiente de adaptar a la API:** el recorrido todavía espera el antiguo registro local, su código de recuperación y sus etiquetas. No valida de extremo a extremo el nuevo flujo de sesión ni los personajes públicos; no debe darse por compatible con la integración actual. Las pruebas unitarias de cuentas locales tampoco prueban la autenticación de Spring Boot.
-
-Es una herramienta de desarrollo. Utiliza un contexto temporal aislado y lo elimina al terminar; las cuentas y bibliotecas de prueba pertenecen a ese contexto.
-
-Para ejecutarla:
-
-1. Arranca la app con `npm run dev`.
-2. Abre Chrome o Edge con depuración remota en el puerto **9222** y un perfil de navegador dedicado a las pruebas. Por ejemplo, en otra terminal PowerShell con Chrome instalado en su ruta habitual:
-
-   ```powershell
-   & "C:\Program Files\Google\Chrome\Application\chrome.exe" --headless=new --remote-debugging-port=9222 "--user-data-dir=$env:TEMP\umbra-browser-smoke"
-   ```
-
-3. Ejecuta `npm run test:browser` en otra terminal. En PowerShell puedes usar `npm.cmd run test:browser`.
-
-El script utiliza `http://127.0.0.1:5173` por defecto. Si la app está en otra dirección o quieres una captura, configura estas variables antes de ejecutarlo:
-
-```powershell
-$env:UMBRA_URL = "http://127.0.0.1:4173"
-$env:UMBRA_SCREENSHOT = Join-Path $env:TEMP "umbra-captura.png"
-npm.cmd run test:browser
-```
-
-`UMBRA_URL` debe apuntar al servidor que tengas activo; por ejemplo, el de `npm run preview`. Si todo pasa, el script muestra `Browser OK`. Si falla una comprobación, muestra el error, la dirección y el contenido de la pantalla.
-
-Algunas comprobaciones de voz utilizan una simulación: verifican los controles, el texto y la cancelación, pero no la salida de audio real ni un lector de pantalla externo.
-
-### Estructura del proyecto
-
-```text
-src/
-  App.jsx             Sesión, rutas, espacio del perfil y diálogos
-  main.jsx            Montaje de React y BrowserRouter
-  App.css             Composición, componentes y variantes de accesibilidad
-  index.css           Fuentes y estilos base
-  pages/              Pantallas de cada ruta y sus estilos específicos
-  components/         Navegación, tarjetas, retratos, formularios y avisos
-  hooks/              Estado y persistencia de bibliotecas y preferencias
-  services/           Peticiones HTTP de personajes públicos y autenticación
-  utils/              Validación, cuentas locales antiguas, almacenamiento y copias JSON
-  data/               Personajes iniciales, catálogos y navegación
-tests/                Pruebas unitarias
-scripts/              Recorridos automáticos de navegador
-public/               Imágenes, icono, fuentes y licencias
-documentacion/        Manual, código empaquetado y herramientas de generación
-```
-
-Las rutas y los títulos se coordinan en [App.jsx](src/App.jsx) y [navigation.js](src/data/navigation.js). Las imágenes se documentan en [ASSETS.md](public/images/ASSETS.md); las licencias de las fuentes están en `public/fonts/` y la licencia del proyecto en [LICENSE](LICENSE).
-
-### Documentación para consultar y extraer
-
-- [Manual completo en PDF](documentacion/UMBRA-manual-completo.pdf): funciones, arquitectura, explicación de componentes y código con números de línea.
-- [Manual en HTML](documentacion/UMBRA-manual-completo.html): versión para abrir y buscar en el navegador.
-- [Documentación y código en ZIP](documentacion/UMBRA-documentacion-y-codigo.zip): manual y carpeta `codigo/` editable con los recursos del proyecto.
-- [Guía de documentación](documentacion/LEEME.md): contenido, extracción y herramientas para regenerar el manual.
-
-El manual y el ZIP son una instantánea del proyecto en el momento de su generación. No se actualizan automáticamente al editar el código o este README. El ZIP de código tampoco incluye los datos guardados por las personas en sus navegadores.
-
-### API de Spring Boot integrada
-
-Las solicitudes están concentradas en [src/services/api.js](src/services/api.js). Estas son las rutas que consume actualmente el frontend:
-
-| Método y ruta | Uso y respuesta esperada |
-| --- | --- |
-| `GET /api/personajes/publicos` | Lista JSON de personajes públicos; las tarjetas usan `idPersonaje` y `nombre`. |
-| `GET /api/personajes/{id}` | Detalle JSON con `nombre`, `visibilidad`, `historia`, `personalidad`, `fuerza`, `destreza`, `inteligencia` y `carisma`. El servicio codifica el identificador en la URL. |
-| `POST /api/auth/register` | Envía JSON `{ nombreUsuario, email, password }`; espera JSON en caso de éxito. Traduce 409 a correo registrado y 400 a datos incorrectos. |
-| `POST /api/auth/login` | Envía JSON `{ email, password }`; espera `{ idUsuario, nombreUsuario, email, rol }`. Traduce 401 a credenciales incorrectas. |
-| `GET /api/auth/me` | Recupera esa misma identidad; 401 se trata como ausencia de sesión. Envía `X-Requested-By: XMLHttpRequest`. |
-| `POST /api/auth/logout` | Solicita cerrar la sesión; después del éxito, la app vuelve a Invitado. No necesita cuerpo JSON de respuesta. |
-
-Los personajes públicos se adaptan al componente `CharacterCard` con `interactive={false}`, dentro de un enlace al detalle público. Usan un id visual `public-<idPersonaje>`, muestran «Personaje público» y omiten el nivel. El adaptador actual no asigna retrato, por lo que muestra las iniciales. El detalle público es de consulta; no ofrece edición ni favoritos locales.
-
-`Portrait` elige `imageDataUrl`, después `image` y después un retrato incluido; si no hay imagen o falla la carga, muestra iniciales. Permite ajustar el encuadre con `imagePosition` (por defecto `center`).
-
-Quedan pendientes el CRUD remoto de la biblioteca personal, la sincronización de ajustes, la recuperación de contraseña del servidor y la conexión de Recordarme. El frontend no accede directamente a MariaDB ni al ORM; esas capas pertenecen al backend.
-
-### Compilar y publicar
-
-```bash
-npm run build
-npm run preview
-```
-
-Publica el contenido generado en `dist/`. Como se utiliza `BrowserRouter`, configura el alojamiento para devolver `index.html` en las rutas internas de la aplicación. En producción configura también un proxy inverso para `/api` hacia Spring Boot en el mismo origen: el proxy definido en `server.proxy` es de desarrollo y no acompaña a los archivos compilados. `npm run preview` hereda el proxy de desarrollo de Vite; sigue necesitando el backend activo. Cambiar `VITE_API_URL` no modifica las rutas relativas actuales. Utiliza HTTPS fuera del entorno local y revisa la sesión con la configuración real del servidor.
-
----
+- [Guía de documentación](documentacion/LEEME.md)
+- [Manual PDF](documentacion/UMBRA-manual-completo.pdf) · [Manual HTML](documentacion/UMBRA-manual-completo.html)
+- [Documentación y código en ZIP](documentacion/UMBRA-documentacion-y-codigo.zip)
 
 <a id="english"></a>
 
 ## English
 
-An application for creating fantasy characters, writing their stories, and organizing their character sheets. Built with **React, Vite, and React Router**, with customizable themes and independent accessibility settings for each profile.
+UMBRA is a web app for creating fantasy characters, writing their stories, and organizing their character sheets. The interface uses React, React Router, and Vite. Spring Boot manages sessions and stores characters in MariaDB. Appearance and accessibility preferences are stored in the browser.
 
-### Current status
+### Run locally
 
-Documentation reviewed on **9 November 2026** against the repository source.
+Use **Node.js 24 LTS** as a compatible runtime, npm, and a Spring Boot backend running at `http://localhost:8080` with MariaDB configured. This repository contains the frontend. Start the backend separately.
 
-The app combines **Spring Boot HTTP services** with **local browser storage**. Registration, sign-in, sign-out, and session checks already call the backend. Library also displays public characters from the server, with a dedicated detail screen.
-
-Personal character creation, editing, duplication, deletion, favorites, and backups remain local, as do accessibility settings per profile. Signing in does not upload these characters or synchronize libraries between devices.
-
-The interface is designed primarily for mobile and has a general maximum width of **390 px**. It includes adjustments for narrow screens and enlarged text; dedicated tablet and desktop layouts remain a future improvement.
-
-### Getting started
-
-You need Node.js and npm installed. From the project folder:
+From the directory containing `package.json`:
 
 ```bash
-npm install
+npm ci
 npm run dev
 ```
 
-Open the address displayed by Vite. In PowerShell, if running `npm.ps1` is blocked, use `npm.cmd`:
+Open the URL printed by Vite. If PowerShell blocks `npm.ps1`, use `npm.cmd ci` and `npm.cmd run dev`. Vite forwards `/api` to `http://localhost:8080`, preserving the path and using `changeOrigin: true`. The services use relative URLs. If the backend listens elsewhere, update the target in [vite.config.js](vite.config.js) and restart Vite. [.env.development](.env.development) declares `VITE_API_URL`, and the current services use the proxy.
 
-```powershell
-npm.cmd install
-npm.cmd run dev
-```
+### Create and browse characters
 
-With `package-lock.json` available, you can also use `npm ci` to install dependencies according to the lockfile.
+1. Open **Iniciar sesión → Crear cuenta** (Sign in → Create account). After registration, sign in with your email and password.
+2. Open **Crear personaje** (Create character). Start from scratch or generate a draft. Fill in the name, class, race, level, origin, story, personality, up to six traits, and four attributes. Choose a built-in portrait, initials, or a PNG, JPG, or WebP file up to 750 KB.
+3. Choose **visibility**. A private sheet appears under **Mis personajes privados** (My private characters). A public sheet appears in the public catalog when returned by the server. Your own public entry opens your editable library detail. Public entries owned by someone else open a read-only detail page.
+4. From your sheet, you can edit, mark it as a favorite, duplicate it, or confirm deletion. Duplication creates a new sheet without the favorite flag and carries over the built-in portrait or initials selection. An uploaded image from the original sheet is excluded.
 
-#### Development API configuration
+**Inspiración** (Inspiration) generates an editable combination, lets you lock or reroll individual fields, and can restore the previous idea. You can save the idea to the server directly from this page. A portrait uploaded here is used for preview. To save the file to the server, attach it in **Crear personaje** (Create) or **Editar** (Edit).
 
-Run the Spring Boot backend separately at **`http://localhost:8080`**, with its database configured. This repository contains the frontend; it does not include the backend or MariaDB configuration.
+**Biblioteca** (Library) shares name, class, race, and origin search across both sections, along with class filtering and sorting by name, level, or descending ID. Search ignores accents and case. **Solo favoritos** (Favorites only) applies to the private section. The URL preserves `q`, `class`, `favorites`, and `sort`. The public catalog displays a result count and loading, error, and empty states.
 
-[vite.config.js](vite.config.js) proxies requests starting with `/api` to `http://localhost:8080`, with `changeOrigin: true` and no path rewrite. For example, `/api/auth/me` reaches `http://localhost:8080/api/auth/me`. It also excludes `public/fonts/**` from file watching.
+### Sessions and accessibility
 
-[.env.development](.env.development) declares:
+On startup, UMBRA calls `GET /api/auth/me`. A 401 response opens the app in visitor mode. A failed request displays a notice. The library, editor, Inspiration, and Profile redirect to sign-in when there is no active session. Home, help, privacy, accessibility, and the direct public-detail route remain available. The server response determines whether a public sheet can be viewed.
 
-```dotenv
-VITE_API_URL=http://localhost:8080/api
-```
+Spring Boot cookies manage the session. The **Recordarme** (Remember me) checkbox is still shown, and the login request sends email and password. **Recuperar acceso** (Recover access) still uses the legacy local account system and only recovers those accounts. The backend determines effective permissions.
 
-[api.js](src/services/api.js) currently uses relative `/api/...` paths and **does not read `VITE_API_URL`**. Changing that variable alone does not change the destination; Vite's proxy `target` determines the development destination. Restart Vite after changing its configuration.
+Under **Menú → Accesibilidad** (Menu → Accessibility), adjust text size, contrast, navigation announcements, read-aloud, keyboard focus, theme, control size, accent, and reduced motion. The same menu includes a keyboard guide. Preferences are stored per profile and origin in `localStorage`, with a separate visitor profile. Read-aloud uses browser or device voices and stops when you leave the sheet. The layout adapts to mobile, tablets from 768 px, and desktops from 1200 px.
 
-#### First visit
+### JSON backups and migration
 
-You can create and save characters as a Guest. To register on the server, open **Iniciar sesión → Crear cuenta** (Sign in → Create account). Enter a name of 2–50 characters, an email address of up to 100 characters, and a password of 8–72 characters including a special character, then confirm the password. Successful registration displays a sign-in link; it does not issue a local recovery code.
+- **Perfil → Exportar biblioteca (JSON)** (Profile → Export library) downloads the loaded sheets for your account, including favorites. Portraits stored in MariaDB are excluded as image files. The JSON contains the fields used by the interface, including the thumbnail reference.
+- **Perfil → Importar copia de seguridad** (Profile → Import backup) validates a UMBRA version 1 JSON file up to 10 MB and 500 sheets. It rejects duplicate IDs in the file and asks for confirmation before adding sheets to MariaDB. Existing sheets are preserved.
+- Import compares normalized name, class, race, level, and story to skip equivalent sheets. It creates new IDs for the remaining entries, attempts to upload supported embedded portraits, and reports imported sheets, skipped entries, uploaded images, and errors. A failed portrait upload leaves the created sheet in place.
+- Import earlier backups manually. The current validator retains the fields from the original local format. Import applies default personality, private visibility, and category 1. Backups transfer character data and exclude accounts, credentials, and preferences.
 
-Sign-in sends email and password to the API. On startup, the app checks `/api/auth/me`; a 401 response continues as Guest. If the session check fails, a notice is displayed and Guest access remains available.
+### Architecture and API
 
-Use the same browser and address to retain local libraries and preferences: `localhost:5173` and `127.0.0.1:5173` have separate storage. The frontend does not configure precreated credentials.
+[App.jsx](src/App.jsx) coordinates sessions and routes. [useCharacters.js](src/hooks/useCharacters.js) loads owned sheets and refreshes the library after changes. [personajesApi.js](src/services/personajesApi.js) maps data between React and the server. [api.js](src/services/api.js) handles authentication and public reads. Spring Boot accesses MariaDB.
 
-### Features
-
-- **Home:** landing screen, access to the editor, and the two most recently updated characters.
-- **Library:** search by name, class, race, or origin; filter by class and favorites; sort by update time, name, or level.
-- **Character sheets:** create, view, edit, duplicate, and delete characters. Each sheet opens on its own screen (`/biblioteca/:id`), with normal page scrolling, a back link, and inline deletion confirmation. Library filters are kept in the URL when returning.
-- **Customization:** name, class, race, level, origin, story, up to six traits, and four attributes: Strength, Dexterity, Intelligence, and Charisma.
-- **Portraits:** included images, initials, or your own PNG, JPG, or WebP file of up to 750 KB, with a preview.
-- **Inspiration:** a visual draft with every field randomized and directly editable: name, class, race, level, origin, portrait, personality, story, and attributes. Upload a portrait, add custom traits, reroll a field, or restore the previous idea. Manual changes are automatically locked to preserve them when generating another combination. **Guardar personaje** (Save character) validates and saves directly to the active profile's library. The editor uses the same complete generator.
-- **Public characters:** an independent list below the personal Library, with loading, error, and empty states. Each card opens `/personajes-publicos/:id` to read server-provided story, personality, visibility, and attributes. Local filters do not filter this list.
-- **Server accounts:** registration, sign-in, startup session checks, and sign-out through the API; see the Remember me and recovery limitations below.
-- **Profile:** identity, character and favorite counts, backups, and access to settings.
-- **Help and feedback:** frequently asked questions, privacy information, connection notices, validation messages, and a 404 screen.
-
-### Accessibility per profile
-
-Open **Menú → Accesibilidad** (Menu → Accessibility) or use the link on the Profile screen. Settings are organized into five submenus:
-
-| Menu | Options |
+| Method and route | Frontend use |
 | --- | --- |
-| Text size | Small, normal, large, and extra large; selected using radio buttons or a slider. |
-| Contrast mode | Normal, high contrast, and inverted. |
-| Screen readers | Screen change announcements, optional read-aloud controls, and slow, normal, or fast reading speed. |
-| Keyboard navigation | Enhanced focus indicator and a guide to Tab, Shift + Tab, Enter, Space, arrow keys, Home, End, and Escape. |
-| Visual customization | Dark, light, and sepia themes; three control sizes; six accent colors; reduced motion. |
+| `POST /api/auth/register` | Sends `nombreUsuario`, `email`, and `password` as JSON. |
+| `POST /api/auth/login`, `GET /api/auth/me` | Read `idUsuario`, `nombreUsuario`, `email`, and `rol`. The session check sends `X-Requested-By: XMLHttpRequest`. |
+| `POST /api/auth/logout` | Asks the server to end the session. |
+| `GET /api/personajes/mios` | Loads owned character sheets. |
+| `GET /api/personajes/publicos`, `GET /api/personajes/{id}` | Load the public catalog and a character by ID. |
+| `POST /api/personajes`, `PUT /api/personajes/{id}`, `DELETE /api/personajes/{id}` | Create, update, and delete sheets. Favorites use the same `PUT`. |
+| `POST /api/personajes/{id}/imagen` | Uploads a portrait using the `archivo` field in `multipart/form-data`. |
+| `GET /api/personajes/{id}/imagen/miniatura` | Serves the image used for remote portraits in the interface. |
 
-Each account and the Guest profile keep their own settings. Switching profiles restores the corresponding configuration; **Restablecer ajustes** (Reset settings) affects only the active profile.
+The editor saves the sheet first and then uploads the file if a new one is attached. If the upload fails, the sheet may already be saved and the app shows a notice. Portraits use the preview or server image, then fall back to a built-in portrait when available and finally to initials.
 
-Contrast takes priority over theme and accent colors while preserving those choices for when you return to normal contrast. The interface also respects the system preference for reduced motion.
+### Build, performance, and checks
 
-Navigation uses semantic controls, labels, alternative text, and dialogs with focus management. Read-aloud uses the voices available in the browser or device and stops when the character sheet is closed or its screen is left. It is an additional feature alongside the system screen reader.
-
-### Data, sessions, and accounts
-
-Personal libraries are saved in `localStorage`. Each profile starts with six example characters; a saved empty library stays empty. Guest data is preserved when signing in or out. An authenticated profile uses the server's `idUsuario`, converted to a string, as its storage owner.
-
-| Data | Location and behavior |
+| Command | Result |
 | --- | --- |
-| `umbra.characters.v1.<owner>` | Local library; `owner` is the server user identifier or `guest`. |
-| `umbra.accessibility.v2.<owner>` | Local accessibility and appearance settings for that profile. |
-| Current session | React holds `id`, `name`, `email`, and `rol` from the backend response. Reloading checks `/api/auth/me` again. |
-| `umbra.accounts.v1` / `umbra.session.v1` | Legacy local module keys. Current registration and sign-in do not use them; recovery still depends on old local accounts. |
-
-Legacy global preferences from `umbra.accessibility.v1` are restored only for Guest. Clearing site data removes that browser's libraries and preferences; it does not delete the backend account.
-
-Login, session checks, and logout use `credentials: 'same-origin'`. The client expects the backend to manage cookie sessions and does not store an authentication token. Cookie lifetime and attributes depend on the server and cannot be established from this repository.
-
-#### Integration limitations
-
-- **Remember me:** the checkbox remains in the form, but the service only sends `email` and `password`. Selecting it does not configure a different session lifetime in the current implementation.
-- **Recovery:** `/recuperar` still calls `recoverAccount` in [localAccounts.js](src/utils/localAccounts.js). It only updates legacy local accounts; it does not reset passwords for API-created accounts. The frontend implements no email delivery.
-- **Roles:** the session response supplies `rol`, but this frontend has no role-specific screens or permission checks. Effective authorization belongs to the backend.
-- **Interface text:** some labels, help, and privacy text still refer to a “local account”. Current registration and sign-in use the API described here.
-
-The legacy local module retains PBKDF2-SHA-256 with a salt and 100,000 iterations for passwords and SHA-256 for recovery codes. This describes old local accounts, not backend password storage. That recovery requires Web Crypto on localhost or HTTPS.
-
-If saving a library change fails, an error is shown and the previous state is preserved. Accessibility settings still apply temporarily when storage is blocked, with a notice that they could not be persisted.
-
-With the app already open, the local library can still be used offline. Registration, sign-in, and public characters require the server. Reloading requires access to the website or local server; there is no offline service worker.
-
-### Character backups
-
-Under **Perfil → Copia de seguridad** (Profile → Backup):
-
-1. **Exportar biblioteca (JSON)** downloads the active profile's characters, favorites, and portraits.
-2. **Importar copia de seguridad** lets you select a UMBRA JSON file of up to 10 MB.
-3. The app validates its contents and requests confirmation before replacing the entire current library. It accepts up to 500 characters and rejects duplicate identifiers.
-
-Character backups do not include accounts, passwords, or accessibility settings. You can use them to transfer a library to another browser or profile. The implementation is in [characterStore.js](src/utils/characterStore.js), and the controls are in [Profile.jsx](src/pages/Profile.jsx).
-
-### Commands and checks
-
-| Command | Purpose |
-| --- | --- |
-| `npm run dev` | Starts the Vite development server. |
-| `npm test` | Runs unit tests for validation, libraries, accounts, and preferences. |
+| `npm run build` | Generates `dist/` with the app, PWA manifest, and service worker. |
+| `npm run preview` | Serves the build for local review. Features that use server data require the backend. |
+| `npm test` | Runs unit tests for generation, validation, backups, legacy local accounts, and preferences. |
 | `npm run lint` | Checks JavaScript, JSX, and React Hooks rules. |
-| `npm run build` | Generates the compiled application in `dist/`. |
-| `npm run preview` | Serves the build for local review. |
-| `npm run test:browser` | Runs automated workflows in Chrome or Edge. |
+| `npm run test:browser` | Runs a workflow for the previous local version. It still expects that version's registration and recovery flow, so it does not validate the current Spring Boot integration. |
 
-#### Browser tests
+To deploy, serve `dist/` over HTTPS, route `/api` to Spring Boot on the same origin, and return `index.html` for internal React routes. The PWA uses `/inicio` as its entry point, 192 and 512 px icons, and automatic updates. The service worker precaches static interface assets and excludes `/api/` from the navigation fallback. Sessions, character sheets, and backend portraits require a connection.
 
-[browser-smoke.mjs](scripts/browser-smoke.mjs) contains workflows for the previous local version: characters, filters, portraits, favorites, accounts, recovery, JSON backups, accessibility, profile isolation, keyboard navigation, storage failures, and screens 320 and 390 px wide.
+The interface uses WebP images and local WOFF2 fonts with `font-display: swap`. The original PNG and TTF assets are retained. Run the [font converter](scripts/convertir-fuentes.mjs) from the project root with `node scripts/convertir-fuentes.mjs`. [Image assets](public/images/ASSETS.md) · [License](LICENSE)
 
-**API adaptation pending:** the workflow still expects legacy local registration, its recovery code, and its labels. It does not validate the new session flow or public characters end to end and should not be assumed compatible with the current integration. Local account unit tests do not test Spring Boot authentication either.
+### Documentation
 
-It is a development tool. It uses an isolated temporary browser context and disposes of it when finished; test accounts and libraries belong to that context.
+The Spanish manual includes architecture, workflows, the HTTP contract, and numbered frontend source listings. The ZIP includes editable source in `codigo/`, assets, and the dependency lockfile. This edition is dated **November 23, 2026**.
 
-To run it:
-
-1. Start the app with `npm run dev`.
-2. Open Chrome or Edge with remote debugging on port **9222** and a browser profile dedicated to testing. For example, in another PowerShell terminal with Chrome installed at its usual location:
-
-   ```powershell
-   & "C:\Program Files\Google\Chrome\Application\chrome.exe" --headless=new --remote-debugging-port=9222 "--user-data-dir=$env:TEMP\umbra-browser-smoke"
-   ```
-
-3. Run `npm run test:browser` in another terminal. In PowerShell, you can use `npm.cmd run test:browser`.
-
-The script uses `http://127.0.0.1:5173` by default. If the app is running at another address or you want a screenshot, set these variables before running it:
-
-```powershell
-$env:UMBRA_URL = "http://127.0.0.1:4173"
-$env:UMBRA_SCREENSHOT = Join-Path $env:TEMP "umbra-captura.png"
-npm.cmd run test:browser
-```
-
-`UMBRA_URL` must point to your active server, for example the one started by `npm run preview`. If all checks pass, the script displays `Browser OK`. If a check fails, it displays the error, address, and screen content.
-
-Some voice checks use a simulation: they verify the controls, text, and cancellation, but not actual audio output or an external screen reader.
-
-### Project structure
-
-```text
-src/
-  App.jsx             Session, routes, profile workspace, and dialogs
-  main.jsx            React and BrowserRouter setup
-  App.css             Layout, components, and accessibility variants
-  index.css           Fonts and base styles
-  pages/              Route screens and their specific styles
-  components/         Navigation, cards, portraits, forms, and notices
-  hooks/              State and persistence for libraries and preferences
-  services/           HTTP requests for public characters and authentication
-  utils/              Validation, legacy local accounts, storage, and JSON backups
-  data/               Initial characters, option catalogs, and navigation
-tests/                Unit tests
-scripts/              Automated browser workflows
-public/               Images, favicon, fonts, and licenses
-documentacion/        Manual, packaged source code, and generation tools
-```
-
-Routes and titles are coordinated in [App.jsx](src/App.jsx) and [navigation.js](src/data/navigation.js). Images are documented in [ASSETS.md](public/images/ASSETS.md); font licenses are in `public/fonts/`, and the project license is in [LICENSE](LICENSE).
-
-### Documentation to read and extract
-
-- [Complete PDF manual](documentacion/UMBRA-manual-completo.pdf): features, architecture, component explanations, and source code with line numbers.
-- [HTML manual](documentacion/UMBRA-manual-completo.html): a version to open and search in a browser.
-- [Documentation and source ZIP](documentacion/UMBRA-documentacion-y-codigo.zip): the manual and an editable `codigo/` folder containing project resources.
-- [Documentation guide](documentacion/LEEME.md): contents, extraction, and tools for regenerating the manual.
-
-The manual and ZIP are snapshots of the project at the time they were generated. They do not update automatically when the code or this README changes. The source ZIP also excludes data saved by people in their browsers.
-
-### Integrated Spring Boot API
-
-Requests are centralized in [src/services/api.js](src/services/api.js). The frontend currently consumes these routes:
-
-| Method and route | Purpose and expected response |
-| --- | --- |
-| `GET /api/personajes/publicos` | JSON public character list; cards use `idPersonaje` and `nombre`. |
-| `GET /api/personajes/{id}` | JSON detail with `nombre`, `visibilidad`, `historia`, `personalidad`, `fuerza`, `destreza`, `inteligencia`, and `carisma`. The service URL-encodes the identifier. |
-| `POST /api/auth/register` | Sends JSON `{ nombreUsuario, email, password }`; expects JSON on success. Maps 409 to an existing email and 400 to invalid input. |
-| `POST /api/auth/login` | Sends JSON `{ email, password }`; expects `{ idUsuario, nombreUsuario, email, rol }`. Maps 401 to invalid credentials. |
-| `GET /api/auth/me` | Restores the same identity; 401 means no active session. Sends `X-Requested-By: XMLHttpRequest`. |
-| `POST /api/auth/logout` | Requests session termination; successful logout returns the app to Guest. No JSON response body is required. |
-
-Public characters use `CharacterCard` with `interactive={false}`, wrapped in a link to public detail. Their display id is `public-<idPersonaje>`; cards show “Personaje público” and omit the level. The current adapter assigns no portrait, so initials are displayed. Public detail is read-only and provides no editing or local favorite controls.
-
-`Portrait` chooses `imageDataUrl`, then `image`, then an included portrait. Missing or failed images fall back to initials. `imagePosition` adjusts the crop, defaulting to `center`.
-
-Remote personal-library CRUD, preference synchronization, server password recovery, and Remember me integration remain pending. The frontend does not access MariaDB or the ORM directly; those layers belong to the backend.
-
-### Build and deployment
-
-```bash
-npm run build
-npm run preview
-```
-
-Deploy the generated contents of `dist/`. Because the app uses `BrowserRouter`, configure hosting to return `index.html` for internal application routes. In production, also configure a reverse proxy for `/api` to Spring Boot on the same origin: `server.proxy` is a development setting and is not shipped with the compiled files. `npm run preview` inherits Vite’s development proxy and still requires the backend to be running. Changing `VITE_API_URL` does not change the current relative paths. Use HTTPS outside local development and verify sessions against the actual server configuration.
+- [Documentation guide](documentacion/LEEME.md)
+- [PDF manual](documentacion/UMBRA-manual-completo.pdf) · [HTML manual](documentacion/UMBRA-manual-completo.html)
+- [Documentation and source ZIP](documentacion/UMBRA-documentacion-y-codigo.zip)

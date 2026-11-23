@@ -1,16 +1,16 @@
 {
   "pdf": "UMBRA-manual-completo.pdf",
-  "bytes": 4776803,
-  "pages": 201,
-  "included_files": 62,
-  "included_lines": 5943,
+  "bytes": 4350812,
+  "pages": 218,
+  "included_files": 66,
+  "included_lines": 8229,
   "fonts_loaded": "loaded",
   "broken_images": 0,
   "tagged_pdf": true,
   "outline": true,
   "exact_html_source_match": true,
   "source_files_hashes_match": true,
-  "pdf_text_characters": 370475,
+  "pdf_text_characters": 380239,
   "pdf_missing_source_lines": 0,
   "nonprinting_bom_ignored_in_text_check": true
 }
