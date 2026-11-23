@@ -49,14 +49,19 @@ function Workspace({ user, onLogin, onLogout, accountError }) {
     : null
 
   const editing = /^\/personaje\/[^/]+\/editar$/.test(path)
+  const publicDetail = /^\/personajes-publicos\/[^/]+$/.test(path)
 
-  const page = pageTitles[path] || (
-    detailMatch
-      ? character?.name || 'Personaje no encontrado'
-      : editing
-        ? 'Editar personaje'
+  
+const page = pageTitles[path] || (
+  detailMatch
+    ? character?.name || 'Ficha de personaje'
+    : editing
+      ? 'Editar personaje'
+      : publicDetail
+        ? 'Ficha de personaje público'
         : 'Página no encontrada'
-  )
+)
+
 
   const isLogin = path === '/login'
 

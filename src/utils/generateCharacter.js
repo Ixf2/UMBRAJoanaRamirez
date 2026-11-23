@@ -43,5 +43,19 @@ export function randomCharacter(previous = {}, lockedFields = [], random = Math.
     draft.story = `${opening} Ahora ${pick(goals)}. ${pick(secrets)}`
   }
 
+  
+  const descripciones = [
+    `De carácter ${draft.traits.join(', ').toLowerCase()}, ${draft.name} afronta los desafíos con determinación y procura mantenerse fiel a sus principios.`,
+    `${draft.name} posee una personalidad marcada por rasgos como ${draft.traits.join(', ').toLowerCase()}. Sus decisiones reflejan tanto sus virtudes como sus contradicciones.`,
+    `Aunque su pasado ha influido profundamente en su forma de ser, ${draft.name} destaca por ser ${draft.traits.join(', ').toLowerCase()}. No siempre resulta fácil comprender sus motivaciones.`,
+    `${draft.name} combina una actitud ${draft.traits.join(', ').toLowerCase()} con una voluntad difícil de quebrantar. Sus relaciones y experiencias determinan cómo responde ante el peligro.`
+  ]
+
+  draft.personality = keep('personality')
+    ? previous.personality
+    : pick(descripciones)
+
+  return draft
+
   return draft
 }

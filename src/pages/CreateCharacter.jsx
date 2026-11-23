@@ -307,17 +307,18 @@ export default function CreateCharacter({ characters, onSave }) {
 
   if (!initial) return <NotFound />
 
-  function generateRandom() {
-    setDraft({
-      ...randomCharacter(),
-      id: undefined,
-      personality: '',
-      visibility: 'privado',
-      idCategoria: 1
-    })
+  
+function generateRandom() {
+  setDraft({
+    ...randomCharacter(),
+    id: undefined,
+    visibility: 'privado',
+    idCategoria: 1
+  })
 
-    setRevision(value => value + 1)
-  }
+  setRevision(value => value + 1)
+}
+
 
   return (
     <section className="editor-page">

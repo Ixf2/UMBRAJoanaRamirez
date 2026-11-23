@@ -140,15 +140,22 @@ export default function PublicCharacters({
                   String(personaje.idPersonaje)
               )
 
-              const personajeAdaptado = {
-                id: String(personaje.idPersonaje),
-                name: personaje.nombre,
-                type: personaje.clase || 'Personaje público',
-                level: personaje.nivel ?? 1,
-                image: propio?.image || '',
-                portrait: propio?.portrait ?? null,
-                favorite: propio?.favorite ?? false
-              }
+
+              
+const personajeAdaptado = {
+  id: String(personaje.idPersonaje),
+  name: personaje.nombre,
+  type: personaje.clase || 'Personaje público',
+  race: personaje.raza || '',
+  level: personaje.nivel ?? 1,
+  realm: personaje.origen || '',
+  image: `/api/personajes/${personaje.idPersonaje}/imagen/miniatura`,
+  portrait: personaje.retrato ?? 2,
+  favorite: propio?.favorite ?? false,
+  visibility: personaje.visibilidad
+}
+
+
 
               const destino = propio
                 ? `/biblioteca/${personaje.idPersonaje}`
