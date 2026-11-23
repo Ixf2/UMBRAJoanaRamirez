@@ -1,4 +1,4 @@
-import DatabaseCharacters from '../components/databasecharacters/DatabaseCharacters.jsx'
+
 import { Link, useLocation, useSearchParams } from 'react-router'
 import CharacterCard from '../components/charactercard/CharacterCard.jsx'
 import Icon from '../components/icon/Icon.jsx'
@@ -54,15 +54,19 @@ export default function Library({ characters = [] }) {
       : []),
     ...(sort !== 'recent'
       ? [{
-        key: 'sort',
-        label: sort === 'name'
-          ? 'Orden: nombre'
-          : 'Orden: mayor nivel'
-      }]
+          key: 'sort',
+          label: sort === 'name'
+            ? 'Orden: nombre'
+            : 'Orden: mayor nivel'
+        }]
       : [])
   ]
 
-  const results = characters
+  const privateCharacters = characters.filter(
+    character => character.visibility === 'privado'
+  )
+
+  const results = privateCharacters
     .filter(character => {
       const searchableText = [
         character.name,
@@ -86,15 +90,14 @@ export default function Library({ characters = [] }) {
         return Number(b.level || 0) - Number(a.level || 0)
       }
 
-      return Number(b.updatedAt || 0) - Number(a.updatedAt || 0)
+      return Number(b.updatedAt || 0) -
+        Number(a.updatedAt || 0)
     })
-
-  const hasFilters = activeFilters.length > 0
 
   return (
     <section aria-labelledby="library-title">
       <div className="section-heading">
-        <h2 id="library-title">Tus personajes</h2>
+        <h2 id="library-title">Biblioteca de personajes</h2>
 
         <Link className="text-button" to="/crear-personaje">
           ＋ Crear personaje
@@ -111,7 +114,7 @@ export default function Library({ characters = [] }) {
         <Icon name="search" />
 
         <input
-          aria-label="Buscar por nombre, clase, raza o reino"
+          aria-label="Buscar por nombre, clase, raza u origen"
           type="search"
           value={search}
           maxLength={100}
@@ -157,14 +160,17 @@ export default function Library({ characters = [] }) {
           type="checkbox"
           checked={favorites}
           onChange={event =>
-            updateFilter('favorites', event.target.checked ? '1' : '')
+            updateFilter(
+              'favorites',
+              event.target.checked ? '1' : ''
+            )
           }
         />
 
         Solo favoritos
       </label>
 
-      {hasFilters && (
+      {activeFilters.length > 0 && (
         <div
           className="active-filters"
           aria-label="Filtros activos"
@@ -181,7 +187,6 @@ export default function Library({ characters = [] }) {
                 className="filter-chip"
                 onClick={() => updateFilter(filter.key, '')}
                 aria-label={`Quitar filtro ${filter.label}`}
-                title={`Quitar ${filter.label}`}
               >
                 <span>{filter.label}</span>
                 <span aria-hidden="true">×</span>
@@ -199,54 +204,60 @@ export default function Library({ characters = [] }) {
         </div>
       )}
 
-      <p className="search-results" role="status" aria-live="polite">
-        {results.length}{' '}
-        {results.length > 0
-          ? `${results.length} ${results.length === 1 ? 'personaje personal encontrado' : 'personajes personales encontrados'}.`
-          : ''}
-      </p>
-
-      <div className="character-grid">
-        {results.map(character => (
-          <CharacterCard
-            key={character.id}
-            character={character}
-          />
-        ))}
-      </div>
-
-      {results.length === 0 && (
-        <div className="empty-state">
-          <p>
-            {characters.length
-              ? 'No hay personajes personales que coincidan con los filtros.'
-              : 'Tu biblioteca personal está vacía. Empieza una nueva leyenda.'}
-          </p>
-
-
-
-          {characters.length === 0 && (
-            <Link
-              className="primary-button"
-              to="/crear-personaje"
-            >
-              Crear mi primer personaje
-            </Link>
-          )}
+      <section
+        className="private-characters-section"
+        aria-labelledby="private-characters-title"
+      >
+        <div className="section-heading">
+          <h2 id="private-characters-title">
+            Mis personajes privados
+          </h2>
         </div>
-      )}
-      <DatabaseCharacters
-        search={search}
-        type={type}
-        favorites={favorites}
-        sort={sort}
-      />
 
+        <p
+          className="search-results"
+          role="status"
+          aria-live="polite"
+        >
+          {results.length === 1
+            ? '1 personaje privado encontrado.'
+            : `${results.length} personajes privados encontrados.`}
+        </p>
+
+        <div className="character-grid">
+          {results.map(character => (
+            <CharacterCard
+              key={character.id}
+              character={character}
+            />
+          ))}
+        </div>
+
+        {results.length === 0 && (
+          <div className="empty-state">
+            <p>
+              {privateCharacters.length > 0
+                ? 'No hay personajes privados que coincidan con los filtros.'
+                : 'Todavía no tienes personajes privados.'}
+            </p>
+
+            {characters.length === 0 && (
+              <Link
+                className="primary-button"
+                to="/crear-personaje"
+              >
+                Crear mi primer personaje
+              </Link>
+            )}
+          </div>
+        )}
+      </section>
 
       <PublicCharacters
         search={search}
         type={type}
         sort={sort}
+        ownCharacters={characters}
       />
     </section>
   )

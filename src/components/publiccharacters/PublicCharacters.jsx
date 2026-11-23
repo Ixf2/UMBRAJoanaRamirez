@@ -4,7 +4,6 @@ import { Link } from 'react-router'
 import { obtenerPersonajesPublicos } from '../../services/api.js'
 import CharacterCard from '../charactercard/CharacterCard.jsx'
 
-// Permite buscar sin distinguir mayúsculas ni acentos
 const normalizar = valor =>
   String(valor ?? '')
     .normalize('NFD')
@@ -14,7 +13,8 @@ const normalizar = valor =>
 export default function PublicCharacters({
   search = '',
   type = '',
-  sort = 'recent'
+  sort = 'recent',
+  ownCharacters = []
 }) {
   const [personajes, setPersonajes] = useState([])
   const [cargando, setCargando] = useState(true)
@@ -42,9 +42,7 @@ export default function PublicCharacters({
         }
       })
       .finally(() => {
-        if (activo) {
-          setCargando(false)
-        }
+        if (activo) setCargando(false)
       })
 
     return () => {
@@ -52,7 +50,6 @@ export default function PublicCharacters({
     }
   }, [])
 
-  // Filtrado de los personajes obtenidos del backend
   const resultados = personajes
     .filter(personaje => {
       const texto = [
@@ -80,7 +77,8 @@ export default function PublicCharacters({
       }
 
       if (sort === 'level') {
-        return Number(b.nivel ?? 0) - Number(a.nivel ?? 0)
+        return Number(b.nivel ?? 0) -
+          Number(a.nivel ?? 0)
       }
 
       return Number(b.idPersonaje ?? 0) -
@@ -99,7 +97,7 @@ export default function PublicCharacters({
       </div>
 
       <p className="form-hint">
-        Personajes obtenidos desde Spring Boot y MariaDB.
+        Personajes públicos disponibles en UMBRA.
       </p>
 
       {cargando && (
@@ -121,10 +119,9 @@ export default function PublicCharacters({
             role="status"
             aria-live="polite"
           >
-            {resultados.length}{' '}
-            {resultados.length > 0
-              ? `${resultados.length} ${resultados.length === 1 ? 'personaje público encontrado' : 'personajes públicos encontrados'}.`
-              : ''}
+            {resultados.length === 1
+              ? '1 personaje público encontrado.'
+              : `${resultados.length} personajes públicos encontrados.`}
           </p>
 
           {resultados.length === 0 && (
@@ -137,22 +134,36 @@ export default function PublicCharacters({
 
           <div className="character-grid">
             {resultados.map(personaje => {
+              const propio = ownCharacters.find(
+                item =>
+                  String(item.id) ===
+                  String(personaje.idPersonaje)
+              )
+
               const personajeAdaptado = {
-                id: `public-${personaje.idPersonaje}`,
+                id: String(personaje.idPersonaje),
                 name: personaje.nombre,
                 type: personaje.clase || 'Personaje público',
-                level: personaje.nivel ?? null,
-                image: '',
-                portrait: null,
-                favorite: false
+                level: personaje.nivel ?? 1,
+                image: propio?.image || '',
+                portrait: propio?.portrait ?? null,
+                favorite: propio?.favorite ?? false
               }
+
+              const destino = propio
+                ? `/biblioteca/${personaje.idPersonaje}`
+                : `/personajes-publicos/${personaje.idPersonaje}`
 
               return (
                 <Link
                   key={personaje.idPersonaje}
-                  to={`/personajes-publicos/${personaje.idPersonaje}`}
+                  to={destino}
                   className="public-character-link"
-                  aria-label={`Consultar ficha pública de ${personaje.nombre}`}
+                  aria-label={
+                    propio
+                      ? `Consultar y editar tu personaje ${personaje.nombre}`
+                      : `Consultar ficha pública de ${personaje.nombre}`
+                  }
                 >
                   <CharacterCard
                     character={personajeAdaptado}
