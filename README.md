@@ -1,6 +1,12 @@
 # UMBRA
 
+![Pantalla de inicio de UMBRA con el botón Crear personaje](public/images/web/inicio.png)
+
 [Español](#espanol) · [English](#english)
+
+| Inspiración / Inspiration | Biblioteca / Library |
+| --- | --- |
+| [![Generador de personajes con retrato y campos editables](public/images/web/generador.png)](public/images/web/generador.png) | [![Biblioteca con filtros y fichas de personajes](public/images/web/biblioteca.png)](public/images/web/biblioteca.png) |
 
 <a id="espanol"></a>
 

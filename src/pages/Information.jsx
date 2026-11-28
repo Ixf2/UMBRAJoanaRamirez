@@ -17,11 +17,16 @@ export function Help() {
 
 export function Privacy() {
   return <section className="information-page">
-    <h2>Datos en tu navegador</h2>
-    <p>UMBRA guarda personajes, retratos, favoritos, preferencias y cuentas en el almacenamiento local del navegador. No envía estos datos a un servidor ni los sincroniza entre dispositivos.</p>
-    <p>Las cuentas locales permiten organizar bibliotecas independientes en este navegador. El código que recibes al registrarte sirve para recuperar el acceso si olvidas tu contraseña. No se envían correos y las copias de seguridad no incluyen las credenciales.</p>
-    <h2>Conservar tus historias</h2>
-    <p>Exporta una copia desde Perfil antes de borrar los datos del sitio o cambiar de navegador. La copia incluye las fichas y sus retratos, sin cuentas ni contraseñas. Usa solo imágenes que tengas permiso para utilizar.</p>
+    <h2>Cuenta y sesión</h2>
+    <p>Al registrarte, UMBRA envía tu nombre de usuario, correo electrónico y contraseña al servidor para crear tu cuenta. Al iniciar sesión, envía tu correo y contraseña para comprobar el acceso. El navegador usa una cookie de sesión para identificarte. Puedes cerrar la sesión desde Perfil.</p>
+    <p>La recuperación mediante código solo funciona con las cuentas locales de versiones anteriores.</p>
+    <h2>Personajes y visibilidad</h2>
+    <p>El servidor guarda en MariaDB tus fichas, favoritos y los retratos que subes. Puedes consultar tu biblioteca al iniciar sesión con la misma cuenta en otro navegador o dispositivo.</p>
+    <p>Las fichas privadas aparecen en tu biblioteca personal. Las fichas públicas pueden mostrarse en el catálogo para que otras personas consulten su contenido y retrato. Puedes cambiar la visibilidad, editar o eliminar una ficha desde tu biblioteca. Usa imágenes que tengas permiso para utilizar.</p>
+    <h2>Preferencias del navegador</h2>
+    <p>Los ajustes de apariencia y accesibilidad se guardan en este navegador por perfil, incluido un perfil para visitantes. Si borras los datos del sitio, se restablecen esos ajustes y tendrás que volver a iniciar sesión para acceder a tu biblioteca.</p>
+    <h2>Copias de seguridad</h2>
+    <p>En Perfil puedes descargar una copia JSON con los datos de tus fichas y sus favoritos. El archivo puede contener historias y otros datos que hayas escrito en las fichas. La exportación excluye las credenciales de la cuenta y los archivos de retratos almacenados en MariaDB.</p>
     <Link className="secondary-button" to="/perfil">Ir a Perfil</Link>
   </section>
 }
