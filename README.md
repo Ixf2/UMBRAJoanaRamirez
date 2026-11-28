@@ -47,6 +47,15 @@ En **Menú → Accesibilidad** puedes ajustar el tamaño del texto, contraste, a
 - La importación compara nombre normalizado, clase, raza, nivel e historia para omitir fichas equivalentes. Crea las demás con identificadores nuevos, intenta subir los retratos incrustados compatibles y muestra un resumen con importadas, omitidas, imágenes y errores. Si falla un retrato, la ficha creada se conserva.
 - Las copias antiguas se importan manualmente. El validador actual conserva los campos del formato local original. Al importar se aplican los valores predeterminados de personalidad, visibilidad privada y categoría 1. La copia está pensada para trasladar fichas y excluye cuentas, credenciales y preferencias.
 
+### 3. Repositorios
+
+| Componente | Tecnología | Repositorio |
+| --- | --- | --- |
+| Aplicación web | React, Vite | [UMBRA Web](https://github.com/Ixf2/UMBRAJoanaRamirez) |
+| Aplicación móvil | Kotlin, Android Studio | [UMBRA Android](https://github.com/Ixf2/UMBRAAndroid) |
+| Backend | Java, Spring Boot, Maven | [UMBRA Backend](https://github.com/Ixf2/UmbraBackendJoanaRam-rez) |
+| Base de datos | MariaDB, SQL | [SQL `umbra`](https://drive.google.com/file/d/1jVAfkBek3cXsasbAn0mDg8_ejbLLUk1e/view?usp=sharing) |
+
 ### Arquitectura y API
 
 [App.jsx](src/App.jsx) coordina sesión y rutas. [useCharacters.js](src/hooks/useCharacters.js) carga las fichas propias y vuelve a consultar la biblioteca después de cambios. [personajesApi.js](src/services/personajesApi.js) convierte los datos entre el formato React y el del servidor. [api.js](src/services/api.js) gestiona autenticación y lecturas públicas. MariaDB se consulta desde Spring Boot.
