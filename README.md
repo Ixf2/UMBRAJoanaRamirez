@@ -157,7 +157,7 @@ La interfaz utiliza imágenes WebP y fuentes locales WOFF2 con `font-display: sw
 
 ### Documentación
 
-El manual en español incluye arquitectura, recorridos, contrato HTTP y listados del frontend con números de línea. El ZIP incluye una copia editable en `codigo/` con recursos y archivo de dependencias. Esta edición corresponde al **23/11/2026**.
+El manual en español incluye arquitectura, recorridos, contrato HTTP y listados del frontend con números de línea. El ZIP incluye una copia editable en `codigo/` con recursos y archivo de dependencias. Esta edición corresponde al **28/11/2026**.
 
 - [Guía de documentación](documentacion/LEEME.md)
 - [Manual PDF](documentacion/UMBRA-manual-completo.pdf) · [Manual HTML](documentacion/UMBRA-manual-completo.html)
@@ -241,7 +241,7 @@ The interface uses WebP images and local WOFF2 fonts with `font-display: swap`. 
 
 ### Documentation
 
-The Spanish manual includes architecture, workflows, the HTTP contract, and numbered frontend source listings. The ZIP includes editable source in `codigo/`, assets, and the dependency lockfile. This edition is dated **November 23, 2026**.
+The Spanish manual includes architecture, workflows, the HTTP contract, and numbered frontend source listings. The ZIP includes editable source in `codigo/`, assets, and the dependency lockfile. This edition is dated **November 28, 2026**.
 
 - [Documentation guide](documentacion/LEEME.md)
 - [PDF manual](documentacion/UMBRA-manual-completo.pdf) · [HTML manual](documentacion/UMBRA-manual-completo.html)

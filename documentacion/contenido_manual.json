@@ -122,18 +122,14 @@
     }
   },
   "src/pages/Information.jsx": {
-    "summary": "Agrupa Inspiración, Ayuda, Privacidad y la pantalla de ruta inexistente.",
-    "state": "Inspiration mantiene el índice de la idea narrativa y un personaje aleatorio.",
+    "summary": "Agrupa Ayuda, Privacidad y uso, y la pantalla de ruta inexistente.",
     "details": [
-      "Las ideas narrativas se encuentran en el array prompts. El enlace a crear pasa un borrador mediante el estado de navegación; todavía no lo guarda.",
-      "Ayuda utiliza details y summary para preguntas desplegables. Privacidad explica la persistencia local. NotFound permite volver a Inicio o Ayuda."
+      "Ayuda presenta preguntas desplegables. Privacidad y uso explica la sesión, la visibilidad de las fichas, las preferencias locales y la copia JSON."
     ],
     "functions": {
-      "Inspiration": "Muestra una idea y una semilla de personaje para comenzar una ficha.",
-      "generate": "Escoge una idea distinta de la actual y vuelve a generar el personaje.",
-      "Help": "Presenta preguntas frecuentes y accesos a ayuda de accesibilidad.",
-      "Privacy": "Explica qué datos se conservan y qué contiene la copia de personajes.",
-      "NotFound": "Presenta el estado 404 para rutas o fichas que no se encuentran."
+      "Help": "Presenta las preguntas frecuentes.",
+      "Privacy": "Describe el tratamiento de datos observado en la aplicación.",
+      "NotFound": "Presenta el estado 404."
     }
   },
   "src/components/header/Header.jsx": {

@@ -1,6 +1,6 @@
 # Documentación de UMBRA
 
-Edición del **23/11/2026**, basada en el frontend del repositorio.
+Edición del **28/11/2026**, basada en el frontend del repositorio.
 
 | Archivo | Contenido |
 | --- | --- |
@@ -13,6 +13,8 @@ Edición del **23/11/2026**, basada en el frontend del repositorio.
 
 ## Qué cubre esta edición
 
+- Capturas de Inicio, Biblioteca e Inspiración y enlaces a los repositorios y al archivo SQL.
+- Privacidad y uso desde Perfil, con el alcance de la sesión, la visibilidad, las preferencias y las copias.
 - Sesión de Spring Boot y acceso a las funciones que requieren cuenta.
 - Biblioteca privada en MariaDB, catálogo público, filtros compartidos y rutas de detalle según la propiedad de la ficha.
 - Creación, edición, duplicado, favoritos, eliminación y subida de retratos en una petición independiente.

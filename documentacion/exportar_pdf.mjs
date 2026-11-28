@@ -67,7 +67,7 @@ try {
     generateTaggedPDF: true,
     generateDocumentOutline: true,
     headerTemplate: '<div style="font-family:Arial,sans-serif;font-size:9px;color:#62726b;width:100%;padding:0 16mm;">UMBRA · Manual funcional y código fuente</div>',
-    footerTemplate: '<div style="font-family:Arial,sans-serif;font-size:9px;color:#62726b;width:100%;padding:0 16mm;display:flex;justify-content:space-between;"><span>Edición 08/11/2026</span><span><span class="pageNumber"></span> / <span class="totalPages"></span></span></div>',
+    footerTemplate: `<div style="font-family:Arial,sans-serif;font-size:9px;color:#62726b;width:100%;padding:0 16mm;display:flex;justify-content:space-between;"><span>Edición ${manifest.date}</span><span><span class="pageNumber"></span> / <span class="totalPages"></span></span></div>`,
   })
   const pdf = Buffer.from(result.data, 'base64')
   if (pdf.subarray(0, 5).toString() !== '%PDF-') throw new Error('The browser did not return a PDF.')

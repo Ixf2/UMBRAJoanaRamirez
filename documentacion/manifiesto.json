@@ -1,7 +1,7 @@
 {
-  "date": "23/11/2026",
+  "date": "28/11/2026",
   "source_files": 66,
-  "source_lines": 8229,
+  "source_lines": 8313,
   "unit_tests": 17,
   "files": [
     {
@@ -66,9 +66,9 @@
     },
     {
       "path": "src/pages/Information.jsx",
-      "bytes": 3781,
-      "lines": 37,
-      "sha256": "34c021139a3f52fbf63a96c592d2a533366ad042c82b425d46c2b275e86e0afb"
+      "bytes": 4618,
+      "lines": 42,
+      "sha256": "14020471ebd48884aaaca32bdd96f79a56d7f9ac94f8d70b469f0319ba7bf6bb"
     },
     {
       "path": "src/components/header/Header.jsx",
@@ -270,9 +270,9 @@
     },
     {
       "path": "public/images/ASSETS.md",
-      "bytes": 2565,
+      "bytes": 2589,
       "lines": 25,
-      "sha256": "232e41af78c029013c0bb85be9a4311043c73ec6f254ea6ee52c0f801c8a6c06"
+      "sha256": "c636f33db0305602b73140787a399042d7e49500f6364db3f065af370e3df849"
     },
     {
       "path": ".gitignore",
@@ -282,9 +282,9 @@
     },
     {
       "path": "README.md",
-      "bytes": 17861,
-      "lines": 171,
-      "sha256": "a249e25557c3e204958b7251b538c12aeac503518866eb8647254ab8a74479d7"
+      "bytes": 22125,
+      "lines": 248,
+      "sha256": "824539739be63f1d9006490ef2667f2880f37dfa17c77fd531290a0adfbc98b2"
     },
     {
       "path": "LICENSE",
@@ -378,9 +378,9 @@
     },
     {
       "path": "documentacion/LEEME.md",
-      "bytes": 3014,
-      "lines": 42,
-      "sha256": "a41cc07a5021db9e66518b30ac7e2ecad0590915ba4c31a9b4c16a79fb303be7"
+      "bytes": 3218,
+      "lines": 44,
+      "sha256": "8045f8d30c30b2a709281fa7886a04ed85ff760fb2b6d9b4f7c64ce054201af5"
     },
     {
       "path": "scripts/convertir-fuentes.mjs",
