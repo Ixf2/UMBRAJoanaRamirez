@@ -1,12 +1,74 @@
 # UMBRA
 
-![Pantalla de inicio de UMBRA con el botón Crear personaje](public/images/web/inicio.png)
+[Español](#espanol) · [English](#english) · [Capturas / Screenshots](#web-screenshots)
 
-[Español](#espanol) · [English](#english)
+<a id="web-screenshots"></a>
 
-| Inspiración / Inspiration | Biblioteca / Library |
-| --- | --- |
-| [![Generador de personajes con retrato y campos editables](public/images/web/generador.png)](public/images/web/generador.png) | [![Biblioteca con filtros y fichas de personajes](public/images/web/biblioteca.png)](public/images/web/biblioteca.png) |
+## Capturas web / Web screenshots
+
+### Inicio / Home
+
+<p align="center">
+  <a href="public/images/web/inicio.png"><img src="public/images/web/inicio.png" alt="Pantalla de inicio de UMBRA / UMBRA home screen" width="900"></a>
+</p>
+
+### Autenticación / Authentication
+
+<p align="center">
+  <a href="public/images/web/login.png"><img src="public/images/web/login.png" alt="Inicio de sesión / Login" width="400"></a>
+  <a href="public/images/web/register.png"><img src="public/images/web/register.png" alt="Registro de usuarios / User registration" width="400"></a>
+</p>
+
+### Biblioteca / Library
+
+<p align="center">
+  <a href="public/images/web/biblioteca.png"><img src="public/images/web/biblioteca.png" alt="Biblioteca y filtros / Library and filters" width="400"></a>
+  <a href="public/images/web/biblioteca1.png"><img src="public/images/web/biblioteca1.png" alt="Personajes de la biblioteca / Library characters" width="400"></a>
+</p>
+
+### Consulta, edición y eliminación / Viewing, editing and deletion
+
+<p align="center">
+  <a href="public/images/web/biblioteca2.png"><img src="public/images/web/biblioteca2.png" alt="Detalle del personaje / Character details" width="400"></a>
+  <a href="public/images/web/biblioteca_eliminar.png"><img src="public/images/web/biblioteca_eliminar.png" alt="Confirmación de eliminación / Deletion confirmation" width="400"></a>
+</p>
+
+<p align="center">
+  <a href="public/images/web/biblioteca3.png"><img src="public/images/web/biblioteca3.png" alt="Formulario de edición / Editing form" width="400"></a>
+  <a href="public/images/web/biblioteca4.png"><img src="public/images/web/biblioteca4.png" alt="Estadísticas y retrato / Statistics and portrait" width="400"></a>
+</p>
+
+### Inspiración y generación / Inspiration and generation
+
+<p align="center">
+  <a href="public/images/web/generador.png"><img src="public/images/web/generador.png" alt="Generador de personajes / Character generator" width="400"></a>
+  <a href="public/images/web/generador1.png"><img src="public/images/web/generador1.png" alt="Datos del personaje generado / Generated character data" width="400"></a>
+</p>
+
+### Perfil / Profile
+
+<p align="center">
+  <a href="public/images/web/perfil.png"><img src="public/images/web/perfil.png" alt="Perfil de usuario / User profile" width="720"></a>
+</p>
+
+### Accesibilidad y personalización / Accessibility and customisation
+
+<p align="center">
+  <a href="public/images/web/accesibilidad.png"><img src="public/images/web/accesibilidad.png" alt="Menú de accesibilidad / Accessibility menu" width="400"></a>
+  <a href="public/images/web/accesibilidad1.png"><img src="public/images/web/accesibilidad1.png" alt="Tamaño del texto / Text size" width="400"></a>
+</p>
+
+<p align="center">
+  <a href="public/images/web/accesibilidad2.png"><img src="public/images/web/accesibilidad2.png" alt="Contraste / Contrast" width="400"></a>
+  <a href="public/images/web/accesibilidad3.png"><img src="public/images/web/accesibilidad3.png" alt="Lectores de pantalla / Screen readers" width="400"></a>
+</p>
+
+<p align="center">
+  <a href="public/images/web/accesibilidad4.png"><img src="public/images/web/accesibilidad4.png" alt="Opciones de accesibilidad / Accessibility options" width="400"></a>
+  <a href="public/images/web/accesibilidad5.png"><img src="public/images/web/accesibilidad5.png" alt="Personalización de apariencia / Appearance customisation" width="400"></a>
+</p>
+
+---
 
 <a id="espanol"></a>
 
